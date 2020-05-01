@@ -1,1 +1,1 @@
-Welcome to Jon Zeolla's github page.
+Welcome to JonZeolla.com

@@ -1,0 +1,34 @@
+---
+version: '3'
+
+silent: true
+
+tasks:
+  init:
+    cmds:
+      - pipenv install --deploy --ignore-pipfile --dev
+
+  build:
+    deps: [init]
+    cmds:
+      - pipenv run sphinx-build -b html docs build
+
+  test:
+    deps: [build]
+    preconditions:
+      - sh: test `git status -s | wc -w` = "0"
+        msg: "A build must not cause the git repo to be dirty."
+
+  update:
+    cmds:
+      - pipenv update
+
+  clean:
+    cmds:
+      - find {{.ROOT_DIR}} -type f -name '.DS_Store' -delete
+      - find {{.ROOT_DIR}} -type f -name '__pycache__' -exec rm -rf {} +
+      - find {{.ROOT_DIR}} -type d -name '.mypy_cache' -exec rm -rf {} +
+      - find {{.ROOT_DIR}} -type d -name '.pytest_cache' -exec rm -rf {} +
+      - find {{.ROOT_DIR}} -type f -name '*.pyc' -delete
+      - find {{.ROOT_DIR}} -type d -name 'coverage-reports' -exec rm -rf {} +
+      - find {{.ROOT_DIR}} -type f -name '.coverage' -delete

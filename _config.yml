@@ -1,8 +1,0 @@
-title: Jonzeolla.GitHub.io
-description: Jon Zeolla's github.io page.
-google_analytics: 
-show_downloads: true
-theme: jekyll-theme-midnight
-
-gems:
-  - jekyll-mentions

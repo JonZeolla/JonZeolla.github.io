@@ -1,0 +1,7 @@
+Labs
+====
+
+.. toctree::
+   :glob:
+
+   *

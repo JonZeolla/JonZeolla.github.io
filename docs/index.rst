@@ -2,7 +2,7 @@ Welcome to Jon Zeolla's junk drawer
 ===================================
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 2
    :glob:
 
    videos/index

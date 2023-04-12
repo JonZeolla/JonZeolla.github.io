@@ -9,7 +9,6 @@ tasks:
       - pipenv install --deploy --ignore-pipfile --dev
 
   build:
-    deps: [init]
     cmds:
       - pipenv run sphinx-build -b html docs build
 
@@ -25,6 +24,7 @@ tasks:
 
   clean:
     cmds:
+      - rm -rf {{.ROOT_DIR}}/build/
       - find {{.ROOT_DIR}} -type f -name '.DS_Store' -delete
       - find {{.ROOT_DIR}} -type f -name '__pycache__' -exec rm -rf {} +
       - find {{.ROOT_DIR}} -type d -name '.mypy_cache' -exec rm -rf {} +

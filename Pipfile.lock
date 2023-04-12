@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "5ce1b062086b98c42545c64de9fcea8c1aee6425ae792d81806cfca73cc438f1"
+            "sha256": "c56419f765108f6af3d34cad61fb031df6f29395460ede5e49c32ce5526d9df6"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -367,6 +367,14 @@
             "index": "pypi",
             "version": "==0.3.0"
         },
+        "sphinx-last-updated-by-git": {
+            "hashes": [
+                "sha256:633db0377a6d7ac38d73d80dfa0fdadecc1995b33f3d828eca2e372beae132be",
+                "sha256:6fd4ed156b64cdc1513ed25c5c4ea6b621271be2a4322292a52379ef64ab73b5"
+            ],
+            "index": "pypi",
+            "version": "==0.3.4"
+        },
         "sphinx-prompt": {
             "hashes": [
                 "sha256:fa4e90d8088b5a996c76087d701fc7e31175f8b9dc4aab03a507e45051067162"
@@ -427,7 +435,7 @@
                 "sha256:1620739f04e36a2c779f1a131a2dfd49b2fd07351bf1968ced074365933abc7a",
                 "sha256:f936030d7d0147dd026a4f2b5a57343d233f1fc7b363f68b3d4f1cb0993878ae"
             ],
-            "markers": "python_version >= '3.1'",
+            "markers": "python_version > '3'",
             "version": "==4.1"
         },
         "sphinxcontrib-jsmath": {

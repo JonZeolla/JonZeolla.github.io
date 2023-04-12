@@ -15,9 +15,10 @@ author: str = "Jon Zeolla"
 
 extensions: list[str] = [
     "myst_parser",
-    "sphinx_copybutton",
     "sphinx-prompt",
+    "sphinx_copybutton",
     "sphinx_design",
+    "sphinx_last_updated_by_git",
     "sphinx_tippy",
     "sphinx_togglebutton",
     "sphinxcontrib.mermaid",

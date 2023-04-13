@@ -1,0 +1,113 @@
+# Container from scratch
+
+Welcome to my container from scratch lab! This was inspired by [Liz Rice](https://www.linkedin.com/in/lizrice/)'s
+[`containers-from-scratch`](https://github.com/lizrice/containers-from-scratch) Go project and DockerCon 2017 presentation.
+
+## Getting Started
+
+```bash
+./start.sh
+echo $SHLVL
+bash
+echo $SHLVL
+sh
+echo $SHLVL
+sh
+echo $SHLVL
+exit
+exit
+exit
+echo $SHLVL
+```
+
+## Capabilities
+
+```bash
+man 7 capabilities
+# File capabilities
+getcap $(which ping)
+cp $(which ping) ./
+getcap ping
+# Process capabilities
+getpcaps 0
+getpcaps $$
+sudo bash
+getpcaps $$
+```
+
+## cgroups
+
+```bash
+cat /proc/$$/cgroup
+grep memory /proc/$$/cgroup
+cat /sys/fs/cgroup/memory/$(grep memory /proc/$$/cgroup | awk -F\: '{print $NF}')/memory.limit_in_bytes
+# limit_in_bytes in GB
+expr $(!!) / 1024 / 1024 / 1024
+# Dump cgroups "before" docker
+lscgroup > ~/before
+# Run something docker
+docker run alpine ls > /dev/null
+# Look into docker cgroups
+ls /sys/fs/cgroup/*/docker | grep docker
+# Dump cgroups "after" docker
+lscgroup > ~/after
+# Compare before/after
+diff ~/before ~/after
+```
+
+## Namespaces
+
+```bash
+man 1 unshare
+# Listing namespaces
+lsns
+sudo bash
+lsns
+# Hostname
+# UTS:  Unix Timesharing System
+unshare --uts bash
+echo $SHLVL
+hostname
+hostname new
+hostname
+exit
+hostname
+# PIDs
+# Cannot run any commands
+unshare --pid bash
+# Can run exactly one command
+unshare --pid sh
+# Run a new PID namespace that works as expected.  Forks the specified program as a child process of unshare rather than running it directly.
+unshare --pid --fork sh
+echo $$ # PID 1!
+ps # Wait, what?
+# Root FS
+mkdir new
+chroot empty
+chroot empty ls
+echo $SHLVL
+mkdir alpine
+curl -o alpine/alpine.tar.gz https://dl-cdn.alpinelinux.org/alpine/v3.17/releases/x86_64/alpine-minirootfs-3.17.2-x86_64.tar.gz
+pushd alpine
+tar xvf alpine.tar.gz
+rm alpine.tar.gz
+popd
+ls /bin/ash # Nothing up my sleeve
+chroot alpine /bin/ash
+chroot alpine ls
+# Multiple Namespaces
+unshare --pid --fork chroot alpine /bin/ash
+echo $$
+ps
+ls /proc/ # We might need that
+mount -t proc proc proc
+ps # Success!
+# Mount
+unshare --mount chroot alpine ash
+mount -t proc proc proc
+mount
+exit
+findmnt # Same info as mount, different format
+# Discuss pivot_root() vs chroot
+# Other namespaces exist, see `man 7 namespaces`
+```

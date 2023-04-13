@@ -13,14 +13,15 @@ author: str = "Jon Zeolla"
 # -- General configuration --
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
+# Consider for the future: sphinx_tippy
 extensions: list[str] = [
     "myst_parser",
     "sphinx-prompt",
     "sphinx_copybutton",
     "sphinx_design",
     "sphinx_last_updated_by_git",
-    "sphinx_tippy",
     "sphinx_togglebutton",
+    "sphinxcontrib.googleanalytics",
     "sphinxcontrib.mermaid",
 ]
 
@@ -37,4 +38,27 @@ html_theme_path: list[str] = ["index.rst"]
 # https://myst-parser.readthedocs.io/en/latest/configuration.html
 # https://myst-parser.readthedocs.io/en/latest/syntax/optional.html
 
-myst_enable_extensions: list[str] = []
+myst_enable_extensions: list[str] = ["attrs_block", "colon_fence"]
+
+# -- Options for sphinx-copybutton --
+# https://github.com/executablebooks/sphinx-copybutton/blob/master/docs/use.md
+
+# True is the default right now, but I prefer explicit over implicit
+copybutton_only_copy_prompt_lines: bool = True
+# Currently the default is ".linenos, .gp", so this effectively just adds .go which is the class for console outputs
+copybutton_exclude: str = ".linenos, .gp, .go"
+# This fixes the copy button for multi-line HEREDOCS that start with a prompt
+copybutton_here_doc_delimiter: str = "EOF"
+# This allows us to set a :class: no-copybutton to remove the copy button for a code block
+copybutton_selector = "div:not(.no-copybutton) > div.highlight > pre"
+
+# -- Options for sphinx-togglebutton --
+# https://github.com/executablebooks/sphinx-togglebutton/blob/master/docs/use.md
+
+# This removes the hint text to avoid a CSS alignment bug where the hint was not properly aligned
+togglebutton_hint: str = ""
+
+# -- Options for sphinxcontrib-googleanalytics --
+# https://github.com/sphinx-contrib/googleanalytics#configuration
+
+googleanalytics_id: str = "G-EZSNDVQWPT"

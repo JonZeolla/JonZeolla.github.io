@@ -1,118 +1,118 @@
 # Container Security 101
 
+Welcome to my Container Security 101 workshop! If you'd like to sign up, you can register
+[here](https://www.sans.org/webcasts/container-security-101/).
+
+## Agenda
+
+1. Create secure and insecure container images.
+1. Perform container image signing.
+1. Create SBOMs.
+1. Vulnerability scan the images.
+1. Dig into the container image manifests, indexes, and layers.
+1. Break out of a misconfigured container.
+
 ## Getting started
 
 ```{important}
 This lab expects that you are running on Ubuntu 20.04 x86; see [this guide](../ref/aws_ubuntu20.04.md) if you need help setting that up.
 ```
 
-```bash
-./start.sh
-echo $SHLVL
-bash
-echo $SHLVL
-sh
-echo $SHLVL
-sh
-echo $SHLVL
-exit
-exit
-exit
-echo $SHLVL
+This lab is meant to be run in order from top to bottom. If you skip around, it is possible some prerequisites may not be met and you will encounter
+errors.
+
+## Create images
+
+### Insecure
+
+### Secure
+
+## Image signing
+
+### What is it?
+
+### Why?
+
+### How?
+
+```{code-block} bash
+---
+class: no-copybutton
+---
+TODO
 ```
 
-## Capabilities
+## Vulnerability scanning images
 
-```bash
-man 7 capabilities
-# File capabilities
-getcap $(which ping)
-cp $(which ping) ./
-getcap ping
-# Process capabilities
-getpcaps 0
-getpcaps $$
-sudo bash
-getpcaps $$
+### Approaches
+
+SBOM generate-then-scan
+
+Scan the image
+
+Scan the repository
+
+Why is scan the image better than repository?
+
+```{note}
+---
+class: dropdown
+---
+Changes to the code can happen during build, including bringing in new dependences, or different versions of known dependencies.
+
+While containers could technicall also make those changes at runtime, it is significantly less popular and easier to monitor for/prevent.
 ```
 
-## cgroups
+## Container image components
 
-```bash
-cat /proc/$$/cgroup
-grep memory /proc/$$/cgroup
-cat /sys/fs/cgroup/memory/$(grep memory /proc/$$/cgroup | awk -F\: '{print $NF}')/memory.limit_in_bytes
-# limit_in_bytes in GB
-expr $(!!) / 1024 / 1024 / 1024
-# Dump cgroups "before" docker
-lscgroup > ~/before
-# Run something docker
-docker run alpine ls > /dev/null
-# Look into docker cgroups
-ls /sys/fs/cgroup/*/docker | grep docker
-# Dump cgroups "after" docker
-lscgroup > ~/after
-# Compare before/after
-diff ~/before ~/after
+High level explanation
+
+### Manifests
+
+```{code-block} console
+$ docker run cgr.dev/chainguard/crane
+output example here
 ```
 
-## Namespaces
+What part of this output is most interesting?
 
-```bash
-man 1 unshare
-# Listing namespaces
-lsns
-sudo bash
-lsns
-# Hostname
-# UTS:  Unix Timesharing System
-unshare --uts bash
-echo $SHLVL
-hostname
-hostname new
-hostname
-exit
-hostname
-# PIDs
-# Cannot run any commands
-unshare --pid bash
-# Can run exactly one command
-unshare --pid sh
-# Run a new PID namespace that works as expected.  Forks the specified program as a child process of unshare rather than running it directly.
-unshare --pid --fork sh
-echo $$ # PID 1!
-ps # Wait, what?
-# Root FS
-mkdir new
-chroot empty
-chroot empty ls
-echo $SHLVL
-mkdir alpine
-curl -o alpine/alpine.tar.gz https://dl-cdn.alpinelinux.org/alpine/v3.17/releases/x86_64/alpine-minirootfs-3.17.2-x86_64.tar.gz
-pushd alpine
-tar xvf alpine.tar.gz
-rm alpine.tar.gz
-popd
-ls /bin/ash # Nothing up my sleeve
-chroot alpine /bin/ash
-chroot alpine ls
-# Multiple Namespaces
-unshare --pid --fork chroot alpine /bin/ash
-echo $$
-ps
-ls /proc/ # We might need that
-mount -t proc proc proc
-ps # Success!
-# Mount
-unshare --mount chroot alpine ash
-mount -t proc proc proc
-mount
-exit
-findmnt # Same info as mount, different format
-# Discuss pivot_root() vs chroot
-# Other namespaces exist, see `man 7 namespaces`
+:::{admonition} Answer
+---
+class: dropdown hint
+---
+```{code-block} bash
+---
+class: no-copybutton
+emphasize-lines: 2
+---
+$ docker run cgr.dev/chainguard/crane
+output example here
 ```
+:::
+
+### Index
+
+### Layers
+
+```{seealso}
+---
+name: oci-image-teardown
+---
+If you want more hands-on teardown of OCI images, see my OCI image teardown lab [here](./oci-image-teardown.md)
+```
+
+## Read, Set, Break!
+
+### Successful breakout
+
+### Fix
+
+### Failed breakout
 
 ## Container Breakout
 
 TODO
+
+## More
+
+Looking for more content like this? Take a look at the SANS [SEC540 class](http://sans.org/sec540)!

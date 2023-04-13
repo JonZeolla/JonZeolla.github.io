@@ -1,3 +1,13 @@
+---
+orphan: true
+hidden: true
+---
+```{image} ../img/jon_zeolla.jpg
+:alt: Jon Zeolla
+:width: 200px
+:align: right
+```
+
 # Jon Zeolla
 
 Hi, I'm Jon and right now I'm focused on **cloud-native security and compliance**.

@@ -21,6 +21,7 @@ extensions: list[str] = [
     "sphinx_design",
     "sphinx_last_updated_by_git",
     "sphinx_togglebutton",
+    "sphinxcontrib.googleanalytics",
     "sphinxcontrib.mermaid",
 ]
 
@@ -52,3 +53,8 @@ copybutton_exclude: str = ".linenos, .gp, .go"
 
 # This removes the hint text to avoid a CSS alignment bug where the hint was not properly aligned
 togglebutton_hint: str = ""
+
+# -- Options for sphinxcontrib-googleanalytics --
+# https://github.com/sphinx-contrib/googleanalytics#configuration
+
+googleanalytics_id: str = "G-EZSNDVQWPT"

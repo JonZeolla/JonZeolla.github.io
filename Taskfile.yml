@@ -4,7 +4,18 @@ version: '3'
 silent: true
 
 tasks:
+  lock:
+    sources:
+      - Pipfile
+    generates:
+      - Pipfile.lock
+    cmds:
+      - pipenv lock
+
   init:
+    deps: [lock]
+    sources:
+      - Pipfile.lock
     cmds:
       - pipenv install --deploy --ignore-pipfile --dev
 

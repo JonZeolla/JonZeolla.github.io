@@ -38,7 +38,7 @@ html_theme_path: list[str] = ["index.rst"]
 # https://myst-parser.readthedocs.io/en/latest/configuration.html
 # https://myst-parser.readthedocs.io/en/latest/syntax/optional.html
 
-myst_enable_extensions: list[str] = []
+myst_enable_extensions: list[str] = ["attrs_block", "colon_fence"]
 
 # -- Options for sphinx-copybutton --
 # https://github.com/executablebooks/sphinx-copybutton/blob/master/docs/use.md
@@ -47,6 +47,10 @@ myst_enable_extensions: list[str] = []
 copybutton_only_copy_prompt_lines: bool = True
 # Currently the default is ".linenos, .gp", so this effectively just adds .go which is the class for console outputs
 copybutton_exclude: str = ".linenos, .gp, .go"
+# This fixes the copy button for multi-line HEREDOCS that start with a prompt
+copybutton_here_doc_delimiter: str = "EOF"
+# This allows us to set a :class: no-copybutton to remove the copy button for a code block
+copybutton_selector = "div:not(.no-copybutton) > div.highlight > pre"
 
 # -- Options for sphinx-togglebutton --
 # https://github.com/executablebooks/sphinx-togglebutton/blob/master/docs/use.md

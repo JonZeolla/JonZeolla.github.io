@@ -1,3 +1,7 @@
+---
+orphan: true
+hidden: true
+---
 ```{image} ../img/jon_zeolla.jpg
 :alt: Jon Zeolla
 :width: 200px

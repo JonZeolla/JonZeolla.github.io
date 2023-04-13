@@ -35,8 +35,11 @@ errors.
 
 ### How?
 
-```console
-
+```{code-block} bash
+---
+class: no-copybutton
+---
+TODO
 ```
 
 ## Vulnerability scanning images
@@ -51,9 +54,10 @@ Scan the repository
 
 Why is scan the image better than repository?
 
-```{tip}
-:class: dropdown
-
+```{note}
+---
+class: dropdown
+---
 Changes to the code can happen during build, including bringing in new dependences, or different versions of known dependencies.
 
 While containers could technicall also make those changes at runtime, it is significantly less popular and easier to monitor for/prevent.
@@ -65,17 +69,35 @@ High level explanation
 
 ### Manifests
 
-```console
+```{code-block} console
 $ docker run cgr.dev/chainguard/crane
 output example here
 ```
+
+What part of this output is most interesting?
+
+:::{admonition} Answer
+---
+class: dropdown hint
+---
+```{code-block} bash
+---
+class: no-copybutton
+emphasize-lines: 2
+---
+$ docker run cgr.dev/chainguard/crane
+output example here
+```
+:::
 
 ### Index
 
 ### Layers
 
 ```{seealso}
-:name: oci-image-teardown
+---
+name: oci-image-teardown
+---
 If you want more hands-on teardown of OCI images, see my OCI image teardown lab [here](./oci-image-teardown.md)
 ```
 
@@ -86,7 +108,6 @@ If you want more hands-on teardown of OCI images, see my OCI image teardown lab 
 ### Fix
 
 ### Failed breakout
-
 
 ## Container Breakout
 

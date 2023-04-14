@@ -57,7 +57,7 @@ CMD ["nginx", "-g", "daemon off;"]
 EXPOSE 80
 ```
 
-In the above example, you see that we are starting `FROM nginx`. This means two things:
+In the above example, you see that we are starting with `FROM nginx`. This means two things:
 1. We are implicitly using the special `latest` tag of `nginx` (see other available tags [here](https://hub.docker.com/_/nginx/tags)).
 1. We are also implicitly pulling the images from Docker Hub, which is the default [Registry](https://docs.docker.com/registry/) for `docker`.
 

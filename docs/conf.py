@@ -45,12 +45,14 @@ myst_enable_extensions: list[str] = ["attrs_block", "colon_fence"]
 
 # True is the default right now, but I prefer explicit over implicit
 copybutton_only_copy_prompt_lines: bool = True
-# Currently the default is ".linenos, .gp", so this effectively just adds .go which is the class for console outputs
-copybutton_exclude: str = ".linenos, .gp, .go"
 # This fixes the copy button for multi-line HEREDOCS that start with a prompt
+# However it doesn't play nice with copybutton_exclude. See https://github.com/executablebooks/sphinx-copybutton/issues/185
 copybutton_here_doc_delimiter: str = "EOF"
+# Currently the default is ".linenos" (as of v0.5.2), so this effectively just adds .go which is the class for console outputs
+# Also, the devs don't like my approach: https://github.com/executablebooks/sphinx-copybutton/issues/185#issuecomment-1319059186
+copybutton_exclude: str = ".linenos, .gp, .go"
 # This allows us to set a :class: no-copybutton to remove the copy button for a code block
-copybutton_selector = "div:not(.no-copybutton) > div.highlight > pre"
+copybutton_selector: str = "div:not(.no-copybutton) > div.highlight > pre"
 
 # -- Options for sphinx-togglebutton --
 # https://github.com/executablebooks/sphinx-togglebutton/blob/master/docs/use.md

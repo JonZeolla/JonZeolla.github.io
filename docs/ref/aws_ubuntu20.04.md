@@ -19,7 +19,7 @@ steps](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/get-set-up-for-amazon
 1. Under Name and tags, for Name, enter a descriptive name for your instance.
 1. Under **Application and OS Images (Amazon Machine Image)**, choose Quick Start, and then choose Ubuntu 20.04 LTS.
 
-    ![AMI Selection](../img/ami.png)
+    ![AMI Selection](../img/aws_ami.png)
 
 1. Specify an appropriate instance type, such as `t2.micro`.
 

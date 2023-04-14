@@ -98,7 +98,8 @@ $ newdir=$(mktemp -d)
 $ pushd "${newdir}"
 ```
 
-And then we create a more secure `Dockerfile`:
+And then we create a `Dockerfile` that defines a more secure image. It starts with `FROM nginx`, meaning that the below configuration starts by
+downloading that, and then builds on top of it.
 
 ```{code-block} bash
 cat << EOF > Dockerfile
@@ -114,7 +115,8 @@ RUN groupadd --gid 53150 -r notroot \
 EOF
 ```
 
-Now we can build the more secure image! Note the user on the last line is _not_ the root user. Success!
+Now we can build the more secure image and examine it to see what the configured `User` is. Note the user on the last line is _not_ the root user.
+Success!
 
 ```{code-block} console
 ---
@@ -141,16 +143,30 @@ $ docker run --user 0 example-secure whoami
 root
 ```
 
-All we've done is make a more secure configuration _the default_, not impossible. In order to further secure your container runtimes requires a host
-of additional layers of security; what we generally refer to as Policy as Code. Check back in the future for a lab on that 😀
+All we've done is make a more secure configuration _the default_, not impossible. While this is a great start, further securing your container
+runtimes requires a host of additional layers of security; what we generally refer to as Policy as Code. Check back in the future for a lab on that 😀
+
+```{seealso}
+---
+class: dropdown
+---
+Everything we've been doing so far has created docker images, which are not OCI-compliant. This means they do not follow the OCI Image specification.
+
+This can lead to confusion in downstream use cases, when you expect a certain structure of the thing that you created.
+
+If you'd like to use the `docker` command line to create an OCI-compliant output, you can run `docker buildx build -o type=oci,dest=example.tar .`
+
+However, this will not necessarily make it usable on your system. If you run a `docker load` to make `example.tar` usable, it will no longer be
+OCI-compliant, so you will need to use a third party tool to push your `example.tar` OCI-compliant image to a registry.
+```
 
 ## Image signing
 
-### What is it?
-
-### Why?
+TODO: Intro to what signing is, prereqs (a private key), and why you want it.
 
 ### How?
+
+TODO: Setup and run cosign.
 
 ```{code-block} bash
 ---
@@ -158,6 +174,12 @@ class: no-copybutton
 ---
 TODO
 ```
+
+TODO: Validate the signature
+
+TODO: Check rekor
+
+TODO: Check for an nginx image signature. Everything we've been doing so far is unsigned?!
 
 ## Vulnerability scanning images
 
@@ -171,6 +193,8 @@ Scan the repository
 
 Why is scan the image better than repository?
 
+TODO: Generate an SBOM with syft. Briefly cover CycloneDX and SPDX, as well as syft's proprietary format.
+
 ```{note}
 ---
 class: dropdown
@@ -180,9 +204,18 @@ Changes to the code can happen during build, including bringing in new dependenc
 While containers could technicall also make those changes at runtime, it is significantly less popular and easier to monitor for/prevent.
 ```
 
+TODO: Examine the SBOM for `nginx`.
+
+TODO: run grype on the `nginx` sbom.
+
+Move to `cgr.dev/chainguard/nginx`, re-run the SBOM and grype, compare the results. Refer back to the implicit nginx registry/tag from above.
+
+Check for the chaingard signature. Nice! They have it. Consider cgr alternatives, supply chain, etc.
+
 ## Container image components
 
-High level explanation
+High level explanation. manifests, indexes, and layers. Call back to signature process; what is actually being signed? How does that work for
+multi-platform images?
 
 ### Manifests
 
@@ -221,6 +254,8 @@ If you want more hands-on teardown of OCI images, see my OCI image teardown lab 
 ## Read, Set, Break!
 
 ### Successful breakout
+
+TODO: CAP_SYS_ADMIN? Mounted docker sock?
 
 ### Fix
 

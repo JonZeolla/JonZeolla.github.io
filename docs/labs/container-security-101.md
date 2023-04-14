@@ -24,6 +24,16 @@ errors.
 Also, in our environment we're going to use `docker` for the examples. While there are alternatives, this is the most widely adopted and simplest
 place to start.
 
+In order to setup all of the prerequisite tools, run the following commands:
+
+```{code-block} console
+$ apt-get update
+$ apt-get -y install --no-install-recommends bpftrace cgroup-tools devscripts docker.io python3-pip libcap-ng-utils
+$ systemctl enable --now docker
+$ systemctl restart docker
+$ usermod -aG docker ubuntu
+```
+
 ## Terminology
 
 A quick aside on terminology.

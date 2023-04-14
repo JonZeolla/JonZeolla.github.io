@@ -353,11 +353,11 @@
         },
         "sphinx-copybutton": {
             "hashes": [
-                "sha256:0842851b5955087a7ec7fc870b622cb168618ad408dee42692e9a5c97d071da8",
-                "sha256:366251e28a6f6041514bfb5439425210418d6c750e98d3a695b73e56866a677a"
+                "sha256:4cf17c82fb9646d1bc9ca92ac280813a3b605d8c421225fd9913154103ee1fbd",
+                "sha256:fb543fd386d917746c9a2c50360c7905b605726b9355cd26e9974857afeae06e"
             ],
             "index": "pypi",
-            "version": "==0.5.1"
+            "version": "==0.5.2"
         },
         "sphinx-design": {
             "hashes": [

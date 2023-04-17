@@ -15,14 +15,12 @@ Welcome to my OCI Image Teardown lab!
 ```{note}
 :class: dropdown
 
-This lab expects that you are running on Ubuntu 20.04 x86; see [this guide](../ref/aws_ubuntu20.04.md) if you need help setting that up.
+This lab expects that you are running on Ubuntu 20.04 x86; see [this guide](project:../ref/aws_ubuntu20.04.md) if you need help setting that up.
 ```
 
 For simplicity, we will be using containers to do the OCI image teardown; it's only right!
 
 Make sure that the `docker` daemon is installed and running.
-
-If the following
 
 ## Pull a multi-platform OCI image
 

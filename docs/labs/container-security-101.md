@@ -52,7 +52,7 @@ For more background, see docker's [What is a Container?](https://www.docker.com/
 
 ## Creating images
 
-As described in [the terminology section](#terminology), images are bundles. Those bundles need to be created (or "built"), and the primary way that
+As described in [the terminology section](terminology), images are bundles. Those bundles need to be created (or "built"), and the primary way that
 we do that is by creating a `Dockerfile`. For instance:
 
 ```{code-block} bash
@@ -254,13 +254,6 @@ output example here
 
 ### Layers
 
-```{seealso}
----
-name: oci-image-teardown
----
-If you want more hands-on teardown of OCI images, see my OCI image teardown lab [here](./oci-image-teardown.md)
-```
-
 ## Read, Set, Break!
 
 ### Successful breakout
@@ -275,6 +268,11 @@ TODO: CAP_SYS_ADMIN? Mounted docker sock?
 
 TODO
 
-## More
+## Conclusion
 
-Looking for more content like this? Take a look at the SANS [SEC540 class](http://sans.org/sec540)!
+If you've made it this far, congratulations!
+
+Looking for more content like this?
+
+- Connect with me [on LinkedIn](https://linkedin.com/in/jonzeolla/)
+- Check out SANS [SEC540 class](http://sans.org/sec540) for 5 days of Cloud Security and DevSecOps training

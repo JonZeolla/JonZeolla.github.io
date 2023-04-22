@@ -24,10 +24,8 @@ tasks:
       - pipenv run sphinx-build -b html docs build
 
   test:
-    deps: [build]
-    preconditions:
-      - sh: test `git status -s | wc -w` = "0"
-        msg: "A build must not cause the git repo to be dirty."
+    cmds:
+      - pipenv run pytest tests
 
   update:
     cmds:

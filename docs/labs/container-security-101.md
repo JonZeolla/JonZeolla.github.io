@@ -62,7 +62,7 @@ Got permission denied while trying to connect to the Docker daemon socket at uni
 In order to fix that, add your user to the `docker` group (in this example, we're updating the default `ubuntu` user).
 
 ```{code-block} console
-$ sudo usermod -aG docker ubuntu
+sudo usermod -aG docker ubuntu
 ```
 
 And then you **must log out** and re-authenticate to your Ubuntu system.
@@ -674,6 +674,7 @@ What part of this output is most interesting?
 ---
 class: dropdown hint
 ---
+
 ```{code-block} bash
 ---
 class: no-copybutton
@@ -682,6 +683,7 @@ emphasize-lines: 2
 $ docker run cgr.dev/chainguard/crane
 output example here
 ```
+
 :::
 
 ### Index

@@ -6,7 +6,10 @@ name = "pypi"
 [packages]
 
 [dev-packages]
+beautifulsoup4 = "*"
 myst-parser = "*"
+pytest = "*"
+selenium = "*"
 sphinx-copybutton = "*"
 sphinx-design = "*"
 sphinx-last-updated-by-git = "*"

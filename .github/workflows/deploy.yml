@@ -48,6 +48,8 @@ jobs:
         uses: arduino/setup-task@v1
       - name: Generate the HTML
         run: task build
+      - name: Run the tests
+        run: task test
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:

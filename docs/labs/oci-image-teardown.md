@@ -36,5 +36,3 @@ and then rerun the command
 ## Investigate the manifests and indexes
 
 ## Extract "hidden" files from the layers
-
-##

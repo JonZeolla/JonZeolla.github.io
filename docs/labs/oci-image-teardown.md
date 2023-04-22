@@ -8,7 +8,6 @@ Welcome to my OCI Image Teardown lab!
 1. Export the docker image as an OCI artifact
 1. Investigate the manifests and indexes
 1. Extract "hidden" files from the layers
-1.
 
 ## Getting started
 

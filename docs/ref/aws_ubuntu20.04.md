@@ -25,7 +25,8 @@ steps](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/get-set-up-for-amazon
 
     ![Instance Type](../img/aws_instance_type.png)
 
-1. Under Key pair (login), for Key pair name, choose the key pair that you created when getting set up.
+1. Under Key pair (login), for Key pair name, choose the key pair that you created when getting [set up](#setup). If you missed or skipped that step,
+   you can follow [these instructions](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/get-set-up-for-amazon-ec2.html#create-a-key-pair).
 1. When configuring the Network settings, follow these steps to ensure you will properly have Internet access outbound and SSH access inbound:
 
     ![Security Groups](../img/aws_security_group.png)
@@ -87,5 +88,6 @@ begin troubleshooting.
 
 ![Confirm Internet Access](../img/aws_ec2_resource_map.png)
 
-Also, you may want to refer to [these steps](https://repost.aws/knowledge-center/nat-gateway-vpc-private-subnet)
+Also, you may want to refer to [these steps](https://repost.aws/knowledge-center/nat-gateway-vpc-private-subnet) or leverage the [VPC Reachability
+Analyzer](https://docs.aws.amazon.com/vpc/latest/reachability/what-is-reachability-analyzer.html).
 :::

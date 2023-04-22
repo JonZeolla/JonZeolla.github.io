@@ -51,6 +51,8 @@ copybutton_here_doc_delimiter: str = "EOF"
 # Currently the default is ".linenos" (as of v0.5.2), so this effectively just adds .go which is the class for console outputs
 # Also, the devs don't like my approach: https://github.com/executablebooks/sphinx-copybutton/issues/185#issuecomment-1319059186
 copybutton_exclude: str = ".linenos, .gp, .go"
+# Disables copying empty lines
+copybutton_copy_empty_lines: bool = False
 # This allows us to set a :class: no-copybutton to remove the copy button for a code block
 copybutton_selector: str = "div:not(.no-copybutton) > div.highlight > pre"
 

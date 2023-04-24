@@ -30,39 +30,40 @@ widely adopted and simplest place to start.
 
 Run the following to setup the prerequisite tools:
 
-```{code-block} console
-$ sudo apt-get update
-$ sudo apt-get -y remove docker.io containerd runc
-$ sudo apt-get -y install --no-install-recommends ca-certificates curl gnupg
-$ sudo install -m 0755 -d /etc/apt/keyrings
-$ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-$ sudo chmod a+r /etc/apt/keyrings/docker.gpg
-$ echo \
-  "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-  "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
-  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-$ sudo apt-get update
-$ sudo apt-get -y install --no-install-recommends docker-ce docker-ce-cli containerd.io docker-buildx-plugin jq
+```{code-block} bash
+su -c 'apt-get update'
+su -c 'apt-get -y install --no-install-recommends ca-certificates curl sudo jq'
+```
+
+Now we can download and run the setup script from docker. Note that this script is meant purely for development
+environments, such as our lab environment, and is not meant for production use.
+
+```{code-block} bash
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
 ```
 
 ```{note}
 When you encounter code blocks, like above, it will show a copy button when you mouse over it if it is meant to be
 copied/pasted directly.
 
-After copy/pasting into your system, you will need to hit enter for all of the lines to be run.
+After copy/pasting into your system, hit enter for all of the lines to be run.
 ```
 
-Now, if you attempt to run `docker` commands, you will find that they fail:
+Now, if you attempt to run `docker` commands as any user other than `root`, you will find that they fail:
 
 ```{code-block} console
+---
+class: no-copybutton
+---
 $ docker ps
 Got permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Get "http://%2Fvar%2Frun%2Fdocker.sock/v1.24/containers/json": dial unix /var/run/docker.sock: connect: permission denied
 ```
 
-In order to fix that, add your user to the `docker` group (in this example, we're updating the default `ubuntu` user).
+In order to fix that, add your user to the `docker` group.
 
 ```{code-block} console
-sudo usermod -aG docker ubuntu
+if [[ "$(whoami)" != "root" ]]; then sudo usermod -aG docker "$(whoami)"; fi
 ```
 
 And then you **must log out** and re-authenticate to your Ubuntu system.
@@ -166,32 +167,24 @@ Running as `root` is not preferred, and although there are [ways to
 secure](https://docs.docker.com/engine/security/userns-remap/) a process that must run as `root`, it should not be the
 default. So, let's fix that.
 
-We'll start by making a temporary working area:
-
-```{code-block} console
-$ newdir=$(mktemp -d)
-$ pushd "${newdir}"
-```
-
-And then we create a `Dockerfile` that defines a more secure image. It starts with `FROM nginx`, meaning that we are
-building on top of the upstream `nginx` image, inheriting all of its secure (or insecure) properties, and then adding
-our changes on top.
+We'll start by creating a `Dockerfile` that defines a more secure image. It starts with `FROM nginx`, meaning that we
+are building on top of the upstream `nginx` image, inheriting all of its secure (or insecure) properties, and then
+adding our changes on top.
 
 ```{code-block} bash
 cat << EOF > Dockerfile
 FROM nginx
-RUN groupadd --gid 53150 -r notroot \
- && useradd -r -g notroot -s "\$(which bash)" --create-home --uid 53150 notroot
+RUN groupadd --gid 53150 -r notroot && useradd -r -g notroot -s "/bin/bash" --create-home --uid 53150 notroot
 USER notroot
 EOF
 ```
 
-Now we can build the more secure image and examine it to see what the configured `User` is. Note the user on the last
+Then we can build the more secure image and examine it to see what the configured `User` is. Note the user on the last
 line is _not_ the root user.
 
 ```{code-block} console
 ---
-emphasize-lines: 17
+emphasize-lines: 15
 ---
 $ docker buildx build -t example-secure .
 [+] Building 1.0s (6/6) FINISHED
@@ -201,13 +194,11 @@ $ docker buildx build -t example-secure .
  => => transferring context: 2B                                                                                                  0.0s
  => [internal] load metadata for docker.io/library/nginx:latest                                                                  0.0s
  => [1/2] FROM docker.io/library/nginx                                                                                           0.1s
- => [2/2] RUN groupadd --gid 53150 -r notroot  && useradd -r -g notroot -s "$(which bash)" --create-home --uid 53150 notroot     0.5s
+ => [2/2] RUN groupadd --gid 53150 -r notroot  && useradd -r -g notroot -s "/bin/bash" --create-home --uid 53150 notroot         0.5s
  => exporting to image                                                                                                           0.2s
  => => exporting layers                                                                                                          0.2s
  => => writing image sha256:4d20cb10ba62fdea186dae157c2f08980efba65de1e2b86f708da46847c62570                                     0.0s
  => => naming to docker.io/library/example-secure                                                                                0.0s
-$ popd
-~
 $ docker inspect example-secure | jq -r '.[].Config.User'
 notroot
 ```
@@ -277,7 +268,7 @@ The most precise way to sign an image is to sign the digest, as opposed to a tag
 of an image over time. Let's retrieve the digest for our `example-secure` image:
 
 ```{code-block} console
-$ docker inspect --format='{{index .RepoDigests 0}}' example-secure
+$ docker inspect --format='{{index .RepoDigests 0}}' example-secure || true
 
 template parsing error: template: :1:2: executing "" at <index .RepoDigests 0>: error calling index: reflect: slice
 index out of range
@@ -317,20 +308,19 @@ that more later.
 However, we want our `example-secure` image to have a digest. We can fix this by running a v2 registry locally and then
 pushing the image to it!
 
-We'll start by setting up HTTPS, and then pulling down a registry image and running the container:
+We'll start by setting up HTTPS, and then pulling down a registry image and running the container. If you look closely,
+you'll notice the use of a "dummy" container below; this is being used to load files into a volume and is a well known
+[work-around](https://github.com/moby/moby/issues/25245#issuecomment-365980572) for a feature that can be voted for
+[here](https://github.com/docker/cli/issues/1436).
 
 ```{code-block} console
 $ newdir=$(mktemp -d)
 $ mkdir -p "${newdir}/certs"
 $ pushd "${newdir}/certs"
 /tmp/tmp.hzH6IxKkz2/certs ~
-$ openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -sha256 -days 60 -nodes -subj "/CN=registry"
-Generating a RSA private key
-....................................++++
-..................................................................................................................................................................................................................++++
-writing new private key to 'key.pem'
------
-$ docker run -d -p 443:443 --name registry -v "$(pwd)":/certs -e REGISTRY_HTTP_ADDR=0.0.0.0:443 -e REGISTRY_HTTP_TLS_CERTIFICATE=/certs/cert.pem -e REGISTRY_HTTP_TLS_KEY=/certs/key.pem registry:2
+$ docker volume create workshop-certs
+workshop-certs
+$ docker container create --name dummy -v workshop-certs:/certs registry:2
 
 Unable to find image 'registry:2' locally
 2: Pulling from library/registry
@@ -341,6 +331,18 @@ ca8951d7f653: Pull complete
 5ee46e9ce9b6: Pull complete
 Digest: sha256:8c51be2f669c82da8015017ff1eae5e5155fcf707ba914c5c7b798fbeb03b50c
 Status: Downloaded newer image for registry:2
+26d8c595ffd35fe4b8a0797533cf7c9749f93bbd0d66baa960f86ea75618661b
+$ openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -sha256 -days 60 -nodes -subj "/CN=registry"
+Generating a RSA private key
+....................................++++
+..................................................................................................................................................................................................................++++
+writing new private key to 'key.pem'
+-----
+$ docker cp cert.pem dummy:/certs/cert.pem
+Successfully copied 3.58kB to dummy:/certs/cert.pem
+$ docker cp key.pem dummy:/certs/key.pem
+Successfully copied 5.12kB to dummy:/certs/key.pem
+$ docker run -d -p 443:443 --name registry -v workshop-certs:/certs -e REGISTRY_HTTP_ADDR=0.0.0.0:443 -e REGISTRY_HTTP_TLS_CERTIFICATE=/certs/cert.pem -e REGISTRY_HTTP_TLS_KEY=/certs/key.pem registry:2
 fa830229c72a484fa1b1c18ffc9039712b2561d4aa5c8f7856ed00b3e275ed65
 $ popd
 ~
@@ -385,13 +387,21 @@ fa830229c72a484fa1b1c18ffc9039712b2561d4aa5c8f7856ed00b3e275ed65   registry:2   
 You'll noticed that the output is significantly longer and harder to read now, but it avoids any truncation.
 
 If you'd like to interact with a running container, you can use this container ID, or the associated name (in my
-example, `registry`). For instance:
+example, `registry`). For instance, here we use the container ID (which will be diffrent in your case):
 
 ```{code-block} console
+---
+class: no-copybutton
+---
 $ docker exec fa8302 ps
 PID   USER     TIME  COMMAND
     1 root      0:01 registry serve /etc/docker/registry/config.yml
    16 root      0:00 ps
+```
+
+And here we use the name to accomplish the same thing:
+
+```{code-block} console
 $ docker exec registry ps
 PID   USER     TIME  COMMAND
     1 root      0:01 registry serve /etc/docker/registry/config.yml
@@ -706,11 +716,19 @@ CAP_SYS_ADMIN? Mounted docker sock?
 
 If you've made it this far, congratulations!
 
-Looking for more content like this?
+Have any ideas or feedback on this lab? Connect with me [on LinkedIn](https://linkedin.com/in/jonzeolla/) and send me a
+message.
 
-- Connect with me [on LinkedIn](https://linkedin.com/in/jonzeolla/)
-- Check out SANS [SEC540 class](http://sans.org/sec540) for 5 days of Cloud Security and DevSecOps training
+If you'd like more content like this, check out SANS [SEC540 class](http://sans.org/sec540) for 5 days of Cloud Security and DevSecOps training.
 
 ## Cleanup
 
-Don't forget to stop or terminate your EC2 instance!
+Don't forget to stop or terminate your EC2 instance! Here's some quick cleanup tasks to cleanup the running containers:
+
+```{code-block} cleanup
+docker network remove workshop || true
+docker container rm dummy || true
+docker kill registry registry2 || true
+docker container rm registry registry2 || true
+docker kill example-secure registry:443/example-secure || true
+```

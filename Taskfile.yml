@@ -18,12 +18,14 @@ tasks:
       - Pipfile.lock
     cmds:
       - pipenv install --deploy --ignore-pipfile --dev
+      - pipenv run playwright install --with-deps chromium
 
   build:
     cmds:
       - pipenv run sphinx-build -b html docs build
 
   test:
+    deps: [clean, build]
     cmds:
       - pipenv run pytest tests
 
@@ -33,6 +35,14 @@ tasks:
 
   clean:
     cmds:
+      - |
+        # TODO: Improve this to find the correct "cleanup" code blocks and run
+        # them. Find a div with class highlight-cleanup and then Copy the button
+        # inside of that.
+      - docker container rm dummy || true
+      - docker kill registry registry2 || true
+      - docker container rm registry registry2 || true
+      - docker kill example-secure registry:443/example-secure || true
       - rm -rf {{.ROOT_DIR}}/build/
       - find {{.ROOT_DIR}} -type f -name '.DS_Store' -delete
       - find {{.ROOT_DIR}} -type f -name '__pycache__' -exec rm -rf {} +

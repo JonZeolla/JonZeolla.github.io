@@ -33,7 +33,9 @@ def test_lab_code_blocks() -> None:
         all_code_blocks: list[str] = get_code_from_code_blocks(
             lab_url=lab_url,
         )
-        cleanup_code_blocks: list[str] = get_cleanup_code_blocks(lab_url=lab_url)
+        cleanup_code_blocks: list[str] = get_code_from_code_blocks(
+            lab_url=lab_url, cleanup_only=True
+        )
         assert run_code_blocks(
             all_code_blocks=all_code_blocks, cleanup_code_blocks=cleanup_code_blocks
         )
@@ -141,26 +143,3 @@ def get_code_from_code_blocks(*, lab_url: str, cleanup_only: bool = False) -> li
             code_blocks.append(clipboard_content)
 
     return code_blocks
-
-
-def get_cleanup_code_blocks(lab_url: str) -> list[str]:
-    """
-    Get the appropriate cleanup code blocks for the provided lab URL
-    """
-    with sync_playwright() as playwright:
-        browser: Browser = playwright.chromium.launch(slow_mo=50, headless=False)
-        context: BrowserContext = browser.new_context()
-        page: Page = context.new_page()
-        page.goto(lab_url)
-
-        # Loop through each div and click it
-        code_blocks: list[str] = []
-        for button in cleanup_code_blocks:
-            # The force is because the copy button from sphinx-copybutton often isn't visible, and pywright will wait
-            # until it times out without additional adjustments to accomodate. Hover doesn't work in headless mode, etc.
-            button.click(force=True)
-
-            # Pull the clipboard content into the code_blocks list
-            root: Tk = Tk()
-            clipboard_content: str = root.clipboard_get()
-            code_blocks.append(clipboard_content)

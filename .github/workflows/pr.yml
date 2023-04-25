@@ -28,5 +28,5 @@ jobs:
         run: |
           python -m pip install --upgrade pipenv
           task init
-      - name: Run the tests
-        run: task test
+      - name: Generate the HTML
+        run: task build

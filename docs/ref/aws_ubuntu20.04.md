@@ -4,14 +4,15 @@ hidden: true
 ---
 # Creating an Ubuntu 20.04 x86 server in AWS
 
-## Setup
+## Manual Setup
 
 1. First, login to the AWS console where you want to create the EC2 instance by following [these AWS
 instructions](https://docs.aws.amazon.com/signin/latest/userguide/console-sign-in-tutorials.html).
 1. If you're launching an EC2 instance for the first time, follow [these setup
 steps](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/get-set-up-for-amazon-ec2.html).
 
-## Get Started
+
+### Get Started
 
 1. Open the [Amazon EC2 console](https://console.aws.amazon.com/ec2/).
 1. From the EC2 console dashboard, in the **Launch instance** box, choose **Launch instance**, and then choose **Launch instance** from the options

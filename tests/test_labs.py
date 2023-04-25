@@ -4,6 +4,7 @@ Tests for my labs
 """
 
 import logging
+import re
 import sys
 from pathlib import Path
 from tkinter import Tk
@@ -18,6 +19,17 @@ from playwright.sync_api import (
 )
 
 LOG = logging.getLogger(__name__)
+LOG.setLevel('NOTSET')
+
+std_err= logging.StreamHandler(sys.stderr)
+std_err.setLevel('ERROR')
+
+std_out = logging.StreamHandler(sys.stdout)
+std_out.setLevel('DEBUG')
+std_out.addFilter(lambda x : x.levelno < logging.ERROR)
+
+LOG.addHandler(std_err)
+LOG.addHandler(std_out)
 
 
 def test_lab_code_blocks() -> None:
@@ -27,22 +39,38 @@ def test_lab_code_blocks() -> None:
     cwd: Path = Path().absolute()
     labs_dir: Path = Path("build/labs/")
     labs: list[Path] = list(labs_dir.glob("**/[!index]*.html"))
+    tk: Tk = Tk()
+    # Hold the original clipboard contents to reinstate later
+    original_clipboard_content: str = tk.clipboard_get()
 
     for lab in labs:
+        success: bool = False
         lab_url: str = f"file://{cwd}/{lab}"
-        all_code_blocks: list[str] = get_code_from_code_blocks(
+        LOG.debug(f"Getting the code blocks for lab {lab} from {lab_url}...")
+        all_code_blocks, cleanup_code_blocks = get_code_from_code_blocks(
             lab_url=lab_url,
+            tk=tk,
         )
-        cleanup_code_blocks: list[str] = get_code_from_code_blocks(
-            lab_url=lab_url, cleanup_only=True
-        )
-        assert run_code_blocks(
+        LOG.debug(f"Running the code blocks for lab {lab}...")
+        success: bool = run_code_blocks(
             all_code_blocks=all_code_blocks, cleanup_code_blocks=cleanup_code_blocks
         )
+        if not success:
+            break
+
+        assert success
+
+    # Reinstate the original clipboard contents
+    tk.clipboard_clear()
+    tk.clipboard_append(original_clipboard_content)
+
+    assert success
 
 
 def run_code_blocks(
-    *, all_code_blocks: list[str], cleanup_code_blocks: list[str]
+    *,
+    all_code_blocks: list[str],
+    cleanup_code_blocks: list[str],
 ) -> bool:
     """
     Run the code in the provided code blocks
@@ -61,42 +89,73 @@ def run_code_blocks(
         docker_sock: {"bind": str(docker_sock), "mode": "ro"}
     }
 
+    image: str = "ubuntu:20.04"
     container = client.containers.run(
-        image="ubuntu:20.04",
+        image=image,
         auto_remove=False,
         detach=True,
-        network="workshop",
         tty=True,
         volumes=volumes,
     )
+    LOG.info(f"Created a container from image {image} called {container.name}")
 
     # Run each code block in the container
     for code in all_code_blocks:
         command: str = f'/bin/bash -c """set -euo pipefail && {code}"""'
-        print(command)
-        exit_code, output = container.exec_run(cmd=command, tty=True)
-        print(output)
-        if exit_code != 0:
-            LOG.error(f"Failed test when running '{command}'")
-            LOG.error(output)
-            for cleanup_code in cleanup_code_blocks:
-                cleanup_command: str = (
-                    f'/bin/bash -c """set -euo pipefail && {cleanup_code}"""'
-                )
-                exit_code, output = container.exec_run(cmd=cleanup_command, tty=True)
-                if exit_code != 0:
-                    LOG.error(f"Failed to run cleanup command '{cleanup_command}'")
-                    LOG.error(output)
+        LOG.info(f"Running '{command}'")
+        try:
+            exit_code, output = container.exec_run(cmd=command, tty=True)
+        except:
+            LOG.error(f"container.exec_run failed to run '{command}'")
             container.kill()
             return False
+
+        if exit_code == 0:
+            LOG.debug(f"Successfully ran '{command}'")
+            continue
+
+        LOG.error(f"Failed test when running '{command}' with the output '{output}'")
+        # Attempt to run the cleanup
+        for cleanup_code in cleanup_code_blocks:
+            base_cleanup_command: str = (
+                f'/bin/bash -c """set -euo pipefail && {cleanup_code}"""'
+            ).replace("\n", " || true\n")
+
+            # If the last line doesn't have a newline, ensure it ends with || true as well
+            if not base_cleanup_command.endswith(' || true"""'):
+                cleanup_command: str = re.sub('"""$', ' || true"""', base_cleanup_command)
+            else:
+                cleanup_command: str = base_cleanup_command
+
+            LOG.info(f"Running the cleanup command '{cleanup_command}'")
+            try:
+                exit_code, output = container.exec_run(cmd=cleanup_command, tty=True)
+            except:
+                LOG.error(f"container.exec_run failed to run '{cleanup_command}'")
+                container.kill()
+                return False
+
+            if exit_code != 0:
+                LOG.error(
+                    f"Failed to run cleanup command '{cleanup_command}' with the output '{output}'"
+                )
+                container.kill()
+                return False
+
+            LOG.info(f"Received the following output from the cleanup commands '{output}'")
+
+        container.kill()
+        return False
 
     container.kill()
     return True
 
 
-def get_code_from_code_blocks(*, lab_url: str, cleanup_only: bool = False) -> list[str]:
+def get_code_from_code_blocks(*, lab_url: str, tk: Tk) -> tuple[list[str], list[str]]:
     """
-    Get the code in the code blocks
+    Get the code in the code blocks and return a tuple of:
+    - All of the code blocks
+    - The code blocks specifically for cleanup
     """
     with sync_playwright() as playwright:
         browser: Browser = playwright.chromium.launch(slow_mo=50, headless=False)
@@ -113,33 +172,37 @@ def get_code_from_code_blocks(*, lab_url: str, cleanup_only: bool = False) -> li
         for div in toggle_divs:
             div.click()
 
-        if cleanup_only:
-            cleanup_div: ElementHandle | None = page.query_selector(
-                "div.highlight-cleanup"
-            )
-            if not cleanup_div:
-                LOG.error(f"No cleanup block in {lab_url}")
-                sys.exit(1)
+        cleanup_div: ElementHandle | None = page.query_selector("div.highlight-cleanup")
+        if not cleanup_div:
+            LOG.error(f"No cleanup block in {lab_url}")
+            sys.exit(1)
 
-            query_selector = cleanup_div.query_selector_all
-        else:
-            query_selector = page.query_selector_all
-
-        copy_buttons = list[ElementHandle] = query_selector(
+        # Click the copy buttons and extract the cleanup code block(s)
+        cleanup_copy_buttons: list[ElementHandle] = cleanup_div.query_selector_all(
             'button[data-tooltip="Copy"]'
         )
-
-        # Click the copy buttons and extract the code blocks, excluding the cleanup
-        # TODO: Exclude the cleanup
-        code_blocks: list[str] = []
-        for button in copy_buttons:
+        cleanup_code_blocks: list[str] = []
+        for button in cleanup_copy_buttons:
             # The force is because the copy button from sphinx-copybutton often isn't visible, and pywright will wait
             # until it times out without additional adjustments to accomodate. Hover doesn't work in headless mode, etc.
             button.click(force=True)
 
             # Pull the clipboard content into the code_blocks list
-            root: Tk = Tk()
-            clipboard_content: str = root.clipboard_get()
-            code_blocks.append(clipboard_content)
+            clipboard_content: str = tk.clipboard_get()
+            cleanup_code_blocks.append(clipboard_content)
 
-    return code_blocks
+        # Click the copy buttons and extract all the code blocks
+        all_copy_buttons: list[ElementHandle] = page.query_selector_all(
+            'button[data-tooltip="Copy"]'
+        )
+        all_code_blocks: list[str] = []
+        for button in all_copy_buttons:
+            # The force is because the copy button from sphinx-copybutton often isn't visible, and pywright will wait
+            # until it times out without additional adjustments to accomodate. Hover doesn't work in headless mode, etc.
+            button.click(force=True)
+
+            # Pull the clipboard content into the code_blocks list
+            clipboard_content: str = tk.clipboard_get()
+            all_code_blocks.append(clipboard_content)
+
+    return all_code_blocks, cleanup_code_blocks

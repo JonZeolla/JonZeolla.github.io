@@ -26,8 +26,10 @@ tasks:
 
   test:
     deps: [clean, build]
+    env:
+      LOG_LEVEL: INFO
     cmds:
-      - pipenv run pytest tests
+      - pipenv run pytest tests --log-cli-level "${LOG_LEVEL}"
 
   update:
     cmds:
@@ -35,14 +37,6 @@ tasks:
 
   clean:
     cmds:
-      - |
-        # TODO: Improve this to find the correct "cleanup" code blocks and run
-        # them. Find a div with class highlight-cleanup and then Copy the button
-        # inside of that.
-      - docker container rm dummy || true
-      - docker kill registry registry2 || true
-      - docker container rm registry registry2 || true
-      - docker kill example-secure registry:443/example-secure || true
       - rm -rf {{.ROOT_DIR}}/build/
       - find {{.ROOT_DIR}} -type f -name '.DS_Store' -delete
       - find {{.ROOT_DIR}} -type f -name '__pycache__' -exec rm -rf {} +

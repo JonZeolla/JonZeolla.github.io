@@ -15,11 +15,13 @@ Welcome to my Container Security 101 workshop! If you'd like to sign up, you can
 ## Getting started
 
 ```{important}
-This lab expects that you are running on Ubuntu 20.04 x86; see [this guide](../ref/aws_ubuntu20.04.md) if you need help
-setting that up.
+This lab expects that you are running on a fresh Ubuntu 20.04 x86 system.
 
-I highly recommend using a fresh, ephemeral system, as there is no deterministic way to "undo" all of the steps below
-after the workshop.
+To provision a fresh environment, you can use our [CloudFormation
+Template](https://console.aws.amazon.com/cloudformation/home#/stacks/create/review?templateURL=https://excited-flunk-music.s3.us-east-2.amazonaws.com/launch/workshop_vm.yml&stackName=Container-Security-101-Workshop),
+which will create an EC2 instance and some minimal accompanying resources.
+
+After provisioning is complete, see the "Outputs" to get the information needed to connect into your system.
 ```
 
 This lab is meant to be run in order from top to bottom. If you skip around, it is possible some prerequisites may not
@@ -31,8 +33,8 @@ widely adopted and simplest place to start.
 Run the following to setup the prerequisite tools:
 
 ```{code-block} bash
-su -c 'apt-get update'
-su -c 'apt-get -y install --no-install-recommends ca-certificates curl sudo jq'
+if [[ -x "$(which sudo)" ]]; then sudo apt-get update; else su -c 'apt-get update'; fi
+if [[ -x "$(which sudo)" ]]; then sudo apt-get -y install ca-certificates curl sudo jq; else su -c 'apt-get -y install ca-certificates curl sudo jq'; fi
 ```
 
 Now we can download and run the setup script from docker. Note that this script is meant purely for development
@@ -41,13 +43,6 @@ environments, such as our lab environment, and is not meant for production use.
 ```{code-block} bash
 curl -fsSL https://get.docker.com -o get-docker.sh
 sudo sh get-docker.sh
-```
-
-```{note}
-When you encounter code blocks, like above, it will show a copy button when you mouse over it if it is meant to be
-copied/pasted directly.
-
-After copy/pasting into your system, hit enter for all of the lines to be run.
 ```
 
 Now, if you attempt to run `docker` commands as any user other than `root`, you will find that they fail:
@@ -60,15 +55,18 @@ $ docker ps
 Got permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Get "http://%2Fvar%2Frun%2Fdocker.sock/v1.24/containers/json": dial unix /var/run/docker.sock: connect: permission denied
 ```
 
+```{note}
+When you encounter code blocks that don't show a copy button, like the one above, it means it is only meant as an
+example and is **not meant to be run**
+```
+
 In order to fix that, add your user to the `docker` group.
 
 ```{code-block} console
-if [[ "$(whoami)" != "root" ]]; then sudo usermod -aG docker "$(whoami)"; fi
+if [[ "$(whoami)" != "root" ]]; then sudo usermod -aG docker "$(whoami)"; exec su -l "$(whoami)"; fi
 ```
 
-And then you **must log out** and re-authenticate to your Ubuntu system.
-
-After doing that, your `docker` commands should now succeed:
+Now your `docker` commands should now succeed:
 
 ```{code-block} console
 $ docker ps
@@ -387,7 +385,7 @@ fa830229c72a484fa1b1c18ffc9039712b2561d4aa5c8f7856ed00b3e275ed65   registry:2   
 You'll noticed that the output is significantly longer and harder to read now, but it avoids any truncation.
 
 If you'd like to interact with a running container, you can use this container ID, or the associated name (in my
-example, `registry`). For instance, here we use the container ID (which will be diffrent in your case):
+example, `registry`). For instance, here we use the container ID (which will be different in your case):
 
 ```{code-block} console
 ---
@@ -461,7 +459,7 @@ In order to sign the image, we will:
 1. Verify the `example-secure` signature using the public key
 
 We're also going to be using a number of new `docker` arguments below; if you'd
-like to look into those futher, see the `docker run` documentation
+like to look into those further, see the `docker run` documentation
 [here](https://docs.docker.com/engine/reference/commandline/run/).
 
 ```{code-block} console
@@ -476,8 +474,8 @@ $ docker network create workshop
 316fa415e729ff7f48319daf815e7e2842da09d76e948eb51b7d5823dec082ee
 $ docker network connect workshop registry
 $  export COSIGN_PASSWORD='example'
-$ docker run -e COSIGN_PASSWORD -u 0 -v "$(pwd):/app" -w /app cgr.dev/chainguard/cosign generate-key-pair
-$ image_digest="$(docker inspect --format='{{index .RepoDigests 0}}' localhost:443/example-secure | cut -f2 -d@)"
+$ docker run -e COSIGN_PASSWORD -u 0 --network workshop -v "$(pwd):/app" -w /app cgr.dev/chainguard/cosign generate-key-pair
+$ image_digest="$(docker inspect --format='{{index .RepoDigests 0}}' localhost:443/example-secure | cut -f2 -d@ )"
 $ docker run -e COSIGN_PASSWORD -u 0 --network workshop -v "$(pwd):/app" -w /app cgr.dev/chainguard/cosign sign --yes --key cosign.key -a tag=latest registry:443/example-secure@"${image_digest}" --allow-insecure-registry
 
         The sigstore service, hosted by sigstore a Series of LF Projects, LLC, is provided pursuant to the Hosted Project Tools Terms of Use, available at https://lfprojects.org/policies/hosted-project-tools-terms-of-use/.
@@ -531,7 +529,7 @@ exclude the specific `.key` file entirely.
 class: dropdown
 ---
 Technically, the above approach is not the most secure way to do this because it has a race condition. It requires that
-an image be pushed prior to being signed, and has no way to accomodate signing failures.
+an image be pushed prior to being signed, and has no way to accommodate signing failures.
 
 However, there is not a great alternative right now. `docker` doesn't populate the repo digest until it's `docker
 push`ed, and `cosign` also doesn't support a sign-then-push workflow.
@@ -605,56 +603,151 @@ If you'd like more of an introduction to Reference Types, I recommend the chaing
 
 ## Vulnerability scanning images
 
-### Approaches
+Now that we have a docker image, we want to have a structured way to know what's in it, and if there are any
+vulnerabilities that may need tending to. There are a few different approaches we can take here, but the most modern
+(and increasingly popular) is to generate a Software Bill of Materials (SBOM), and then assess that SBOM artifact for
+issues.
 
-SBOM generate-then-scan
+This is effectively how Software Composition Analysis (SCA) tools have worked for years, except that we're now uniformly
+using standard formats for determining software composition, such as [SPDX](https://spdx.dev/) and
+[CycloneDX](https://cyclonedx.org/), which are meant for information exchange (such as between vendors and software
+consumers). SBOMs can also support enrichment through specifications like
+[VEX](https://www.ntia.gov/files/ntia/publications/vex_one-page_summary.pdf) (see the nitty gritty on VEX
+[here](https://docs.oasis-open.org/csaf/csaf/v2.0/csd01/csaf-v2.0-csd01.html#45-profile-5-vex) and a recent more
+opinionated specification called OpenVEX [here](https://github.com/openvex/spec/blob/main/OPENVEX-SPEC.md)).
 
-Scan the image
+Let's get started by creating an SBOM with a popular generation tool, [`syft`](https://github.com/anchore/syft):
 
-Scan the repository
-
-Why is scan the image better than repository?
-
-TODO: Generate an SBOM with syft. Briefly cover CycloneDX and SPDX, as well as syft's proprietary format.
+```{code-block} console
+$ docker run -v "$(pwd):/tmp" -v /var/run/docker.sock:/var/run/docker.sock anchore/syft:latest docker:example-secure -o json --file example-secure.sbom.json
+Unable to find image 'anchore/syft:latest' locally
+latest: Pulling from anchore/syft
+b5dc3672f171: Pull complete
+46399d889351: Pull complete
+05b8cdb378a3: Pull complete
+Digest: sha256:ffde5d9aa0468a9bd7761330e585a8a9050fda7ae6a5fa070a29f4a6f922088a
+Status: Downloaded newer image for anchore/syft:latest
+$ ls -lh example-secure.sbom.json
+-rw-r--r-- 1 root root 2.5M Apr 25 22:16 example-secure.sbom.json
+$ jq '.artifacts | length' < example-secure.sbom.json
+143
+```
 
 ```{note}
 ---
 class: dropdown
 ---
-Changes to the code can happen during build, including bringing in new dependences, or different versions of known
-dependencies.
+This SBOM that we have may not be _exactly_ the same as what ends up running in production.
 
-While containers could technically also make those changes at runtime, it is significantly less popular and easier to
-monitor for/prevent.
+While dependencies are typically downloaded at build time, processes in containers could technically also download
+additional dependencies or make other changes at runtime. In practice, it is significantly less popular and easier to
+monitor for/prevent, but something to be aware of.
 ```
 
-TODO: Examine the SBOM for `nginx`.
+This will create a new file, `example-secure.sbom.json` containing an SBOM of our `example-secure`, identifying 143 (!?!)
+different artifacts. Think that our little 160MB container only had `nginx` in it? Think again!
 
-TODO: run grype on the `nginx` sbom.
+Now, you also may be asking, which of the above standard SBOM formats did this output in? Great question; and the answer
+is none of the above. When you run with the `json` output format (like we did above) `syft` uses a proprietary SBOM
+format to "get as much information out of Syft as possible!" However, if you'd like
 
-Move to `cgr.dev/chainguard/nginx`, re-run the SBOM and grype, compare the results. Refer back to the implicit nginx
-registry/tag from above.
+Now, why did we use the `json` output format? Well, in this case we would like to pass this SBOM file into another tool
+called [`grype`](https://github.com/anchore/grype) to do some vulnerability scanning. Since both tools are developed and
+maintained by Anchore, you can see why this format is the _only_ SBOM format which is supported to do a `grype` scan.
 
-Check for the chainguard signature. Nice! They have it. Consider cgr alternatives, supply chain, etc.
+```{code-block} console
+$ docker run -v "$(pwd):/tmp" anchore/grype sbom:example-secure.sbom.json --output json --file example-secure.vulns.json
+Unable to find image 'anchore/grype:latest' locally
+latest: Pulling from anchore/grype
+3d4811e75147: Pull complete
+657b6e8ab91d: Pull complete
+e58480bec473: Pull complete
+Digest: sha256:9d326e7fc0e4914481a2b0c458a0eb0891b04d00569a6f92bdc549507f2089a0
+Status: Downloaded newer image for anchore/grype:latest
+Report written to "example-secure.vulns.json"
+$ ls -lh example-secure.vulns.json
+-rw-r--r-- 1 root root 525K Apr 25 22:30 example-secure.vulns.json
+$ jq '.matches | length' < example-secure.vulns.json
+144
+```
 
-Now, what if you don't know what supply chain security information exists for a given image? There's a helper for that!
+Now, we can see that this container has 144 vulnerabilities of various severities.
 
-We can use the `cosign tree` command to "Display supply chain security related artifacts for an image such as
+Now that we know what we know about `nginx`, let's take a look at an alternative container which also contains a
+functional `nginx` binary, but brings along with it significantly less accessories (i.e. attack surface).
+
+One newer alternative are the chainguard images, built on
+[wolfi](https://www.chainguard.dev/unchained/introducing-wolfi-the-first-linux-un-distro), which are meant to be
+minimal, secure-by-default, and heavily maintained images that provide a secure foundation for others to build on top
+of.
+
+Let's re-run our SBOM generation and vulnerability scan steps from before, but this time against the
+`cgr.dev/chainguard/nginx` version of `nginx:
+
+```{code-block} console
+$ docker run -v "$(pwd):/tmp" -v /var/run/docker.sock:/var/run/docker.sock anchore/syft:latest
+docker:cgr.dev/chainguard/nginx -o json --file chainguard-nginx.sbom.json
+$ ls -lh chainguard-nginx.sbom.json
+-rw-r--r-- 1 root root 137K Apr 25 22:41 chainguard-nginx.sbom.json
+$ jq '.artifacts | length' < chainguard-nginx.sbom.json
+26
+$ docker run -v "$(pwd):/tmp" anchore/grype sbom:chainguard-nginx.sbom.json --output json --file
+chainguard-nginx.vulns.json
+[0000]  WARN unknown relationship type: described-by form-lib=syft
+<repeated warning removed for brevity>
+[0000]  WARN unknown relationship type: described-by form-lib=syft
+Report written to "chainguard-nginx.vulns.json"
+$ jq '.matches | length' < chainguard-nginx.vulns.json
+0
+```
+
+Huh, 0 vulnerabilities; did it even work?
+
+Or at least, that's where my mind goes when I see something _so_ extreme.
+
+But, that's actually by design. Chainguard is so proud of their consistently low vulnerabilities that they provide an
+[interactive
+graph](https://visualization-ui.chainguard.app/bar?left=nginx%3alatest&right=cgr.dev%2fchainguard%2fnginx%3alatest) that
+you can use to compare the `nginx:latest` findings to the `cgr.dev/chainguard/nginx:latest` findings (at least,
+according to [Trivy](https://github.com/aquasecurity/trivy), another popular docker image vulnerability scanning tool).
+
+```{note}
+Worried about those "unknown relationship type" errors? I was too, until I found [this
+issue](https://github.com/anchore/grype/issues/1244) describing that this is due to new information coming from `syft`
+that `grype` hasn't been updated to be able to make use of yet. If you're running this lab and not seeing those issues,
+it means that `grype` has had a release and is now in sync with the `syft` outputs.
+```
+
+I wonder, do we even need our `example-secure` image from before? Let's quickly check the user:
+
+```{code-block} console
+$ docker inspect cgr.dev/chainguard/nginx:latest | jq -r '.[].Config.User'
+65532
+```
+
+Well, that's definitely not the `root` user (UID 0)! 🎉
+
+It seems like this may be one good option (of numerous) that we could build on top of.
+
+Now, if you are looking for a new image to build on top of, you likely would have more questions to ask before you have
+a firm grasp on your supply chain security risks.
+
+To start, you can use the `cosign tree` command to "Display supply chain security related artifacts for an image such as
 signatures, SBOMs and attestations". Let's take a look at what the `cgr.dev/chainguard/cosign` image that we've been
 using to run `cosign` commands has available:
 
 ```{code-block} console
-$ docker run cgr.dev/chainguard/cosign tree cgr.dev/chainguard/cosign
-📦 Supply Chain Security Related artifacts for an image: cgr.dev/chainguard/cosign
-└── 💾 Attestations for an image tag: cgr.dev/chainguard/cosign:sha256-d15e181a549c2086aebaeafcd731bf7daaae8f07f4bd45ec22520d75fb849085.att
-   ├── 🍒 sha256:db7407d7255baa87a62874e548ad9c45dd71fd388b1cec2752e3c326ce122bd1
-   ├── 🍒 sha256:56d78c3c69009365e9431221272f4a9ecc2f7e0cf510b82bd7e88b3bf265ebf0
-   ├── 🍒 sha256:644c4d060943cab88b0b128188bbda049598dda413a5bdb610a3f2c3a959847a
-   └── 🍒 sha256:30845e6bee8de3885d82fecdfdaa3755c1f30b07e2902a34c07651cb14594a7f
-└── 🔐 Signatures for an image tag: cgr.dev/chainguard/cosign:sha256-d15e181a549c2086aebaeafcd731bf7daaae8f07f4bd45ec22520d75fb849085.sig
-   └── 🍒 sha256:e5d73bd8602c35b5d0a33a095329ac63e4bc6dc3f03d83c7594cc9e317d5d4f0
-└── 📦 SBOMs for an image tag: cgr.dev/chainguard/cosign:sha256-d15e181a549c2086aebaeafcd731bf7daaae8f07f4bd45ec22520d75fb849085.sbom
-   └── 🍒 sha256:e5f7592e081e7e7ba55e2941e2ed1d324b0e62e7ce02e1052fcf7ebdee2d6445
+$ docker run cgr.dev/chainguard/cosign tree cgr.dev/chainguard/nginx
+📦 Supply Chain Security Related artifacts for an image: cgr.dev/chainguard/nginx
+└── 💾 Attestations for an image tag: cgr.dev/chainguard/nginx:sha256-475b56541eec5bf8ef725c8e8912dc1451e01d6065f0ceac7f6a39cb229fcfe2.att
+   ├── 🍒 sha256:428c41b65c98785fdaa1ebcd2169851c9717ead2092cfe95169e8c992ec40295
+   ├── 🍒 sha256:cbeec866936c4177184d1a17af697440ce3b67acb176d314876a3c8f0ca56f53
+   ├── 🍒 sha256:575d374e029b5a8078878683894fa8bc32a88bb666c656d0bb9c30afccd2668c
+   └── 🍒 sha256:c61a3bc4599bdb41b9734b039b68156a7304bd5de7b8df08679a203171b5d784
+└── 🔐 Signatures for an image tag: cgr.dev/chainguard/nginx:sha256-475b56541eec5bf8ef725c8e8912dc1451e01d6065f0ceac7f6a39cb229fcfe2.sig
+   └── 🍒 sha256:a921b47f93ddc97afd697d37b1f63527a32e1aa1a93e1a3068b6984e637adce9
+└── 📦 SBOMs for an image tag: cgr.dev/chainguard/nginx:sha256-475b56541eec5bf8ef725c8e8912dc1451e01d6065f0ceac7f6a39cb229fcfe2.sbom
+   └── 🍒 sha256:c67b16667b9e1e9dd520b654d93ace750a05169494636b2581079f827e4259c6
 ```
 
 Not bad! In addition to a signature and SBOM, there are 4 additional attestations available for this image that we could
@@ -726,9 +819,10 @@ If you'd like more content like this, check out SANS [SEC540 class](http://sans.
 Don't forget to stop or terminate your EC2 instance! Here's some quick cleanup tasks to cleanup the running containers:
 
 ```{code-block} cleanup
-docker network remove workshop || true
-docker container rm dummy || true
-docker kill registry registry2 || true
-docker container rm registry registry2 || true
-docker kill example-secure registry:443/example-secure || true
+docker container rm dummy
+docker kill registry
+docker container rm registry
+docker network remove workshop
+docker volume rm workshop-certs
+rm -f cosign.key cosign.pub
 ```

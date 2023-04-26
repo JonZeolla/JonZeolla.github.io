@@ -18,16 +18,18 @@ tasks:
       - Pipfile.lock
     cmds:
       - pipenv install --deploy --ignore-pipfile --dev
+      - pipenv run playwright install --with-deps chromium
 
   build:
     cmds:
       - pipenv run sphinx-build -b html docs build
 
   test:
-    deps: [build]
-    preconditions:
-      - sh: test `git status -s | wc -w` = "0"
-        msg: "A build must not cause the git repo to be dirty."
+    deps: [clean, build]
+    env:
+      LOG_LEVEL: INFO
+    cmds:
+      - pipenv run pytest tests --log-cli-level "${LOG_LEVEL}"
 
   update:
     cmds:

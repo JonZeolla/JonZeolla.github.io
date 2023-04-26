@@ -6,7 +6,10 @@ name = "pypi"
 [packages]
 
 [dev-packages]
+docker = "*"
 myst-parser = "*"
+playwright = "*"
+pytest = "*"
 sphinx-copybutton = "*"
 sphinx-design = "*"
 sphinx-last-updated-by-git = "*"

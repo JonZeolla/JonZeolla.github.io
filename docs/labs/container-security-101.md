@@ -63,8 +63,11 @@ example and is **not meant to be run**
 In order to fix that, add your user to the `docker` group.
 
 ```{code-block} console
-if [[ "$(whoami)" != "root" ]]; then sudo usermod -aG docker "$(whoami)"; exec su -l "$(whoami)"; fi
+if [[ "$(whoami)" != "root" ]]; then sudo usermod -aG docker "$(whoami)"; fi
 ```
+
+Now, if you know your password you can run `exec su -l "$(whoami)"`, otherwise you will need to **exit your SSH
+session** and re-connect.
 
 Now your `docker` commands should now succeed:
 
@@ -686,14 +689,12 @@ Let's re-run our SBOM generation and vulnerability scan steps from before, but t
 `cgr.dev/chainguard/nginx` version of `nginx`:
 
 ```{code-block} console
-$ docker run -v "$(pwd):/tmp" -v /var/run/docker.sock:/var/run/docker.sock anchore/syft:latest
-docker:cgr.dev/chainguard/nginx -o json --file chainguard-nginx.sbom.json
+$ docker run -v "$(pwd):/tmp" -v /var/run/docker.sock:/var/run/docker.sock anchore/syft:latest docker:cgr.dev/chainguard/nginx -o json --file chainguard-nginx.sbom.json
 $ ls -sh chainguard-nginx.sbom.json
 140K chainguard-nginx.sbom.json
 $ jq '.artifacts | length' < chainguard-nginx.sbom.json
 26
-$ docker run -v "$(pwd):/tmp" anchore/grype sbom:chainguard-nginx.sbom.json --output json --file
-chainguard-nginx.vulns.json
+$ docker run -v "$(pwd):/tmp" anchore/grype sbom:chainguard-nginx.sbom.json --output json --file chainguard-nginx.vulns.json
 [0000]  WARN unknown relationship type: described-by form-lib=syft
 <repeated warnings removed for brevity>
 [0000]  WARN unknown relationship type: described-by form-lib=syft
@@ -759,45 +760,131 @@ use to evaluate and make policy decisions about whether or not we're comfortable
 
 ## Container image components
 
-High level explanation. manifests, indexes, and layers. Call back to signature process; what is actually being signed?
-How does that work for multi-platform images?
+Alright, now it's time to get a little bit ... deeper.
 
-Remember how we mentioned earlier that image signatures, vulnerability scan attestations, and other artifacts are
-currently uploaded to a registry as separate OCI artifacts? Well, `crane` gives you a way to take a peek under the
-covers and see those separate artifacts directly.
+So far we've covered a little bit about docker images and OCI artifacts, but what exactly _is_ an image?
 
-TODO: 1 paragraph background on crane. Example of where it's used?
+You may remember from our [terminology](terminology) section that an image is a bundle of configuration, metadata, and
+files in a structured format.
 
-### Manifests
+That bundle can be uniquely identified using an image manifest digest, which is just another name for the digest we've
+been using all along. Here you can us retrieve the manifest digest and use it to make API calls to the registry:
 
 ```{code-block} console
-$ docker run cgr.dev/chainguard/crane
-output example here
+---
+emphasize-lines: 3,5,7
+---
+$ mdigest=$(docker inspect --format='{{index .RepoDigests 0}}' example-secure | cut -f2 -d@)
+$ echo $mdigest
+sha256:63e226a559065a971cfd911a91fefe7f1c96693186467ad182ca9dd9b64d078c
+$ curl -k https://localhost:443/v2/example-secure/tags/list
+{"name":"example-secure","tags":["sha256-63e226a559065a971cfd911a91fefe7f1c96693186467ad182ca9dd9b64d078c.sig","latest"]}
+$ curl -s -k https://localhost:443/v2/example-secure/manifests/$digest | sha256sum
+63e226a559065a971cfd911a91fefe7f1c96693186467ad182ca9dd9b64d078c  -
+$ curl -s -k https://localhost:443/v2/example-secure/manifests/$mdigest | head -14
+{
+   "schemaVersion": 2,
+   "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+   "config": {
+      "mediaType": "application/vnd.docker.container.image.v1+json",
+      "size": 7705,
+      "digest": "sha256:6b7f86a3d64be8fb0ece35d5b54b15b6bd117c7fdcf2f778350de9012186fd14"
+   },
+   "layers": [
+      {
+         "mediaType": "application/vnd.docker.image.rootfs.diff.tar.gzip",
+         "size": 31418228,
+         "digest": "sha256:26c5c85e47da3022f1bdb9a112103646c5c29517d757e95426f16e4bd9533405"
+      },
 ```
 
-What part of this output is most interesting?
+Note that the digest is the same on each of the above highlighted lines, even the one that is the result of a
+`sha256sum`, showing that it is a content addressable store. That is, the contents of the data returned by the API are
+the same as its SHA-256 sum.
 
-:::{admonition} Answer
----
-class: dropdown hint
----
+You can repeat this same sort of approach for the other two key components of an image; let's look at the first file
+system layer first:
 
-```{code-block} bash
+```{code-block} console
 ---
-class: no-copybutton
-emphasize-lines: 2
+emphasize-lines: 7-16
 ---
-$ docker run cgr.dev/chainguard/crane
-output example here
+$ ldigest=$(curl -s -k https://localhost:443/v2/example-secure/manifests/$mdigest | jq -r '.layers[0].digest')
+$ echo $ldigest
+sha256:26c5c85e47da3022f1bdb9a112103646c5c29517d757e95426f16e4bd9533405
+$ curl -s -k https://localhost:443/v2/example-secure/blobs/$ldigest | sha256sum
+26c5c85e47da3022f1bdb9a112103646c5c29517d757e95426f16e4bd9533405  -
+$ curl -s -k https://localhost:443/v2/example-secure/blobs/$ldigest | tar -tvzf - | head
+drwxr-xr-x 0/0               0 2023-04-11 00:00 bin/
+-rwxr-xr-x 0/0         1234376 2022-03-27 18:40 bin/bash
+-rwxr-xr-x 0/0           43936 2020-09-24 08:36 bin/cat
+-rwxr-xr-x 0/0           72672 2020-09-24 08:36 bin/chgrp
+-rwxr-xr-x 0/0           64448 2020-09-24 08:36 bin/chmod
+-rwxr-xr-x 0/0           72672 2020-09-24 08:36 bin/chown
+-rwxr-xr-x 0/0          151168 2020-09-24 08:36 bin/cp
+-rwxr-xr-x 0/0          125560 2020-12-10 13:23 bin/dash
+-rwxr-xr-x 0/0          113664 2020-09-24 08:36 bin/date
+-rwxr-xr-x 0/0           80968 2020-09-24 08:36 bin/dd
 ```
 
-:::
+What's particularly notable here is that we can actually start to investigate the files that are in this layer!
 
-### Index
+Now, why is it called a layer? Well, the filesystem for images is built on something called the Union filesystem, or
+Unionfs. It allows us to have multiple different bundles of files (layers) which are then iteratively decompressed on
+top of each other when you run a container to then create the final, merged filesystem that you actually see at runtime.
 
-### Layers
+This also means that, just because a file has a certain set of contents at runtime doesn't mean that's the _only_
+version of that file in the image. You may find a different file in a prior layer that was overwritten by the newer
+layer.
+
+This is where we can encounter security issues. These files become "hidden" at runtime, but they are very much available
+in the image itself, if you know where to look, and sometimes they can contain sensitive information such as passwords
+or keys.
+
+Okay, let's move onto the third and final component of an image, the configuration!
+
+```{code-block} console
+$ cdigest=$(curl -s -k https://localhost:443/v2/example-secure/manifests/$mdigest | jq -r '.config.digest')
+$ echo $cdigest
+sha256:6b7f86a3d64be8fb0ece35d5b54b15b6bd117c7fdcf2f778350de9012186fd14
+$ curl -s -k https://localhost:443/v2/example-secure/blobs/$cdigest | sha256sum
+6b7f86a3d64be8fb0ece35d5b54b15b6bd117c7fdcf2f778350de9012186fd14  -
+$ curl -s -k https://localhost:443/v2/example-secure/blobs/$cdigest | jq -r '.config.Env[]'
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+NGINX_VERSION=1.23.4
+NJS_VERSION=0.7.11
+PKG_RELEASE=1~bullseye
+$ curl -s -k https://localhost:443/v2/example-secure/blobs/$cdigest | jq -r '.history[15]'
+{
+  "created": "2023-04-26T00:50:44.615696269Z",
+  "created_by": "RUN /bin/sh -c groupadd --gid 53150 -r notroot && useradd -r -g notroot -s \"/bin/bash\" --create-home --uid 53150 notroot # buildkit",
+  "comment": "buildkit.dockerfile.v0"
+}
+```
+
+Just like with the layers, we can see some very interesting information by dissecting an image configuration. In the
+highlighted lines above we see the environment variables that this image has configured, as well as each of the
+historical steps taken at build time. Specifically, I am showing the user creation step from earlier in the lab.
+
+This information is available to anybody who can pull the image, and is another place where you may find sensitive
+information exposed unintentionally. For instance, was a secret passed in at build time and used in a command to pull
+code from your internal repositories? Or perhaps a secret is needed at runtime to decrypt some files and it's stored as
+an environment variable. Both of those are easily exposed to anybody with read access.
+
+The real solution here is to avoid secrets from being stored in your images in the first place. While there are many
+reasonable approaches to prevent this, I highly recommend [multi-stage
+builds](https://docs.docker.com/build/building/multi-stage/) and providing secrets at build time safely using
+[environment variables](https://github.com/moby/buildkit/pull/1534).
+
+```{seealso}
+As a brief aside, if using `curl` to custom-create API queries isn't your thing, but you still need to take a peek under
+the covers from time to time, I recommend using
+[`crane`](https://github.com/google/go-containerregistry/blob/main/cmd/crane/doc/crane.md).
+```
 
 ## Read, Set, Break!
+
+Alright, now it's time for the grand finale, a container escape!
 
 ### Successful breakout
 

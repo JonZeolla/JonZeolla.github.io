@@ -17,7 +17,7 @@ Welcome to my Container Security 101 workshop! If you'd like to sign up, you can
 ```{important}
 This lab expects that you are running on a fresh Ubuntu 20.04 x86 system.
 
-To provision a fresh environment, you can use our [CloudFormation
+To provision a fresh environment, you can use this [CloudFormation
 Template](https://console.aws.amazon.com/cloudformation/home#/stacks/create/review?templateURL=https://excited-flunk-music.s3.us-east-2.amazonaws.com/launch/workshop_vm.yml&stackName=Container-Security-101-Workshop),
 which will create an EC2 instance and some minimal accompanying resources.
 
@@ -239,8 +239,8 @@ as Code. Check back in the future for a lab on that 😀
 ---
 class: dropdown
 ---
-Everything we've been doing so far has created docker images which are not OCI-compliant. This means they do not follow
-the OCI Image specification.
+Everything we've been doing so far has created docker images which are functional, but not OCI-compliant. This means
+they do not follow the OCI Image specification.
 
 This can lead to confusion in downstream use cases, when your runtime expects a given artifact structure.
 
@@ -274,8 +274,8 @@ signing private key.
 
 ### Image signing setup
 
-The most precise way to sign an image is to sign the digest, as opposed to a tag which can point to different versions
-of an image over time. Let's retrieve the digest for our `example-secure` image:
+The most precise way to sign an image is to sign the digest, as opposed to a tag (e.g. `latest`) which can point to
+different versions of an image over time. Let's retrieve the digest for our `example-secure` image:
 
 ```{code-block} console
 $ docker inspect --format='{{index .RepoDigests 0}}' example-secure || true
@@ -297,7 +297,7 @@ example-secure   latest    <none>    cad64b88527f   2 hours ago   159MB
 Well, it looks like we don't have an image digest 🤔
 
 What we're seeing is another `docker` specific implementation detail. The digest will not be created for new images
-until it is pushed to a registry (technically a v2 registry, which has been around since 2015), or if it was pulled
+until it is pushed to a registry (technically we must use the _manifest_ digest, and a v2 registry), or if it was pulled
 _from_ a v2 registry.
 
 For example, the `nginx:latest` image that we pulled previously from docker hub does have an image digest:
@@ -311,17 +311,20 @@ nginx@sha256:63b44e8ddb83d5dd8020327c1f40436e37a6fffd3ef2498a6204df23be6e7e94
 The actual SHA-256 digest that you receive may differ from the above. This is because the implicit `latest` tag is
 updated over time to point to the latest released image, and is exactly why we sign digests instead of tags.
 
-You are able to get the best of both worlds by combining the two approaches by adding a tag "annotation"; we'll cover
-that more later.
+You are able to get the best of both worlds by combining the two approaches and adding the tag as an "annotation" (which
+we will do later).
 ```
 
 However, we want our `example-secure` image to have a digest. We can fix this by running a v2 registry locally and then
 pushing the image to it!
 
-We'll start by setting up HTTPS, and then pulling down a registry image and running the container. If you look closely,
-you'll notice the use of a "dummy" container below; this is being used to load files into a volume and is a well known
-[work-around](https://github.com/moby/moby/issues/25245#issuecomment-365980572) for a feature that can be voted for
-[here](https://github.com/docker/cli/issues/1436).
+We'll start by setting up HTTPS, and then pulling down a registry image and running the container.
+
+```{note}
+If you look closely, you'll notice the use of a "dummy" container below; this is being used to load files into a volume
+and is a well known [work-around](https://github.com/moby/moby/issues/25245#issuecomment-365980572) for a feature that
+can be voted for [here](https://github.com/docker/cli/issues/1436).
+```
 
 ```{code-block} console
 $ newdir=$(mktemp -d)
@@ -364,7 +367,7 @@ Question: Do you know what `fa830229c72a484fa1b1c18ffc9039712b2561d4aa5c8f7856ed
 ---
 class: dropdown hint
 ---
-What we're seeing is not an image digest, but rather a container ID. This is a unique identifier that `docker` create
+What we're seeing is not an image digest, but rather a container ID. This is a unique identifier that `docker` creates
 for each container. If you were to run the same command again, you will receive a different identifier, for instance:
 
 ```{code-block} bash
@@ -394,7 +397,7 @@ CREATED          STATUS          PORTS                  NAMES
 fa830229c72a484fa1b1c18ffc9039712b2561d4aa5c8f7856ed00b3e275ed65   registry:2   "/entrypoint.sh /etc/docker/registry/config.yml"      17 minutes ago   Up 17 minutes   0.0.0.0:443->443/tcp   registry
 ```
 
-You'll noticed that the output is significantly longer and harder to read now, but it avoids any truncation.
+You'll notice that the output is significantly longer and harder to read now, but it avoids any truncation.
 
 If you'd like to interact with a running container, you can use this container ID, or the associated name (in my
 example, `registry`). For instance, here we use the container ID (which will be different in your case):
@@ -431,8 +434,8 @@ re-tag that image to include the registry information so it knows what destinati
 $ docker tag example-secure localhost:443/example-secure
 ```
 
-Now, when we push the fully qualified tag, it will know to use the registry hosted locally, instead of the implicit
-docker hub registry.
+Now, when we push the fully qualified image name, it will know to use the registry hosted locally, instead of the
+implicit docker hub registry.
 
 ```{code-block} console
 $ docker push localhost:443/example-secure
@@ -470,9 +473,8 @@ In order to sign the image, we will:
 1. Sign the `example-secure` image using the private key
 1. Verify the `example-secure` signature using the public key
 
-We're also going to be using a number of new `docker` arguments below; if you'd
-like to look into those further, see the `docker run` documentation
-[here](https://docs.docker.com/engine/reference/commandline/run/).
+We're also going to be using a number of new `docker` arguments below; if you'd like to look into those further, see the
+`docker` cli documentation [here](https://docs.docker.com/engine/reference/commandline/cli/).
 
 ```{code-block} console
 $ docker pull cgr.dev/chainguard/cosign
@@ -502,7 +504,7 @@ Pushing signature to: registry:443/example-secure
 
 We've officially signed our `example-secure` image!
 
-In the above command, we generated a public and private keypair, signed the latest image digest of the
+In the above command, we generated a public and private keypair, signed the manifest digest of the
 `localhost:443/example-secure` image, and pushed that signature to our local registry to live alongside the image.
 
 We also added an annotation of `tag` with the value of `latest` to describe what we are signing at the moment, which is
@@ -525,14 +527,14 @@ To learn more, check out the [keyless documentation](https://docs.sigstore.dev/c
 ---
 class: dropdown
 ---
-Although the private key is encrypted, many secrets scanning tools don't have exclusions for encrypted cosign private
+Although the private key is encrypted, many secret scanning tools don't have exclusions for encrypted cosign private
 keys and will still flag them as insecure.
 
 For instance, [gitleaks](https://github.com/gitleaks/gitleaks) (one of my favourite secret scanning tools) will flag an
 encrypted cosign private key, and doesn't have a straightforward workaround due to the Go programming language's regex
 library's choice not to support negative lookaheads (see the issue I opened on this
-[here](https://github.com/gitleaks/gitleaks/issues/1034). The best approach in most cases, albeit imperfect, is to
-exclude the specific `.key` file entirely.
+[here](https://github.com/gitleaks/gitleaks/issues/1034)). The best approach in most cases, albeit imperfect, is to
+exclude the specific `.key` file from your secret scanning tool.
 ```
 
 :::{seealso}
@@ -577,14 +579,14 @@ used.
 It worked!
 
 And in addition, evidence of this signing process was added to a public, software supply chain transparency log called
-rekor. Let's check it out!
+rekor. Let's check out an example signature that I did previously, following these same steps:
 
 ```{code-block} console
 $ curl https://rekor.sigstore.dev/api/v1/log/entries/24296fb24b8ad77ad9ca41820f93cdbef2264692ced5c142d19e2ba859ab9f2b500d1917afe8ef30
 {"24296fb24b8ad77ad9ca41820f93cdbef2264692ced5c142d19e2ba859ab9f2b500d1917afe8ef30":{"body":"eyJhcGlWZXJzaW9uIjoiMC4wLjEiLCJraW5kIjoiaGFzaGVkcmVrb3JkIiwic3BlYyI6eyJkYXRhIjp7Imhhc2giOnsiYWxnb3JpdGhtIjoic2hhMjU2IiwidmFsdWUiOiJmZjdhNmU0ODMwMDE0ZDFhMjUwZDA0MzUzY2UxNWZkNmY1NDExYTI5NDdmYmZkNmNlOTYzZmNmNmRmNjhhODQ4In19LCJzaWduYXR1cmUiOnsiY29udGVudCI6Ik1FUUNJRmVFdTRkdXU5UHhYSDFqWWZZRmFnUUUrWkYzTCs3TkJoTVozZG9qUEU5REFpQWs4Vm4rYmRkV2Q0YlRtV2lQckh0ZXJ5cHBXbC9BaVVST1RrV1kvdjh6WVE9PSIsInB1YmxpY0tleSI6eyJjb250ZW50IjoiTFMwdExTMUNSVWRKVGlCUVZVSk1TVU1nUzBWWkxTMHRMUzBLVFVacmQwVjNXVWhMYjFwSmVtb3dRMEZSV1VsTGIxcEplbW93UkVGUlkwUlJaMEZGYzJReVdXYzVNRGtySzBaRmF5dGpiak5zVmt4Q1MwWndaUzlvVGdwdmIwRmtZVkkxWmxOd2MzVTVUbVV3T1hJM2FYUXhhVXgzUm5oa05FVnFVRkZ6YTJsQ2VYaHpaa0ZzVldONFdqWmFPVUZpZUVJeVZsUkJQVDBLTFMwdExTMUZUa1FnVUZWQ1RFbERJRXRGV1MwdExTMHRDZz09In19fX0=","integratedTime":1682131706,"logID":"c0d23d6ad406973f9559f3ba2d1ca01f84147d8ffc5b8445c224f98b9591801d","logIndex":18624203,"verification":{"inclusionProof":{"checkpoint":"rekor.sigstore.dev - 2605736670972794746\n14461401\nhiZ41EGZQqn3qWoXCV7NR4CET8Opt1BWZ56N5FsJuXQ=\nTimestamp: 1682132568542746071\n\n—  rekor.sigstore.dev  wNI9ajBFAiEAlXVguDvXhjyXnwjX0/D64F/nZesHWwJGCSaKyun0KlcCIEXq8yh7MN8BP0vW1aW/FYSBzV5fVwSJKd5NrOg75eaT\n","hashes":["76953dcdf1b59a3f682ee895bd4a4cb5868ee40a3d45ebf75bdc62adecdb2b4a","c8d6687d876151821b739a75821e111821e607743bf7a6f32e7681a2fa0c4501","7217c11743bfc97d1507f5681d9c3505b00e8d47ce7fcd90a8c2c14c51805e2e","7d6bde85aacb040500212f6567d81b4297a574377da748f378d439931f194247","b8f398cbfc968928b53974ea16c96c0ca4d61a222c1cc90ea24fd8ace57b07a1","1b1c51d9a3857dad776b8cae131ce9c4c17b8fb50a932bff58d33d5c0c8cd7b3","9db3f1057b4b0315360aa4d3225bc84c1855f223346337e32ee56db52b814084","44521e9d9f6a1b9c064b92d25c42a146488701f9e7787aa1f1a68a208d5edf64","deb3d900893c1871cdef5a234e770a60eb1b6fc507e8a5c35c3037f70bfbe4ce","d0103a677e2bf2598ba11017194e75fd86825dd4745dce2c0b247f90b7d3e92d","69d4cd1a5d76e4df7cc18552d76dce66d7d3c8c631241f49d23f5fd70f46f2f1","ba0e22b19049b1610e726a3481382451f37aabfc0c3606114918ebaec0e6b16e","3c9e72db0940d7be6cfaa67197efb5e3c48cdb96bd47b6afa8f621cc2790da5c","71e138a81c8b8e6871958ce12b747ef7e2c65ae1bfc9a5e0247734c7e372d899","3f7a2bb24688b2c4956a652ddba433123d92bba8cd565d880e2a9b871ea511e0","781de2e242cf8fe1432593030707a2e357e13c28632fc46ed3b158c9a1266fa1","ec4c6515563a676a411e44ad06b2df2dffda2c037787eeba00c95bc3b5345955","d63092c2277805dcb4cb361bea6e09ac7ed9e9e9192724b8f51e57e54bdf3531","9e040066dfe5f02004658386ac66cf0bb6ffe857ed71cb337c7f5545ecf4558b"],"logIndex":14460772,"rootHash":"862678d4419942a9f7a96a17095ecd4780844fc3a9b75056679e8de45b09b974","treeSize":14461401},"signedEntryTimestamp":"MEYCIQCyJq8dKr404aMxl8p5eNwDHHPh5+BF+jzmpOxCFYM3XgIhAOMkGSLCxUW9Wx5yhztUOANvFpyeXgS8GQlPgl9dSFXf"}}}
 ```
 
-Well, that was a lot. If you'd like, you can also view the details in a web browser
+Well, that returned a lot of _stuff_. If you'd like, you can also view the details in a web browser
 [here](https://search.sigstore.dev/?logIndex=18624203).
 
 ```{admonition} Storing Image Signatures
@@ -660,7 +662,7 @@ This will create a new file, `example-secure.sbom.json` containing an SBOM of wh
 it? Think again!
 
 You also may be asking, which of the above standard SBOM formats did this output in? Great question; and the answer is
-none of the above. When you run with the `json` output format (like we did above) `syft` uses a proprietary SBOM format
+none of the above. When you run with the `json` output format (like we just did) `syft` uses a proprietary SBOM format
 to "get as much information out of Syft as possible!"
 
 ## Vulnerability scanning images
@@ -692,7 +694,7 @@ Now that we know what we know about `nginx`, let's take a look at an alternative
 functional `nginx` binary, but brings along with it fewer accessories (i.e. attack surface).
 
 One newer alternative are the chainguard images, built on
-[wolfi](https://www.chainguard.dev/unchained/introducing-wolfi-the-first-linux-un-distro), which are meant to be
+[wolfi](https://www.chainguard.dev/unchained/introducing-wolfi-the-first-linux-un-distro), which are meant to be free,
 minimal, secure-by-default, and heavily maintained images that provide a secure foundation for others to build on top
 of.
 
@@ -748,7 +750,7 @@ It seems like this may be one good option (of numerous) that we could build on t
 All of this analysis is really just a start, and if you are looking for a new image to build on top of, you likely would
 have more questions to ask before you have enough information to make a decision.
 
-To get you pointed in the right direction for some initial investigation, you can use the `cosign tree` command to
+To get you pointed in the right direction for some additional investigation, you can use the `cosign tree` command to
 "Display supply chain security related artifacts for an image such as signatures, SBOMs and attestations". Let's take a
 look at what else the `cgr.dev/chainguard/nginx` image has available:
 
@@ -766,8 +768,8 @@ $ docker run cgr.dev/chainguard/cosign tree cgr.dev/chainguard/nginx
    └── 🍒 sha256:c67b16667b9e1e9dd520b654d93ace750a05169494636b2581079f827e4259c6
 ```
 
-Not bad! In addition to a signature and SBOM, there are 4 additional attestations available for this image that we could
-use to evaluate and make policy decisions about whether or not we're comfortable using it in our environment.
+Not bad! In addition to a signature and SBOM, there are 4 other attestations available for this image that we could use
+to evaluate and make policy decisions about whether or not we're comfortable using it in our environment.
 
 ## Container image components
 
@@ -855,6 +857,9 @@ or keys.
 Okay, let's move onto the third and final component of an image, the configuration!
 
 ```{code-block} console
+---
+emphasize-lines: 7-10,12-16
+---
 $ cdigest=$(curl -s -k https://localhost:443/v2/example-secure/manifests/$mdigest | jq -r '.config.digest')
 $ echo $cdigest
 sha256:6b7f86a3d64be8fb0ece35d5b54b15b6bd117c7fdcf2f778350de9012186fd14
@@ -874,18 +879,20 @@ $ curl -s -k https://localhost:443/v2/example-secure/blobs/$cdigest | jq -r '.hi
 ```
 
 Just like with the layers, we can see some very interesting information by dissecting an image configuration. In the
-highlighted lines above we see the environment variables that this image has configured, as well as each of the
+highlighted lines above we see the environment variables that this image has configured, as well as some of the
 historical steps taken at build time. Specifically, I am showing the user creation step from earlier in the lab.
 
 This information is available to anybody who can pull the image, and is another place where you may find sensitive
-information exposed unintentionally. For instance, was a secret passed in at build time and used in a command to pull
-code from your internal repositories? Or perhaps a secret is needed at runtime to decrypt some files and it's stored as
-an environment variable. Both of those are easily exposed to anybody with read access.
+information exposed unintentionally. For instance, was a secret passed in at build time and used to pull code from your
+internal repositories? Or perhaps a secret is needed at runtime to decrypt some files and it's stored as an environment
+variable. Both of those are easily exposed to anybody with read access.
 
 The real solution here is to avoid secrets from being stored in your images in the first place. While there are many
 reasonable approaches to prevent this, I highly recommend [multi-stage
 builds](https://docs.docker.com/build/building/multi-stage/) and providing secrets at build time safely using
-[environment variables](https://github.com/moby/buildkit/pull/1534).
+[environment variables](https://github.com/moby/buildkit/pull/1534), and dynamically retrieving sensitive information at
+runtime via integrations with secrets stores like [HashiCorp Vault](https://www.vaultproject.io/), [AWS Secrets
+Manager](https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html), etc.
 
 ```{note}
 As a brief aside, if using `curl` to custom-create API queries isn't your thing, but you still need to take a peek under
@@ -898,13 +905,15 @@ Want more like the above? Well, to start I recommend checking out
 [this](https://raesene.github.io/blog/2023/02/11/Fun-with-Containers-adding-tracking-to-your-images/) incredibly
 interesting blog post about how OCI images can be modified to track when it's pulled, and anything online from a group
 that calls themselves SIG-Honk.
+
+Also, keep an eye out for additional labs by myself in the future 😉
 ```
 
 ## Ready, Set, Break!
 
-Alright, now it's time for container escape.
+Alright, now it's time for our last section, a container escape.
 
-We'll start by running a standard ubuntu container with some additional privileges which are sometimes used when trying
+We'll start by running a standard Ubuntu container with some additional privileges which are sometimes used when trying
 to troubleshoot permissions issues:
 
 ```{code-block} console

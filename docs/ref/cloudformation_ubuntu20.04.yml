@@ -1,0 +1,166 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description: |
+  Launch an EC2 instance for the SANS Container Security 101 Workshop -
+  Supported Regions (us-east-1, us-east-2, us-west-1, us-west-2, eu-west-1, ap-southeast-1, ap-southeast-2, ap-northeast-1)
+  Create SSH Key Pair at https://console.aws.amazon.com/ec2/home#KeyPairs
+
+Parameters:
+  SSHAccessKey:
+    Description: SSH Public Key ID (Used to access the VM)
+    Type: AWS::EC2::KeyPair::KeyName
+
+# Deliberately avoid use1-az3, usw2-az4 - they don't have the allowed instance types
+Mappings:
+  ImageId:
+    ap-northeast-1:
+      focal: ami-0d0c6a887ce442603
+    ap-southeast-1:
+      focal: ami-062550af7b9fa7d05
+    ap-southeast-2:
+      focal: ami-03d0155c1ef44f68a
+    eu-west-1:
+      focal: ami-05147510eb2885c80
+    us-east-1:
+      focal: ami-0aa2b7722dc1b5612
+    us-east-2:
+      focal: ami-06c4532923d4ba1ec
+    us-west-1:
+      focal: ami-081a3b9eded47f0f3
+    us-west-2:
+      focal: ami-0db245b76e5c21ca1
+  AZone:
+    us-east-1:
+      blue:  use1-az2
+      green: use1-az4
+    us-east-2:
+      blue:  use2-az2
+      green: use2-az1
+    us-west-1:
+      blue:  usw1-az1
+      green: usw1-az3
+    us-west-2:
+      blue:  usw2-az2
+      green: usw2-az3
+    eu-west-1:
+      blue:  euw1-az1
+      green: euw1-az3
+    ap-northeast-1:
+      blue:  apne1-az4
+      green: apne1-az1
+    ap-southeast-1:
+      blue:  apse1-az1
+      green: apse1-az2
+    ap-southeast-2:
+      blue:  apse2-az2
+      green: apse2-az3
+
+Resources:
+  Vpc:
+    Type: AWS::EC2::VPC
+    Metadata:
+      cfn_nag:
+        rules_to_suppress:
+        - id: W60
+          reason: "Skip flow logging to avoid retention costs"
+    Properties:
+      CidrBlock: 10.23.101.0/24
+      EnableDnsSupport: true
+      Tags:
+        - Key: Name
+          Value: !Sub "SANS Cloud Security Workshop VM VPC - ${AWS::StackName}"
+  SubnetPublic:
+    Type: AWS::EC2::Subnet
+    Metadata:
+      cfn_nag:
+        rules_to_suppress:
+        - id: W33
+          reason: "PublicIP on launch required to meet lab exercise designs"
+    Properties:
+      VpcId: !Ref Vpc
+      CidrBlock: 10.23.101.192/26
+      MapPublicIpOnLaunch: true
+      AvailabilityZoneId: !FindInMap [ AZone, !Ref 'AWS::Region', blue]
+      Tags:
+        - Key: Name
+          Value: !Sub "SANS Cloud Security Workshop VM Public Subnet A -  ${AWS::StackName}"
+  InternetGW:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Sub "SANS Cloud Security Workshop VM Internet Gateway - ${AWS::StackName}"
+  AttachGateway:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref Vpc
+      InternetGatewayId: !Ref InternetGW
+  RouteTablePublic:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref Vpc
+      Tags:
+        - Key: Name
+          Value: !Sub "SANS Cloud Security Workshop VM Public Route Table - ${AWS::StackName}"
+  RoutePublicIgw:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref RouteTablePublic
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGW
+  RouteTablePublicAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref SubnetPublic
+      RouteTableId: !Ref RouteTablePublic
+  WorkshopVmSG:
+    Type: AWS::EC2::SecurityGroup
+    Metadata:
+      cfn_nag:
+        rules_to_suppress:
+        - id: W40
+          reason: "IpProtocol -1 required to meet lab exercise designs"
+        - id: W5
+          reason: "Open Egress required to meet lab exercise designs"
+    Properties:
+      GroupDescription: !Sub "SANS Cloud Security Workshop VM Security Group - ${AWS::StackName}"
+      VpcId: !Ref Vpc
+      SecurityGroupIngress:
+        - Description: Permit SSH from World
+          IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: '0.0.0.0/0'
+      SecurityGroupEgress:
+        - Description: Permit All traffic to targets
+          IpProtocol: '-1'
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Name
+          Value: !Sub "SANS Cloud Security Workshop VM Security Group - ${AWS::StackName}"
+  ## Workshop VM - in Public Subnet
+  WorkshopVm:
+    Type: "AWS::EC2::Instance"
+    Properties:
+      ImageId:          !FindInMap [ImageId, !Ref 'AWS::Region', focal ]
+      SubnetId:         !Ref SubnetPublic
+      InstanceType:     t2.micro
+      SecurityGroupIds: [ !GetAtt WorkshopVmSG.GroupId ]
+      Tags:
+        - Key: Name
+          Value: !Sub "SANS Cloud Security Workshop Workshop VM - ${AWS::StackName}"
+      KeyName: !Ref SSHAccessKey
+      InstanceInitiatedShutdownBehavior: stop
+      BlockDeviceMappings:
+        - DeviceName: /dev/sda1
+          Ebs:
+            VolumeSize: 12
+            VolumeType: gp3
+
+Outputs:
+  WorkshopVmAddress:
+    Description: Public IP Address of Workshop VM - Connect via SSH
+    Value: !GetAtt WorkshopVm.PublicIp
+  WorkshopConnectCommand:
+    Description: Command to connect to Workshop VM
+    Value: !Sub "ssh ubuntu@${WorkshopVm.PublicIp} -i ${SSHAccessKey}.pem"

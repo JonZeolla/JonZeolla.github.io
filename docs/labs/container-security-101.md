@@ -17,9 +17,11 @@ Welcome to my Container Security 101 workshop! If you'd like to sign up, you can
 ```{important}
 This lab expects that you are running on a fresh Ubuntu 20.04 x86 system.
 
-To provision a fresh environment, you can use this [CloudFormation
-Template](https://console.aws.amazon.com/cloudformation/home#/stacks/create/review?templateURL=https://excited-flunk-music.s3.us-east-2.amazonaws.com/launch/workshop_vm.yml&stackName=Container-Security-101-Workshop),
-which will create an EC2 instance and some minimal accompanying resources.
+To provision a fresh EC2 instance and minimal accompanying resources, you can download [this CloudFormation
+Template](../ref/cloudformation_ubuntu20.04.yml) and upload it to your [AWS Create Stack
+console](https://console.aws.amazon.com/cloudformation/home#/stacks/create). If you need more help, see the "Upload a
+template file" instructions
+[here](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-using-console-create-stack-template.html).
 
 After provisioning is complete, see the "Outputs" to get the information needed to connect into your system.
 ```
@@ -777,7 +779,7 @@ Alright, now it's time to get a little bit ... deeper.
 
 So far we've covered a little bit about docker images and OCI artifacts, but what exactly _is_ an image?
 
-You may remember from our [terminology](terminology) section that an image is a bundle of configuration, metadata, and
+You may remember from our [terminology](#terminology) section that an image is a bundle of configuration, metadata, and
 files in a structured format.
 
 That bundle can be uniquely identified using an image manifest digest, which is just another name for the digest we've

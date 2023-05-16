@@ -4,58 +4,60 @@ hidden: true
 ---
 # Presentations
 
-| Date       | Event                              | Title                                             |
-| ---------- | ---------------------------------- | ------------------------------------------------- |
-| 2023-02-23 | SANS Cloud Defender Dallas @ Night | IaC Security at (even larger) Scale               |
-| 2023-01-13 | Carnegie Science Center            | [Passwords for Humans][2023-ScienceCenter]        |
-| 2022-12-13 | Private                            | OWASP 2021                                        |
-| 2022-12-07 | DevSecCon                          | [Simplifying IaC Security][2022-DevSecCon]        |
-| 2022-10-25 | Cloud Native Security Con          | [Cloud Native Security Best Practices][2022-CNSC] |
-| 2022-10-14 | Three Rivers Information Security  | Transparent IaC Security                          |
-| 2022-05-04 | CloudSecNext                       | [IaC Security at Scale][2022-CloudSecNext]        |
-| 2021-07-14 | Pittsburgh Hackers Association     | Infrastructure as Code (Iac) Security             |
-| 2021-07-13 | Private                            | The Pros and Cons of AWS Security Services        |
-| 2020-11-23 | Private                            | Secure coding in ASP.NET                          |
-| 2020-11-03 | Pittsburgh CISSP Study Group       | PKI and Cryptography                              |
-| 2020-01-30 | Doing Better Business Seminar      | Making Security Faster                            |
-| 2019-12-09 | Pittsburgh InfoSec Day             | SaaS Business Email Compromise Lessons Learned    |
-| 2019-10-08 | Private                            | TLS Best Practices for Developers                 |
-| 2019-04-18 | BSides Flood City                  | Cleaning up your Command Line                     |
-| 2018-12-05 | Pittsburgh CISSP Study Group       | Software Development Security                     |
-| 2018-04-18 | Steel City InfoSec                 | The Use and Abuse of Blockchains                  |
-| 2018-02-05 | InfraGard Pittsburgh               | Steel City InfoSec                                |
-| 2017-10-20 | Three Rivers Information Security  | [Cutting through the buzz: ML & AI][2017-TRISS]   |
-| 2017-09-13 | BroCon 2017                        | Apache Metron                                     |
-| 2017-07-19 | NEOISF                             | Security Data Analytics for the masses            |
-| 2017-03-15 | University of Pitt InfoSec Group   | Wireless Security                                 |
-| 2017-02-07 | University of Pitt InfoSec Group   | Information Security Starter Kit                  |
+| Date       | Event                              | Title                                                          |
+| ---------- | ---------------------------------- | -------------------------------------------------------------- |
+| 2023-02-23 | SANS Cloud Defender Dallas @ Night | IaC Security at (even larger) Scale                            |
+| 2023-01-13 | Carnegie Science Center            | [Passwords for Humans][2023-ScienceCenter]                     |
+| 2022-12-13 | Private                            | OWASP 2021                                                     |
+| 2022-12-07 | DevSecCon                          | [Simplifying IaC Security][2022-DevSecCon]                     |
+| 2022-10-25 | Cloud Native Security Con          | [Cloud Native Security Best Practices][2022-CNSC]              |
+| 2022-10-18 | (ISC){sup}`2` Pittsburgh           | [Cloud Native Security Best Practices][2022-ISC2]              |
+| 2022-10-14 | Three Rivers Information Security  | Transparent IaC Security                                       |
+| 2022-05-04 | CloudSecNext                       | [IaC Security at Scale][2022-CloudSecNext]                     |
+| 2021-07-14 | Pittsburgh Hackers Association     | Infrastructure as Code (Iac) Security                          |
+| 2021-07-13 | Private                            | The Pros and Cons of AWS Security Services                     |
+| 2020-11-23 | Private                            | Secure coding in ASP.NET                                       |
+| 2020-11-03 | Pittsburgh CISSP Study Group       | PKI and Cryptography                                           |
+| 2020-01-30 | Doing Better Business Seminar      | Making Security Faster                                         |
+| 2019-12-09 | Pittsburgh InfoSec Day             | SaaS Business Email Compromise Lessons Learned                 |
+| 2019-10-08 | Private                            | TLS Best Practices for Developers                              |
+| 2019-04-18 | BSides Flood City                  | Cleaning up your Command Line                                  |
+| 2018-12-05 | Pittsburgh CISSP Study Group       | Software Development Security                                  |
+| 2018-04-18 | Steel City InfoSec                 | The Use and Abuse of Blockchains                               |
+| 2018-02-05 | InfraGard Pittsburgh               | Steel City InfoSec                                             |
+| 2017-10-20 | Three Rivers Information Security  | [Cutting through the buzz: ML & AI][2017-TRISS]                |
+| 2017-09-13 | BroCon 2017                        | Apache Metron                                                  |
+| 2017-07-19 | NEOISF                             | Security Data Analytics for the masses                         |
+| 2017-03-15 | University of Pitt InfoSec Group   | Wireless Security                                              |
+| 2017-02-07 | University of Pitt InfoSec Group   | Information Security Starter Kit                               |
 | 2017-01-12 | Steel City InfoSec                 | [Security Data Analytics for the masses][2017-SCIS]            |
-| 2016-08-11 | Steel City InfoSec                 | [Proximity Attacks][2016-SCIS]                      |
-| 2016-07-22 | Community College Cyber Summit     | Becoming the Enemy - Understanding Attackers      |
-| 2016-06-08 | Pittsburgh Technical Institute     | Kickstarting Your Cybersecurity Career            |
-| 2016-05-12 | Steel City InfoSec                 | Automotive Security                               |
-| 2016-04-28 | Solutions 4 Networks               | A DROWN deep dive (TLS security)                  |
-| 2016-04-07 | Software Engineering Institute     | A Survey of Pittsburgh InfoSec                    |
-| 2016-02-11 | Steel City InfoSec                 | Software Defined Radios                           |
-| 2015-11-10 | Robert Morris University           | Password Cracking                                 |
-| 2015-11-05 | Pittsburgh Technical Institute     | Alumni Speaker Series                             |
-| 2015-09-24 | Steel City InfoSec                 | [Password Cracking][2015-SCIS-PasswordCracking]   |
-| 2015-09-16 | (ISC){sup}`2` Pittsburgh           | Cryptography in 2015 (Quantum update)             |
-| 2015-08-26 | Pittsburgh InfraGard               | DEFCON Briefing                                   |
-| 2015-07-07 | Pittsburgh Code & Supply           | The Dos and Don'ts of Wireless                    |
+| 2016-08-11 | Steel City InfoSec                 | [Proximity Attacks][2016-SCIS]                                 |
+| 2016-07-22 | Community College Cyber Summit     | Becoming the Enemy - Understanding Attackers                   |
+| 2016-06-08 | Pittsburgh Technical Institute     | Kickstarting Your Cybersecurity Career                         |
+| 2016-05-12 | Steel City InfoSec                 | Automotive Security                                            |
+| 2016-04-28 | Solutions 4 Networks               | A DROWN deep dive (TLS security)                               |
+| 2016-04-07 | Software Engineering Institute     | A Survey of Pittsburgh InfoSec                                 |
+| 2016-02-11 | Steel City InfoSec                 | Software Defined Radios                                        |
+| 2015-11-10 | Robert Morris University           | Password Cracking                                              |
+| 2015-11-05 | Pittsburgh Technical Institute     | Alumni Speaker Series                                          |
+| 2015-09-24 | Steel City InfoSec                 | [Password Cracking][2015-SCIS-PasswordCracking]                |
+| 2015-09-16 | (ISC){sup}`2` Pittsburgh           | Cryptography in 2015 (Quantum update)                          |
+| 2015-08-26 | Pittsburgh InfraGard               | DEFCON Briefing                                                |
+| 2015-07-07 | Pittsburgh Code & Supply           | The Dos and Don'ts of Wireless                                 |
 | 2015-04-09 | Steel City InfoSec                 | [Wireless Keyloggers and KeySweeper][2015-SCIS-WirelessKeylog] |
-| 2015-01-22 | Steel City InfoSec                 | Audio Surveillence                                |
-| 2014-10-20 | Robert Morris University           | Mobile Device Security                            |
-| 2014-02-11 | Forbes Road CTC                    | Alumni Day Presentation                           |
-| 2014-01-09 | Steel City InfoSec                 | 2013 - What Just Happened?                        |
-| 2013-04-08 | Pittsburgh Technical Institute     | Life After Graduation                             |
-| 2013-03-25 | Pittsburgh Technical Institute     | Vulnerability Management 101                      |
-| 2013-01-03 | Steel City InfoSec                 | Wireless Security                                 |
-| 2012-08-07 | Pittsburgh Technical Institute     | Life After Graduation                             |
-| 2011-10-05 | Pittsburgh Technical Institute     | Alumni Speaker Series                             |
+| 2015-01-22 | Steel City InfoSec                 | Audio Surveillence                                             |
+| 2014-10-20 | Robert Morris University           | Mobile Device Security                                         |
+| 2014-02-11 | Forbes Road CTC                    | Alumni Day Presentation                                        |
+| 2014-01-09 | Steel City InfoSec                 | 2013 - What Just Happened?                                     |
+| 2013-04-08 | Pittsburgh Technical Institute     | Life After Graduation                                          |
+| 2013-03-25 | Pittsburgh Technical Institute     | Vulnerability Management 101                                   |
+| 2013-01-03 | Steel City InfoSec                 | Wireless Security                                              |
+| 2012-08-07 | Pittsburgh Technical Institute     | Life After Graduation                                          |
+| 2011-10-05 | Pittsburgh Technical Institute     | Alumni Speaker Series                                          |
 
 [2023-ScienceCenter]: https://youtu.be/RzFsM0b-4ms?t=922 "Passwords for Humans"
 [2022-CNSC]: https://www.youtube.com/watch?v=dSCJbdFbggA "Assessing Environments Against Cloud Native Security Best Practices"
+[2022-ISC2]: https://youtu.be/yihVuyu3I8A "Assessing Environments Against Cloud Native Security Best Practices"
 [2022-DevSecCon]: https://www.youtube.com/watch?v=Y1TGQWOmrTI "Simplifying IaC Security"
 [2022-CloudSecNext]: https://www.youtube.com/watch?v=jwqR_gtjSOc "IaC Security at Scale"
 [2017-TRISS]: https://www.youtube.com/watch?v=61qJnY9njgs "Cutting Through the Buzz: Machine Learning & Artificial Intelligence"

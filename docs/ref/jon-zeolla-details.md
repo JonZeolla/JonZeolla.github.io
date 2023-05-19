@@ -70,7 +70,9 @@ hidden: true
 
 | Date       | Event                           | Training                                                                            |
 | ---------- | ------------------------------- | ----------------------------------------------------------------------------------- |
+| 2023-10-18 | SANS Dallas Cloud Sec Next 2023 | [SEC540][SEC540]                                                                    |
 | 2023-09-04 | SANS Cloud Security London 2023 | [SEC540][SEC540]                                                                    |
+| 2023-08-07 | Private                         | [SEC540][SEC540]                                                                    |
 | 2023-07-10 | SANS SANSFIRE 2023              | [SEC540][SEC540]                                                                    |
 | 2023-05-21 | SANS Cyber Security East        | [SEC540][SEC540]                                                                    |
 | 2023-03-06 | SANS Las Vegas Winter 2023      | [SEC540][SEC540]                                                                    |

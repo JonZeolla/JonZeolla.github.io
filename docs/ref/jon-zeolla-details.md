@@ -118,7 +118,7 @@ hidden: true
 | 2018-02-28 | Packet Pushers         | [Datanauts 123: Security without Firewalls][2018-PacketPushers]                   |
 | 2016-06-01 | Packet Pushers         | [Datanauts 036: Busting The Security Silo In The Data Center][2016-PacketPushers] |
 
-[2023-Logicast] https://logicastvideo.podbean.com/e/season-2-episode-20-iam-roles-crypto-mining-and-hats/ "Season 2 Episode 20 - IAM Roles, Crypto Mining and Hats"
+[2023-Logicast]: https://logicastvideo.podbean.com/e/season-2-episode-20-iam-roles-crypto-mining-and-hats/ "Season 2 Episode 20 - IAM Roles, Crypto Mining and Hats"
 [2021-CSP]: https://cloudsecuritypodcast.tv/season-2/security-governance-and-compliance-in-serverless-applications/ "Cloud Security Podcast: Security Governance and Compliance in Serverless Applications"
 [2020-Reddup]: https://podcasts.apple.com/us/podcast/episode-ii-jon-zeolla/id1534967419?i=1000493972782 "Episode II - Jon Zeolla"
 [2018-PacketPushers]: https://packetpushers.net/podcast/datanauts-123-security-without-firewalls/ "Datanauts 123: Security without Firewalls"

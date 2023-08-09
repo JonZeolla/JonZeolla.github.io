@@ -6,8 +6,9 @@ name = "pypi"
 [packages]
 
 [dev-packages]
-docker = "*"
+boto3 = "*"
 myst-parser = "*"
+paramiko = "*"
 playwright = "*"
 pytest = "*"
 sphinx-copybutton = "*"
@@ -21,4 +22,4 @@ sphinxcontrib-googleanalytics = "*"
 sphinxcontrib-mermaid = "*"
 
 [requires]
-python_version = "3.10"
+python_version = "3.11"

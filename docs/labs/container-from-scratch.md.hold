@@ -3,6 +3,15 @@
 Welcome to my container from scratch lab! This was inspired by [Liz Rice](https://www.linkedin.com/in/lizrice/)'s
 [`containers-from-scratch`](https://github.com/lizrice/containers-from-scratch) Go project and DockerCon 2017 presentation.
 
+# Agenda
+
+```{toctree}
+---
+caption: Agenda
+maxdepth: 1
+---
+```
+
 ## Getting Started
 
 ```bash

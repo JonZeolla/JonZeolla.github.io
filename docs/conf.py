@@ -33,6 +33,8 @@ exclude_patterns: list[str] = []
 
 html_theme: str = "sphinx_rtd_theme"
 html_theme_path: list[str] = ["index.rst"]
+html_static_path: list[str] = ["_static"]
+html_css_files: list[str] = ["css/custom.css"]
 
 # -- Options for MyST --
 # https://myst-parser.readthedocs.io/en/latest/configuration.html

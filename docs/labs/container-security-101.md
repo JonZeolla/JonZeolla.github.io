@@ -3,7 +3,15 @@
 Welcome to my Container Security 101 workshop! If you'd like to sign up, you can register
 [here](https://www.sans.org/webcasts/container-security-101/).
 
+
 ## Agenda
+
+```{toctree}
+---
+caption: Agenda
+maxdepth: 1
+---
+```
 
 1. [Create secure and insecure container images](creating-images)
 1. [Perform container image signing](image-signing)
@@ -14,17 +22,9 @@ Welcome to my Container Security 101 workshop! If you'd like to sign up, you can
 
 ## Getting started
 
-```{important}
-This lab expects that you are running on a fresh Ubuntu 20.04 x86 system.
-
-To provision a fresh EC2 instance and minimal accompanying resources, you can download [this CloudFormation
-Template](../ref/cloudformation_ubuntu20.04.yml) and upload it to your [AWS Create Stack
-console](https://console.aws.amazon.com/cloudformation/home#/stacks/create). If you need more help, see the "Upload a
-template file" instructions
-[here](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-using-console-create-stack-template.html).
-
-After provisioning is complete, see the "Outputs" to get the information needed to connect into your system.
+```{include} ../shared/aws_ubuntu_20.04.md
 ```
+
 
 This lab is meant to be run in order from top to bottom. If you skip around, it is possible some prerequisites may not
 be met and you will encounter errors.
@@ -109,7 +109,7 @@ For more background, see docker's [What is a Container?](https://www.docker.com/
 
 ## Creating images
 
-As described in [the terminology section](#terminology), images are bundles. Those bundles need to be created (or
+As described in [the terminology section](terminology), images are bundles. Those bundles need to be created (or
 "built"), and the primary way that we do that is by creating a `Dockerfile`. For instance:
 
 ```{code-block} bash
@@ -779,7 +779,7 @@ Alright, now it's time to get a little bit ... deeper.
 
 So far we've covered a little bit about docker images and OCI artifacts, but what exactly _is_ an image?
 
-You may remember from our [terminology](#terminology) section that an image is a bundle of configuration, metadata, and
+You may remember from our [terminology](terminology) section that an image is a bundle of configuration, metadata, and
 files in a structured format.
 
 That bundle can be uniquely identified using an image manifest digest, which is just another name for the digest we've
@@ -955,7 +955,7 @@ anything juicy, and maybe drop a quick backdoor for ourselves later:
 
 ```{code-block} console
 ---
-emphasize-lines: 6,20
+emphasize-lines: 5,7,9
 ---
 $ ls -al /home # We can now see /home/ubuntu/ on the host filesystem
 total 12
@@ -1039,21 +1039,6 @@ Security and DevSecOps training.
 
 ## Cleanup
 
-Don't forget to terminate your EC2 instance! If you used the CloudFormation templates above, you should be able to go
+Don't forget to terminate your EC2 instance! If you used the CloudFormation template above, you should be able to go
 back into your [stacks](https://console.aws.amazon.com/cloudformation/home) and delete the stack that you used to create
 the lab.
-
-If you aren't quite ready to terminate your EC2 instance, here are some quick cleanup tasks:
-
-```{warning}
-Running the following commands WILL undo parts of the lab, and should only be used when you are done.
-```
-
-```{code-block} cleanup
-docker container rm dummy
-docker kill registry
-docker container rm registry
-docker network remove workshop
-docker volume rm workshop-certs
-rm -f cosign.key cosign.pub
-```

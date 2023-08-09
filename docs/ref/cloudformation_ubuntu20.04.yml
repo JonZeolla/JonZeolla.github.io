@@ -1,9 +1,9 @@
 ---
 AWSTemplateFormatVersion: 2010-09-09
 Description: |
-  Launch an EC2 instance for the SANS Container Security 101 Workshop -
-  Supported Regions (us-east-1, us-east-2, us-west-1, us-west-2, eu-west-1, ap-southeast-1, ap-southeast-2, ap-northeast-1)
-  Create SSH Key Pair at https://console.aws.amazon.com/ec2/home#KeyPairs
+  Launch an Ubuntu 20.04 EC2 instance and supporting resources.
+  Supported Regions include us-east-1, us-east-2, us-west-1, us-west-2, eu-west-1, ap-southeast-1, ap-southeast-2, and ap-northeast-1
+  Create an SSH Key Pair at https://console.aws.amazon.com/ec2/home#KeyPairs
 
 Parameters:
   SSHAccessKey:
@@ -158,9 +158,9 @@ Resources:
             VolumeType: gp3
 
 Outputs:
-  WorkshopVmAddress:
-    Description: Public IP Address of Workshop VM - Connect via SSH
+  IPAddress:
+    Description: Public IP Address of the Workshop VM
     Value: !GetAtt WorkshopVm.PublicIp
   WorkshopConnectCommand:
-    Description: Command to connect to Workshop VM
+    Description: SSH command to connect to the Workshop VM
     Value: !Sub "ssh ubuntu@${WorkshopVm.PublicIp} -i ${SSHAccessKey}.pem"

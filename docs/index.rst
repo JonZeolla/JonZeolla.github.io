@@ -25,7 +25,7 @@ having fun working on |easy_infra|.
 
 If you're here for a lab, `click here <labs/index.html>`_.
 
-You can also find a bit about my background `here <ref/jon-zeolla.html>`_.
+You can also find a bit about my background `here <about-me.html>`_.
 
 .. |seiso| image:: img/seiso.png
   :height: 3ex
@@ -42,3 +42,11 @@ You can also find a bit about my background `here <ref/jon-zeolla.html>`_.
 .. |easy_infra| image:: img/easy_infra.png
   :height: 5ex
   :target: https://github.com/SeisoLLC/easy_infra
+
+.. toctree::
+   :maxdepth: 2
+   :hidden:
+
+   labs/index
+   about-me
+   ref/content

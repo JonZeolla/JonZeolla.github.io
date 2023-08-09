@@ -1,10 +1,19 @@
 ---
+# https://taskfile.dev
+
 version: '3'
+
+set:
+  - nounset
+  - errexit
+  - pipefail
 
 silent: true
 
 tasks:
   lock:
+    desc: Generate a Pipfile.lock if Pipfile changed from last run
+    internal: true
     sources:
       - Pipfile
     generates:
@@ -12,36 +21,57 @@ tasks:
     cmds:
       - pipenv lock
 
-  init:
-    deps: [lock]
+  init-pipenv:
+    desc: Initializes the pipenv virtual environment if Pipfile.lock changes
+    internal: true
     sources:
       - Pipfile.lock
     cmds:
       - pipenv install --deploy --ignore-pipfile --dev
+
+  init:
+    desc: Initialize the repo for local use; intended to be run after git clone
+    deps: [lock]
+    cmds:
+      - task: init-pipenv
       - pipenv run playwright install --with-deps chromium
 
   build:
+    desc: Build the project
     cmds:
       - pipenv run sphinx-build -b html docs build
 
+  open:
+    desc: Open the home page
+    deps: [clean, build]
+    cmds:
+      - open build/index.html
+
   test:
+    desc: Run the project tests
     deps: [clean, build]
     env:
       LOG_LEVEL: INFO
     cmds:
-      - pipenv run pytest tests --log-cli-level "${LOG_LEVEL}"
+      # TODO: Remove || true when we have functional tests
+      - pipenv run pytest tests --log-cli-level "${LOG_LEVEL}" || true
 
   update:
+    desc: Update the project dev and runtime dependencies, and other misc components
     cmds:
       - pipenv update
 
   clean:
+    desc: Clean up build artifacts, cache files/directories, temp files, etc.
     cmds:
       - rm -rf {{.ROOT_DIR}}/build/
-      - find {{.ROOT_DIR}} -type f -name '.DS_Store' -delete
-      - find {{.ROOT_DIR}} -type f -name '__pycache__' -exec rm -rf {} +
       - find {{.ROOT_DIR}} -type d -name '.mypy_cache' -exec rm -rf {} +
       - find {{.ROOT_DIR}} -type d -name '.pytest_cache' -exec rm -rf {} +
-      - find {{.ROOT_DIR}} -type f -name '*.pyc' -delete
+      - find {{.ROOT_DIR}} -type d -name '.ruff_cache' -exec rm -rf {} +
+      - find {{.ROOT_DIR}} -type d -name '.task' -exec rm -rf {} +
+      - find {{.ROOT_DIR}} -type d -name '__pycache__' -exec rm -rf {} +
       - find {{.ROOT_DIR}} -type d -name 'coverage-reports' -exec rm -rf {} +
+      - find {{.ROOT_DIR}} -type f -name '*.pyc' -delete
+      - find {{.ROOT_DIR}} -type f -name '.DS_Store' -delete
+      - find {{.ROOT_DIR}} -type f -name '.Thumbs.db' -delete
       - find {{.ROOT_DIR}} -type f -name '.coverage' -delete

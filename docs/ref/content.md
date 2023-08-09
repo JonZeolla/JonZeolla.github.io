@@ -2,10 +2,16 @@
 orphan: true
 hidden: true
 ---
+```{toctree}
+```
+
 # Presentations
 
 | Date       | Event                              | Title                                                          |
 | ---------- | ---------------------------------- | -------------------------------------------------------------- |
+| 2023-07-25 | [OWASP Pittsburgh][2023-OWASP]     | IaC Security                                                   |
+| 2023-06-07 | InfraGard Pittsburgh               | Just In Time Cloud Permissions                                 |
+| 2023-04-27 | SANS Workshop                      | [Container Security 101][2023-SANS-ContainerSec101]            |
 | 2023-02-23 | SANS Cloud Defender Dallas @ Night | IaC Security at (even larger) Scale                            |
 | 2023-01-13 | Carnegie Science Center            | [Passwords for Humans][2023-ScienceCenter]                     |
 | 2022-12-13 | Private                            | OWASP 2021                                                     |
@@ -14,7 +20,7 @@ hidden: true
 | 2022-10-18 | (ISC){sup}`2` Pittsburgh           | [Cloud Native Security Best Practices][2022-ISC2]              |
 | 2022-10-14 | Three Rivers Information Security  | Transparent IaC Security                                       |
 | 2022-05-04 | CloudSecNext                       | [IaC Security at Scale][2022-CloudSecNext]                     |
-| 2021-07-14 | Pittsburgh Hackers Association     | Infrastructure as Code (Iac) Security                          |
+| 2021-07-14 | Pittsburgh Hackers Association     | Infrastructure as Code (IaC) Security                          |
 | 2021-07-13 | Private                            | The Pros and Cons of AWS Security Services                     |
 | 2020-11-23 | Private                            | Secure coding in ASP.NET                                       |
 | 2020-11-03 | Pittsburgh CISSP Study Group       | PKI and Cryptography                                           |
@@ -45,7 +51,7 @@ hidden: true
 | 2015-08-26 | Pittsburgh InfraGard               | DEFCON Briefing                                                |
 | 2015-07-07 | Pittsburgh Code & Supply           | The Dos and Don'ts of Wireless                                 |
 | 2015-04-09 | Steel City InfoSec                 | [Wireless Keyloggers and KeySweeper][2015-SCIS-WirelessKeylog] |
-| 2015-01-22 | Steel City InfoSec                 | Audio Surveillence                                             |
+| 2015-01-22 | Steel City InfoSec                 | Audio Surveillance                                             |
 | 2014-10-20 | Robert Morris University           | Mobile Device Security                                         |
 | 2014-02-11 | Forbes Road CTC                    | Alumni Day Presentation                                        |
 | 2014-01-09 | Steel City InfoSec                 | 2013 - What Just Happened?                                     |
@@ -55,6 +61,8 @@ hidden: true
 | 2012-08-07 | Pittsburgh Technical Institute     | Life After Graduation                                          |
 | 2011-10-05 | Pittsburgh Technical Institute     | Alumni Speaker Series                                          |
 
+[2023-OWASP]: https://www.meetup.com/owasp-pittsburgh-chapter/events/294769152 "OWASP Pittsburgh: IaC Security"
+[2023-SANS-ContainerSec101]: https://www.youtube.com/watch?v=-iJbGBJTRyk&t=2 "Container Security 101"
 [2023-ScienceCenter]: https://youtu.be/RzFsM0b-4ms?t=922 "Passwords for Humans"
 [2022-CNSC]: https://www.youtube.com/watch?v=dSCJbdFbggA "Assessing Environments Against Cloud Native Security Best Practices"
 [2022-ISC2]: https://youtu.be/yihVuyu3I8A "Assessing Environments Against Cloud Native Security Best Practices"
@@ -108,16 +116,18 @@ hidden: true
 [2015-PasswordCracking]: https://github.com/JonZeolla/lab-PasswordCracking "Password Cracking Lab"
 [2015-WifiSecurity]: https://github.com/JonZeolla/lab-WifiSecurity "Wifi Security Lab"
 
-# Podcasts
+# Podcasts and Live Streams
 
 | Date       | Podcast                | Episode                                                                           |
 | ---------- | ---------------------- | --------------------------------------------------------------------------------- |
+| 2023-09-13 | Wednesday Offensive    | [Cloud-native security][2023-WedOffensive]                                        |
 | 2023-05-30 | Logicast               | [Season 2 Episode 20 - IAM Roles, Crypto Mining and Hats][2023-Logicast]          |
 | 2021-11-06 | Cloud Security Podcast | [Security Governance and Compliance in Serverless Applications][2021-CSP]         |
 | 2020-07-26 | Reddup Security        | [Episode II - Jon Zeolla][2020-Reddup]                                            |
 | 2018-02-28 | Packet Pushers         | [Datanauts 123: Security without Firewalls][2018-PacketPushers]                   |
 | 2016-06-01 | Packet Pushers         | [Datanauts 036: Busting The Security Silo In The Data Center][2016-PacketPushers] |
 
+[2023-WedOffensive]: https://redsiege.com/wednesday-offensive/ "Wednesday Offensive - 9/13"
 [2023-Logicast]: https://logicastvideo.podbean.com/e/season-2-episode-20-iam-roles-crypto-mining-and-hats/ "Season 2 Episode 20 - IAM Roles, Crypto Mining and Hats"
 [2021-CSP]: https://cloudsecuritypodcast.tv/season-2/security-governance-and-compliance-in-serverless-applications/ "Cloud Security Podcast: Security Governance and Compliance in Serverless Applications"
 [2020-Reddup]: https://podcasts.apple.com/us/podcast/episode-ii-jon-zeolla/id1534967419?i=1000493972782 "Episode II - Jon Zeolla"

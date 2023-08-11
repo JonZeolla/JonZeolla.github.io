@@ -1,8 +1,16 @@
 # Container Security 101
 
-Welcome to my Container Security 101 workshop! If you'd like to sign up, you can register
-[here](https://www.sans.org/webcasts/container-security-101/).
+Welcome to my Container Security 101 workshop!
 
+For some background and an introduction to the lab, check out this presentation.
+
+<center><iframe width="560" height="315" src="https://www.youtube.com/embed/-iJbGBJTRyk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></center>
+<br />
+
+```{note}
+This was given as a part of [this webcast](https://www.sans.org/webcasts/container-security-101/) and was sponsored by [SANS Cloud
+Security](https://www.sans.org/cloud-security/). Thank you!
+```
 
 ## Agenda
 

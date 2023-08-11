@@ -10,6 +10,8 @@ Run `task init` to setup your local environment, `task build` to build the proje
 
 If you'd like to turn debug logging on, set your `LOG_LEVEL` environment variable to `DEBUG`.
 
+To autobuild as files change, run `nohup task -w build >/dev/null 2>&1 &` and clean up the job with `pkill -f 'task -w build'`
+
 ## Warning
 
 When running the tests, the contents of your clipboard is saved to a variable in an attempt to reinstate it after the tests complete (which use the clipboard to

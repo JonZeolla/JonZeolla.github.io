@@ -62,7 +62,7 @@ hidden: true
 | 2011-10-05 | Pittsburgh Technical Institute     | Alumni Speaker Series                                          |
 
 [2023-OWASP]: https://www.meetup.com/owasp-pittsburgh-chapter/events/294769152 "OWASP Pittsburgh: IaC Security"
-[2023-SANS-ContainerSec101]: https://www.youtube.com/watch?v=-iJbGBJTRyk&t=2 "Container Security 101"
+[2023-SANS-ContainerSec101]: https://www.youtube.com/watch?v=-iJbGBJTRyk "Container Security 101"
 [2023-ScienceCenter]: https://youtu.be/RzFsM0b-4ms?t=922 "Passwords for Humans"
 [2022-CNSC]: https://www.youtube.com/watch?v=dSCJbdFbggA "Assessing Environments Against Cloud Native Security Best Practices"
 [2022-ISC2]: https://youtu.be/yihVuyu3I8A "Assessing Environments Against Cloud Native Security Best Practices"

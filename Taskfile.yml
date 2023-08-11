@@ -10,6 +10,9 @@ set:
 
 silent: true
 
+# This sets the watch interval to .5s; https://taskfile.dev/usage/#watch-tasks
+interval: '500ms'
+
 tasks:
   lock:
     desc: Generate a Pipfile.lock if Pipfile changed from last run
@@ -38,12 +41,17 @@ tasks:
 
   build:
     desc: Build the project
+    # Sources are needed for auto-rebuilding via the taskfile watch feature
+    sources:
+      - docs/**/*.md
+      - docs/**/*.py
+      - docs/**/*.rst
     cmds:
       - pipenv run sphinx-build -b html docs build
 
   open:
     desc: Open the home page
-    deps: [clean, build]
+    deps: [build]
     cmds:
       - open build/index.html
 

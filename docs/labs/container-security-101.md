@@ -2,7 +2,11 @@
 
 Welcome to my Container Security 101 workshop!
 
-For some background and an introduction to the lab, check out this presentation.
+Is your company adopting containers but you haven’t had a chance to figure out the best way to secure them yet? In this lab, we get hands-on with containers,
+learn how to examine them for common mistakes, and then add in some security controls like container image signing, create a Software Bill of Materials, and run
+vulnerability scans.
+
+For some additional background and an introduction to the lab, check out this presentation.
 
 <center><iframe width="560" height="315" src="https://www.youtube.com/embed/-iJbGBJTRyk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></center>
 <br />

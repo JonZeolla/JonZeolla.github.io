@@ -9,9 +9,11 @@ hidden: true
 
 | Date       | Event                                  | Title                                                          |
 | ---------- | -------------------------------------- | -------------------------------------------------------------- |
-| 2023-09-07 | [Cloud Native Security Pgh][2023-CNSP] | Policy as Code                                                 |
+| 2023-09-22 | [2023 Pittsburgh TechFest][2023-TF]    | Platform Engineering and Security Guardrails                   |
+| 2023-09-07 | [Cloud Native Security Pgh][2023-CNSP] | Getting Started with Security Policy as Code                   |
+| 2023-09-05 | SANS Cloud Security London @ Night     | Just In Time Cloud Permissions (updated)                       |
 | 2023-08-23 | Domestic Security Alliance Council     | Cloud Security (Private)                                       |
-| 2023-07-25 | [OWASP Pittsburgh][2023-OWASP]         | IaC Security                                                   |
+| 2023-07-25 | [OWASP Pittsburgh][2023-OWASP]         | IaC Security (updated)                                         |
 | 2023-06-07 | InfraGard Pittsburgh                   | Just In Time Cloud Permissions                                 |
 | 2023-04-27 | SANS Workshop                          | [Container Security 101][2023-SANS-ContainerSec101]            |
 | 2023-02-23 | SANS Cloud Defender Dallas @ Night     | IaC Security at (even larger) Scale                            |
@@ -63,6 +65,7 @@ hidden: true
 | 2012-08-07 | Pittsburgh Technical Institute         | Life After Graduation                                          |
 | 2011-10-05 | Pittsburgh Technical Institute         | Alumni Speaker Series                                          |
 
+[2023-TF]: https://www.pghtech.org/events/2023TechFest_1 "2023 Pittsburgh TechFest"
 [2023-CNSP]: https://community.cncf.io/e/mvsutb/ "Cloud Native Security Pittsburgh - Kickoff Event in London"
 [2023-OWASP]: https://www.meetup.com/owasp-pittsburgh-chapter/events/294769152 "OWASP Pittsburgh: IaC Security"
 [2023-SANS-ContainerSec101]: https://www.youtube.com/watch?v=-iJbGBJTRyk "Container Security 101"

@@ -44,8 +44,9 @@ If you're into certifications I have a few
 
 ## Awards
 
-* 2022 Best Places to Work
-* 2021 Start-Up Innovator of the Year
+* 2023 Cybersecurity Innovator Finalist - Seiso
+* 2022 Best Places to Work - Seiso
+* 2021 Start-Up Innovator of the Year - Seiso
 * 2017 NTHS Honorary Member
 
 ## Community Building
@@ -60,6 +61,7 @@ If you're into certifications I have a few
 
 ## Volunteer Work
 
+* KubeCon/CloudNativeCon North America 2023 - [Program Committee Member](https://www.credly.com/earner/earned/badge/b5fe6313-37ad-41f9-a3b0-a07e6003c6ac)
 * [CNCF TAG-Security](https://github.com/cncf/tag-security) Member since 2020
   * 2023 [Pixie security review](https://github.com/cncf/tag-security/issues/1068) ([Pixie](https://github.com/pixie-io/pixie))
   * 2022 [Cloud Native Security Controls Catalog](https://docs.google.com/spreadsheets/d/1H9J0phBbg47fsyiLNG1-5NXms46KKxTH9ZjcU07no6A/edit#gid=1938257679) ([issue

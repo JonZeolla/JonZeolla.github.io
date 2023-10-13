@@ -5,10 +5,13 @@ hidden: true
 ```{toctree}
 ```
 
-# Presentations
+# Presentations and Events
 
 | Date       | Event                                  | Title                                                          |
 | ---------- | -------------------------------------- | -------------------------------------------------------------- |
+| 2023-11-06 | [2023 KubeCon][2023-KubeCon]           | [Lightning Talk][2023-KubeCon-Talk]                            |
+| 2023-11-16 | [2023 CloudSecNext][2023-CloudSecNext] | Event co-host                                                  |
+| 2023-10-13 | [2023 TRISS][2023-TRISS]               | Cloud Security Panel                                           |
 | 2023-09-22 | [2023 Pittsburgh TechFest][2023-TF]    | Platform Engineering and Security Guardrails                   |
 | 2023-09-07 | [Cloud Native Security Pgh][2023-CNSP] | Getting Started with Security Policy as Code                   |
 | 2023-09-05 | SANS Cloud Security London @ Night     | Just In Time Cloud Permissions (updated)                       |
@@ -65,6 +68,10 @@ hidden: true
 | 2012-08-07 | Pittsburgh Technical Institute         | Life After Graduation                                          |
 | 2011-10-05 | Pittsburgh Technical Institute         | Alumni Speaker Series                                          |
 
+[2023-CloudSecNext]: https://www.sans.org/cyber-security-training-events/cloudsecnext-summit-2023/ "2023 CloudSecNext"
+[2023-KubeCon-Talk]: https://kccncna2023.sched.com/event/1R2ll/cl-lightning-talk-empowering-the-deaf-and-hard-of-hearing-in-cloud-native-and-open-source-jon-zeolla-seiso-catherine-paganini-buoyant "2023 KubeCon Lightning Talk"
+[2023-KubeCon]: https://events.linuxfoundation.org/kubecon-cloudnativecon-north-america/ "2023 KubeCon and CloudNativeCon"
+[2023-TRISS]: https://www.threeriversinfosec.com/ "2023 Three Rivers Information Security Symposium"
 [2023-TF]: https://www.pghtech.org/events/2023TechFest_1 "2023 Pittsburgh TechFest"
 [2023-CNSP]: https://community.cncf.io/e/mvsutb/ "Cloud Native Security Pittsburgh - Kickoff Event in London"
 [2023-OWASP]: https://www.meetup.com/owasp-pittsburgh-chapter/events/294769152 "OWASP Pittsburgh: IaC Security"

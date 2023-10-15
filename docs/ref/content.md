@@ -114,6 +114,7 @@ hidden: true
 | 2016-02-11 | Steel City InfoSec               | [SDR Security][2016-SDRSecurity] (Collab with David)                                |
 | 2015-09-24 | Steel City InfoSec               | [Password Cracking Lab][2015-PasswordCracking]                                      |
 | 2015-07-07 | Pittsburgh Code & Supply         | [Wifi Security][2015-WifiSecurity]                                                  |
+| 2015-01-22 | Steel City InfoSec               | Audio Surveillance                                                                  |
 | 2015-04-09 | Steel City InfoSec               | [Attacker drop boxes][2015-Attackerdropboxes] (Collab with Brian Gray)              |
 | 2015-01-22 | Steel City InfoSec               | [Eavesdropping at a distance][2015-LaserMicrophones] (Collab with Brian Gray)       |
 | 2013-03-07 | Steel City InfoSec               | Wifi Security                                                                       |

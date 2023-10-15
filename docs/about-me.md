@@ -53,7 +53,8 @@ If you're into certifications I have a few
 
 * [CNCF - Cloud Native Security Pittsburgh](https://community.cncf.io/cloud-native-security-pittsburgh/) ([YouTube
   channel](https://www.youtube.com/@cloud-native-security)) founder since 2023
-* [Steel City InfoSec](https://steelcityinfosec.com/) (aka DC412) founder since 2012
+* [Steel City InfoSec](https://steelcityinfosec.com/) (aka DC412) founder since 2012; see prior events
+  [here](https://www.meetup.com/steel-city-infosec/events/?type=past)
 * [BSides Pittsburgh](https://bsidespgh.com/) organizer since 2014
 * [PittSec](https://pittsec.com/) founder since 2018
 * CNCF [TAG-Security](https://github.com/cncf/tag-security) and [Ambassador](https://www.credly.com/badges/b8d3938a-219d-42f7-b175-0820e2cb1db7)

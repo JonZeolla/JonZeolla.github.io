@@ -92,6 +92,10 @@ $ export EXTERNAL_IP="$(grep ^Host ~/.ssh/config | awk '{print $2}')"
 $ ssh-keyscan -p 2222 "${EXTERNAL_IP}" >> "${HOME}/.ssh/known_hosts"
 $ cd ~/environment/policy-as-code-demo
 $ git fetch --all
+$ git checkout feat/iac
+$ git checkout policy/iac
+$ git checkout policy/dockerfile
+$ git checkout main
 $ git remote remove origin
 $ git remote add origin ssh://git@${EXTERNAL_IP}:2222/demo/policy-as-code-demo.git
 $ git push --all origin

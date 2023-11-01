@@ -18,4 +18,6 @@ If you need more help, see [AWS's CloudFormation stacks
 documentation](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-using-console.html).
 
 After provisioning is complete, see the "Outputs" to get the information needed to connect into your system.
+
+[this guide](project:../ref/manual_aws_ubuntu20.04.md) if you need help setting that up.
 ```

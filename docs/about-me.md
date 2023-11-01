@@ -36,7 +36,7 @@ clients, actively contributes to open source projects, and shapes industry stand
 
 Feel free to connect with me on [LinkedIn](https://linkedin.com/in/jonzeolla).
 
-Check out my presentations, trainings, etc. [here](project:./ref/content.md).
+Check out my presentations, trainings, etc. [here](project:./ref/jz-content.md).
 
 If you're into certifications I have a few
 [here](https://drive.google.com/drive/u/0/folders/0B2NDLONqoOuTcXU1Uk5yVnBFMW8?resourcekey=0-iM4bgThWU8AStx5cR7RIow) and

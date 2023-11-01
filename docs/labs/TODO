@@ -1,0 +1,5 @@
+Git repo and clone
+Mktemp -d
+Tf and make keypair
+use tf output, pass into ansible.
+Ansible second separate step so no d in d

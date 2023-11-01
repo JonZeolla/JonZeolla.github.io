@@ -18,7 +18,6 @@ hidden: true
 | 2023-08-23 | Domestic Security Alliance Council     | Cloud Security (Private)                                       |
 | 2023-07-25 | [OWASP Pittsburgh][2023-OWASP]         | IaC Security (updated)                                         |
 | 2023-06-07 | InfraGard Pittsburgh                   | Just In Time Cloud Permissions                                 |
-| 2023-04-27 | SANS Workshop                          | [Container Security 101][2023-SANS-ContainerSec101]            |
 | 2023-02-23 | SANS Cloud Defender Dallas @ Night     | IaC Security at (even larger) Scale                            |
 | 2023-01-13 | Carnegie Science Center                | [Passwords for Humans][2023-ScienceCenter]                     |
 | 2022-12-13 | Private                                | OWASP 2021                                                     |
@@ -75,7 +74,6 @@ hidden: true
 [2023-TF]: https://www.pghtech.org/events/2023TechFest_1 "2023 Pittsburgh TechFest"
 [2023-CNSP]: https://community.cncf.io/e/mvsutb/ "Cloud Native Security Pittsburgh - Kickoff Event in London"
 [2023-OWASP]: https://www.meetup.com/owasp-pittsburgh-chapter/events/294769152 "OWASP Pittsburgh: IaC Security"
-[2023-SANS-ContainerSec101]: https://www.youtube.com/watch?v=-iJbGBJTRyk "Container Security 101"
 [2023-ScienceCenter]: https://youtu.be/RzFsM0b-4ms?t=922 "Passwords for Humans"
 [2022-CNSC]: https://www.youtube.com/watch?v=dSCJbdFbggA "Assessing Environments Against Cloud Native Security Best Practices"
 [2022-ISC2]: https://youtu.be/yihVuyu3I8A "Assessing Environments Against Cloud Native Security Best Practices"
@@ -91,12 +89,15 @@ hidden: true
 
 | Date       | Event                            | Training                                                                            |
 | ---------- | -------------------------------- | ----------------------------------------------------------------------------------- |
+| 2023-11-01 | SANS Workshop                    | [Mastering Policy as Code][2023-PolicyasCode]                                       |
 | 2023-10-18 | SANS Dallas Cloud Sec Next 2023  | [SEC540][SEC540]                                                                    |
+| 2023-10-16 | SANS Workshop                    | [Container Security 101][2023-ContainerSec101]                                      |
 | 2023-09-25 | SANS Managing Security Risk 2023 | [SEC540][SEC540]                                                                    |
 | 2023-09-04 | SANS Cloud Security London 2023  | [SEC540][SEC540]                                                                    |
 | 2023-08-07 | Private                          | [SEC540][SEC540]                                                                    |
 | 2023-07-10 | SANS SANSFIRE 2023               | [SEC540][SEC540]                                                                    |
 | 2023-05-21 | SANS Cyber Security East         | [SEC540][SEC540]                                                                    |
+| 2023-04-27 | SANS Workshop                    | [Container Security 101][2023-ContainerSec101]                                      |
 | 2023-03-06 | SANS Las Vegas Winter 2023       | [SEC540][SEC540]                                                                    |
 | 2023-02-20 | SANS Cloud Defender Dallas 2023  | [SEC540][SEC540]                                                                    |
 | 2022-11-07 | SANS Cyber Security East         | [SEC540][SEC540]                                                                    |
@@ -119,6 +120,8 @@ hidden: true
 | 2015-01-22 | Steel City InfoSec               | [Eavesdropping at a distance][2015-LaserMicrophones] (Collab with Brian Gray)       |
 | 2013-03-07 | Steel City InfoSec               | Wifi Security                                                                       |
 
+[2023-PolicyasCode]: https://jonzeolla.com/labs/policy-as-code.html "Mastering Policy as Code"
+[2023-ContainerSec101]: https://jonzeolla.com/labs/container-security-101.html "Container Security 101"
 [SEC540]: https://sans.org/sec540 "SANS SEC540: Cloud Security and DevSecOps Automation"
 [2018-BlockCipherCrypto]: https://github.com/JonZeolla/lab-BlockCipherCryptography "Attacking Block Cipher Cryptography"
 [2018-SmartContractSecurity]: https://github.com/JonZeolla/lab-SmartContractSecurity "Smart Contract Security"

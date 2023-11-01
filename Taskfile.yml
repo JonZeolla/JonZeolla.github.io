@@ -53,7 +53,7 @@ tasks:
     desc: Open the home page
     deps: [build]
     cmds:
-      - open build/index.html
+      - open {{.ROOT_DIR}}/build/index.html
 
   test:
     desc: Run the project tests

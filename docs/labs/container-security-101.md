@@ -12,7 +12,7 @@ For some additional background and an introduction to the lab, check out this pr
 <br />
 
 ```{note}
-This was given as a part of [this webcast](https://www.sans.org/webcasts/container-security-101/) and was sponsored by [SANS Cloud
+The above recording was a part of [this webcast](https://www.sans.org/webcasts/container-security-101/), sponsored by [SANS Cloud
 Security](https://www.sans.org/cloud-security/). Thank you!
 ```
 
@@ -34,76 +34,23 @@ maxdepth: 1
 
 ## Getting started
 
-```{include} ../shared/aws_ubuntu_20.04.md
+```{important}
+This lab expects that you have an AWS Cloud9 environment configured. Step by step instructions to create a Cloud9 environment are available
+<a href="../ref/aws_cloud9.html" target="_blank" rel="noopener">here</a>.
 ```
 
-
-This lab is meant to be run in order from top to bottom. If you skip around, it is possible some prerequisites may not
-be met and you will encounter errors.
-
-Also, in our environment we're going to use `docker` for the examples. While there are alternatives, this is the most
-widely adopted containerization software and simplest place to start.
-
-Run the following to setup the prerequisite tools:
+Run the following inside your Cloud9 IDE to setup the lab environment:
 
 ```{code-block} bash
-if [[ -x "$(which sudo)" ]]; then sudo apt-get update; else su -c 'apt-get update'; fi
-if [[ -x "$(which sudo)" ]]; then sudo apt-get -y install ca-certificates curl sudo jq; else su -c 'apt-get -y install ca-certificates curl sudo jq'; fi
-```
-
-Now we can download and run the setup script from docker. Note that this script is meant purely for development
-environments, such as our lab environment, and is not meant for production use.
-
-```{code-block} bash
-curl -fsSL https://get.docker.com -o get-docker.sh
-sudo sh get-docker.sh
-```
-
-Now, if you attempt to run `docker` commands as any user other than `root`, you will find that they fail:
-
-```{code-block} console
 ---
-class: no-copybutton
+class: getting-started
 ---
-$ docker ps
-permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Get "http://%2Fvar%2Frun%2Fdocker.sock/v1.24/containers/json": dial unix /var/run/docker.sock: connect: permission denied
-```
-
-```{note}
-When you encounter code blocks that don't show a copy button, like the one above, it means it is only meant as an
-example and is **not meant to be run**
-```
-
-In order to fix that, add your user to the `docker` group.
-
-```{code-block} bash
-if [[ "$(whoami)" != "root" ]]; then sudo usermod -aG docker "$(whoami)"; fi
-```
-
-**If you know your password** you can run `exec su -l "$(whoami)"` to refresh your group memberships
-
-```{code-block} console
-$ id | grep docker
-$ exec su -l "$(whoami)"
-Password:
-$ id | grep docker
-uid=1000(ubuntu) gid=1000(ubuntu) groups=1000(ubuntu),4(adm),20(dialout),24(cdrom),25(floppy),27(sudo),29(audio),30(dip),44(video),46(plugdev),118(netdev),119(lxd),998(docker)
-```
-
-Otherwise you will need to **exit your SSH session** and re-connect.
-
-Now your `docker` commands should now succeed:
-
-```{code-block} console
-$ docker ps
-CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+docker run -e HOST_USER="${USER}" --network host -v ~/.ssh:/root/.ssh jonzeolla/labs:container-security-101
 ```
 
 You're now ready to get started on the lab!
 
 ## Terminology
-
-A quick aside on terminology.
 
 - **Image**: An image is a bundle of configuration, metadata, and files in a structured format. When you want to run a
   container, you take an image and "instantiate" (run) it.
@@ -116,6 +63,8 @@ A quick aside on terminology.
   [runtimes](https://github.com/opencontainers/runtime-spec), and [distributing
   images](https://github.com/opencontainers/distribution-spec). You don't need to worry about the details for this lab,
   just know that an OCI Artifact is a bundle of files that conforms to the OCI standards.
+- **Container Runtime**: Container runtimes are software components that facilitate running containers on a host operating system. In this lab we're going to
+  use `docker` as our container runtime; while there are alternatives, this is the most widely adopted containerization software and simplest place to start.
 
 For more background, see docker's [What is a Container?](https://www.docker.com/resources/what-container/) page.
 

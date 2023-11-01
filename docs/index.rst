@@ -49,4 +49,4 @@ You can also find a bit about my background `here <about-me.html>`_.
 
    labs/index
    about-me
-   ref/content
+   ref/jz-content

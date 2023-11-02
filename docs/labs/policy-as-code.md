@@ -47,7 +47,7 @@ Now, run the lab setup container.
 ---
 class: getting-started
 ---
-docker run -e C9_PROJECT -e CLIENT_IP -e HOST_USER="${USER}" --network host -v ~/logs:/root/logs -v ~/.ssh:/root/.ssh jonzeolla/labs:policy-as-code
+docker run -e CLIENT_IP -e HOST_USER="${USER}" --network host -v ~/logs:/root/logs -v ~/.ssh:/root/.ssh jonzeolla/labs:policy-as-code
 ```
 
 Then, you will need to wait for a while as the automation configures your enviornment. At the end you should see a message like this:

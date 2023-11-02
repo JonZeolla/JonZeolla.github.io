@@ -76,40 +76,10 @@ Policy as Code applies across the entire lifecycle of development, from early so
 deployment of those artifacts, and finally production runtime. In this lab, we will be focusing on Policy as Code tooling that can be used in pipelines to
 detect and prevent mistakes from being deployed to production.
 
-We will be using a very simple demo repository foro this lab, which has already been cloned in `~/environment/policy-as-code-demo`. Go ahead and open this
-folder in your Cloud9 IDE and take a brief look around.
+We will be using a very simple demo repository foro this lab, which is already setup in GitLab, and is also available in your Cloud9 IDE under
+`~/environment/policy-as-code-demo`.
 
-First, we need to push this new repository into our GitLab environment. I've pre-created an SSH private key in `~/.ssh/gitlab` and a public key in
-`~/.ssh/gitlab.pub`, as well as a configuration in `~/.ssh/config`. Feel free to examine these manually.
-
-Now you can follow [these steps](https://docs.gitlab.com/ee/user/ssh.html#add-an-ssh-key-to-your-gitlab-account) to add your SSH public key to your user in
-GitLab.
-
-Once that's complete, run the following commands to push the `policy-as-code-demo` into GitLab.
-
-```{code-block} console
-$ export EXTERNAL_IP="$(grep ^Host ~/.ssh/config | awk '{print $2}')"
-$ ssh-keyscan -p 2222 "${EXTERNAL_IP}" >> "${HOME}/.ssh/known_hosts"
-$ cd ~/environment/policy-as-code-demo
-$ git fetch --all
-$ git checkout feat/iac
-$ git checkout policy/iac
-$ git checkout policy/dockerfile
-$ git checkout main
-$ git remote remove origin
-$ git remote add origin ssh://git@${EXTERNAL_IP}:2222/demo/policy-as-code-demo.git
-$ git push --all origin
-Enumerating objects: 6, done.
-Counting objects: 100% (6/6), done.
-Delta compression using up to 4 threads
-Compressing objects: 100% (4/4), done.
-Writing objects: 100% (6/6), 1.82 KiB | 1.82 MiB/s, done.
-Total 6 (delta 0), reused 5 (delta 0), pack-reused 0
-To ssh://3.134.105.97:2222/demo/policy-as-code-demo.git
- * [new branch]      main -> main
-```
-
-You can now open up GitLab and browse to the `policy-as-code-demo` pipelines. It should look a little something like this:
+Taking a look, you should see something like this:
 
 ![Initial Pipelines](../img/policy-as-code_initial_pipelines.png)
 
@@ -118,9 +88,11 @@ You can now open up GitLab and browse to the `policy-as-code-demo` pipelines. It
 class: dropdown hint
 ---
 If you're having a hard time finding the `policy-as-code-demo` repo, and the corresponding pipeline, try going to the below URL:
-```{code-block} bash
-export EXTERNAL_IP="$(grep ^Host ~/.ssh/config | awk '{print $2}')"
-echo "http://${EXTERNAL_IP}/root/policy-as-code-demo/-/pipelines"
+
+```{code-block} console
+$ export EXTERNAL_IP="$(grep ^Host ~/.ssh/config | awk '{print $2}')"
+$ echo "http://${EXTERNAL_IP}/demo/policy-as-code-demo/-/pipelines"
+http://18.219.106.231/demo/policy-as-code-demo/-/pipelines
 ```
 :::
 
@@ -268,10 +240,11 @@ needs to be either 7 or 40 characters of hex, or it can be passed in with a buil
 
 Let's have a look at our pipelines relating to this code. Run the following command, and then open the resulting URL in your host web browser.
 
+% Hidden comment: The output below has the final % removed because of a rendering issue, probably with myst
 ```{code-block} console
 $ export EXTERNAL_IP="$(grep ^Host ~/.ssh/config | awk '{print $2}')"
 $ echo "http://${EXTERNAL_IP}/demo/policy-as-code-demo/-/pipelines?page=1&scope=branches&ref=policy%2Fdockerfile"
-http://18.191.159.152/demo/policy-as-code-demo/-/pipelines?page=1&scope=branches&ref=policy%2Fdockerfile
+http://1.2.3.4/demo/policy-as-code-demo/-/pipelines?page=1&scope=branches&ref=policy2Fdockerfile
 ```
 
 You should see something like this - the pipeline failed! But, why did it fail?
@@ -359,10 +332,12 @@ And, if we look at the related pipeline, we should also see that they succeeded 
 class: dropdown hint
 ---
 If you're having a hard time finding the `feat/iac` pipeline, run the following and then open the displayed URL in the host browser:
-```{code-block} bash
+
+% Hidden comment: The output below has the final % removed because of a rendering issue, probably with myst
+```{code-block} console
 $ export EXTERNAL_IP="$(grep ^Host ~/.ssh/config | awk '{print $2}')"
 $ echo "http://${EXTERNAL_IP}/demo/policy-as-code-demo/-/pipelines?page=1&scope=branches&ref=feat%2Fiac"
-http://18.191.159.152/demo/policy-as-code-demo/-/pipelines?page=1&scope=branches&ref=feat%2Fiac
+http://1.2.3.4/demo/policy-as-code-demo/-/pipelines?page=1&scope=branches&ref=feat2Fiac
 ```
 :::
 
@@ -379,21 +354,17 @@ Go to the pipeline associated with the `policy/iac` branch now. You should see s
 class: dropdown hint
 ---
 If you're having a hard time finding the `feat/iac` pipeline, run the following and then open the displayed URL in the host browser:
-```{code-block} bash
+
+% Hidden comment: The output below has the final % removed because of a rendering issue, probably with myst
+```{code-block} console
 $ export EXTERNAL_IP="$(grep ^Host ~/.ssh/config | awk '{print $2}')"
 $ echo "http://${EXTERNAL_IP}/demo/policy-as-code-demo/-/pipelines?page=1&scope=branches&ref=policy%2Fiac"
-http://18.191.159.152/demo/policy-as-code-demo/-/pipelines?page=1&scope=branches&ref=policy%2Fiac
+http://1.2.3.4/demo/policy-as-code-demo/-/pipelines?page=1&scope=branches&ref=policy2Fiac
 ```
 :::
 
-```{admonition} Answer
----
-class: dropdown hint
----
-The pipeline should fail due to some security findings.
-
-Our policy is that all EC2 instances must use encrypted EBS volumes, and the configuration that was used did not have encrypted disks (among other problems).
-```
+The pipeline **failed, which is the expected outcome** due to being non-compliant with our company's policy. Our policy is that all EC2 instances must use
+encrypted EBS volumes, and the configuration that was used did not have encrypted disks (among other problems).
 
 That was cool. All we did was change containers though. How did it add policy enforcement?
 

@@ -67,8 +67,8 @@ hidden: true
 | 2012-08-07 | Pittsburgh Technical Institute         | Life After Graduation                                          |
 | 2011-10-05 | Pittsburgh Technical Institute         | Alumni Speaker Series                                          |
 
-[2023-CloudSecNext]: https://www.sans.org/cyber-security-training-events/cloudsecnext-summit-2023/ "2023 CloudSecNext"
 [2023-KubeCon-Talk]: https://kccncna2023.sched.com/event/1R2ll/cl-lightning-talk-empowering-the-deaf-and-hard-of-hearing-in-cloud-native-and-open-source-jon-zeolla-seiso-catherine-paganini-buoyant "2023 KubeCon Lightning Talk"
+[2023-CloudSecNext]: https://www.sans.org/cyber-security-training-events/cloudsecnext-summit-2023/ "2023 CloudSecNext"
 [2023-KubeCon]: https://events.linuxfoundation.org/kubecon-cloudnativecon-north-america/ "2023 KubeCon and CloudNativeCon"
 [2023-TRISS]: https://www.threeriversinfosec.com/ "2023 Three Rivers Information Security Symposium"
 [2023-TF]: https://www.pghtech.org/events/2023TechFest_1 "2023 Pittsburgh TechFest"
@@ -89,6 +89,7 @@ hidden: true
 
 | Date       | Event                            | Training                                                                            |
 | ---------- | -------------------------------- | ----------------------------------------------------------------------------------- |
+| 2023-11-27 | Pittsburgh Code & Supply         | [Container Security 101][2023-ContainerSec101] ([Event link][2023-PCS])             |
 | 2023-11-01 | SANS Workshop                    | [Mastering Policy as Code][2023-PolicyasCode]                                       |
 | 2023-10-18 | SANS Dallas Cloud Sec Next 2023  | [SEC540][SEC540]                                                                    |
 | 2023-10-16 | SANS Workshop                    | [Container Security 101][2023-ContainerSec101]                                      |
@@ -120,6 +121,7 @@ hidden: true
 | 2015-01-22 | Steel City InfoSec               | [Eavesdropping at a distance][2015-LaserMicrophones] (Collab with Brian Gray)       |
 | 2013-03-07 | Steel City InfoSec               | Wifi Security                                                                       |
 
+[2023-PCS]: https://www.meetup.com/pittsburgh-code-supply/events/297107969/ "Pittsburgh Code & Supply Container Security 101 Workshop"
 [2023-PolicyasCode]: https://jonzeolla.com/labs/policy-as-code.html "Mastering Policy as Code"
 [2023-ContainerSec101]: https://jonzeolla.com/labs/container-security-101.html "Container Security 101"
 [SEC540]: https://sans.org/sec540 "SANS SEC540: Cloud Security and DevSecOps Automation"

@@ -70,6 +70,9 @@ If you're into certifications I have a few
     635](https://github.com/cncf/tag-security/issues/635),
     [blog](https://www.cncf.io/blog/2022/06/07/introduction-to-the-cloud-native-security-controls-catalog/))
   * 2021 Serverless Security White Paper ([issue 546](https://github.com/cncf/tag-security/issues/546))
+* [Kubernetes SIG-Security](https://github.com/kubernetes/sig-security/tree/main) Policy Working Group Member since 2022
+  * 2023 [Kubernetes Governance, Risk, and Compliance White
+    Paper](https://github.com/kubernetes/sig-security/blob/8cf0dd5dc8b9c7e67be71b19e3b4683645b99a68/sig-security-docs/papers/policy_grc/Kubernetes_Policy_WG_Paper_v1_101123.pdf)
 * NSF Grant #2000902 Advisory Board Member since 2022
 * DataWorks Summit, CyberSecurity Track Chair in 2018
 * [CAMLIS Organizer](https://www.camlis.org/) in 2018

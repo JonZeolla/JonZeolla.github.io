@@ -985,6 +985,21 @@ $ exit
 
 Breakout averted! Great job 😊
 
+```{seealso}
+---
+class: dropdown
+---
+Interested in some more ways to escape a container? Check out Panoptica's "[7 Ways to Escape a
+Container](https://www.panoptica.app/research/7-ways-to-escape-a-container)" blog post, which covers:
+  1. Mounting the host filesystem
+  1. Using a mounted docker socket
+  1. Project Injection
+  1. Adding a malicious kernel module
+  1. Reading secrets from the host
+  1. Overriding files on the host
+  1. Abusing notify on release
+```
+
 ## Conclusion
 
 If you've made it this far, congratulations!

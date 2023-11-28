@@ -1,0 +1,85 @@
+# Policy as Code TODOs
+
+## Bugfix
+
+1. Fix the IAC failed pipeline output
+
+    - Add a screenshot of the IaC failure and put it in the labs
+
+1. Finish migrating easy_infra to otel and ensure otel & cloning logic aren't in the entrypoint to support gitlab
+
+1. Support restarting the server; the container came back up on its own, but the runner was broken.
+
+## Chore
+
+1. Is there anything in the policy-as-code repo entrypoint.sh that we don’t need or can simplify?
+
+1. Improve maintenance with renovate
+
+    - Fix the hard coded variables, add renovate to auto update them.  Centralized embedded-dependencies.yml with context of file, regex, how to get updates? to
+    be passed to renovate?
+    - Pin and auto update the collections in requirements.yml
+
+1. Clean up the OSCAL section
+
+    - Add Utility Map screenshot to 12 Essential Requirements inline.
+
+1. Add ansible-lint back into task lint and .pre-commit-config.yml to include the update for the goat, as well as the init function
+
+1. Add testing
+
+1. Disable new sign-ups automatically https://docs.gitlab.com/ee/administration/settings/sign_up_restrictions.html#disable-new-sign-ups (glab?)
+
+1. Add SECURITY-INSIGHTS.yml (Add https://github.com/ossf/security-insights-spec/blob/main/specification.md)
+
+## New feature
+
+1. Make a fix/dockerfile branch
+
+    ```
+    LABEL org.opencontainers.image.vendor="Example"
+    LABEL org.opencontainers.image.url="https://example.com"
+    LABEL org.opencontainers.image.source="https://example.com/demo/policy-as-code-demo"
+    ```
+
+1. Run fix/dockerfile based on top of policy/dockerfile.  See the pipeline is good.
+
+1. Write terraform/cfn that creates cloud9 and runs commands in it (tests and ease spinup).
+
+    - Set certain env vars all the time – like CLIENT_IP – maybe in bash shell or userdata or /etc/profile.d/policy-as-code.sh? If yes, remove from the lab instructions and
+    policy-as-code repo to export
+        - https://stackoverflow.com/questions/54564787/how-to-add-two-variables-in-cloudformation-fnsub-in-userdata/54571665#54571665
+        - Replace things like <IP> in the lab instructions with a variable
+    - Change the manual instructions
+    - Deploy with OIDC in pipeline, test, then destroy.
+
+1. Add keyless signing
+
+## Nice to have
+
+1. Generate a SSH key with a passphrase; I was getting “"Could not open a connection to your authentication agent"” when non-interactively running.
+    - Askpass.sh in history
+
+1. Add cspell word denylist (npm is a dep)
+
+1. Add conftest w/rego; non-working example
+
+    ```
+    package image
+
+    allow_list = ["mcr.microsoft.com/"]
+
+    is_base_image_allowed(element) {
+      contains(element, allow_list[_])
+      }
+
+      deny[msg] {
+      input[i].Cmd == "from"
+      image := input[i].Value[0]
+      not is_base_image_allowed(image)
+      msg = sprintf("Untrusted supplier: %v",
+                    [image])
+    }
+
+    $ conftest test --namespace image,install Dockerfile
+    ```

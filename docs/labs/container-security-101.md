@@ -45,7 +45,7 @@ Run the following inside your Cloud9 IDE to setup the lab environment:
 ---
 class: getting-started
 ---
-docker run -e HOST_USER="${USER}" --network host -v ~/.ssh:/root/.ssh jonzeolla/labs:container-security-101
+docker run -e HOST_USER="${USER}" --network host -v ~/logs:/root/logs -v ~/.ssh:/root/.ssh jonzeolla/labs:container-security-101
 ```
 
 You're now ready to get started on the lab!
@@ -428,6 +428,22 @@ Now that we have an image digest, we can properly sign the image. In order to pe
 operations, we'll be using the `cosign` tool, which is an [Open Source Security Foundation](https://openssf.org/)
 project under the [sigstore](https://www.sigstore.dev/) umbrella.
 
+```{note}
+---
+class: dropdown
+---
+Although we use `cosign` in this lab, it is not the only option for performing image signing. Other options include:
+1. CNCF [Notary project](https://notaryproject.dev/) and the associated [Notation](https://github.com/notaryproject/notation/) specification, which has been
+   adopted by [AWS Signer](https://docs.aws.amazon.com/signer/latest/developerguide/image-signing-steps.html) and [Azure Key
+   Vault](https://learn.microsoft.com/en-us/azure/container-registry/container-registry-tutorial-sign-build-push).
+1. [OpenPubkey](https://www.docker.com/blog/signing-docker-official-images-using-openpubkey/), which was announced at DockerCon 2023 and is described well in
+   [this](https://www.docker.com/blog/signing-docker-official-images-using-openpubkey/) blog post (for additional details, see a detailed OpenPubkey paper
+   [here](https://eprint.iacr.org/2023/296.pdf)).
+1. Google's [Binary Authorization](https://cloud.google.com/binary-authorization/docs/key-concepts) format, which often includes various attestations, such as
+   provenance details, evidence of manual assessments, and vulnerability scanning, based on the
+   [kritis](https://github.com/grafeas/kritis/blob/master/docs/binary-authorization.md) specification.
+```
+
 In order to sign the image, we will:
 
 1. Pull another docker image that contains `cosign` (are you seeing the pattern yet? 😀)
@@ -483,7 +499,10 @@ signing". In reality, just like serverless isn't serverless, keyless also isn't 
 to generate or manage the keys yourself; they are created on the fly, tied to an OIDC identity, used to create a
 short-lived certificate and to facilitate the signing process, and then securely erased.
 
-To learn more, check out the [keyless documentation](https://docs.sigstore.dev/cosign/keyless/).
+To learn more, check out the [keyless documentation](https://docs.sigstore.dev/signing/overview/) and [Life of a Sigstore
+Signature](https://www.youtube.com/watch?v=DrHrkSsozB0) presentation at SigstoreCon NA 2022 (slides
+[here](https://static.sched.com/hosted_files/sigstoreconna22/f1/Life%20of%20a%20Sigstore%20Signature.pdf) and [this related blog
+post](https://www.chainguard.dev/unchained/life-of-a-sigstore-signature)).
 ```
 
 ```{note}
@@ -549,6 +568,19 @@ $ curl https://rekor.sigstore.dev/api/v1/log/entries/24296fb24b8ad77ad9ca41820f9
 {"24296fb24b8ad77ad9ca41820f93cdbef2264692ced5c142d19e2ba859ab9f2b500d1917afe8ef30":{"body":"eyJhcGlWZXJzaW9uIjoiMC4wLjEiLCJraW5kIjoiaGFzaGVkcmVrb3JkIiwic3BlYyI6eyJkYXRhIjp7Imhhc2giOnsiYWxnb3JpdGhtIjoic2hhMjU2IiwidmFsdWUiOiJmZjdhNmU0ODMwMDE0ZDFhMjUwZDA0MzUzY2UxNWZkNmY1NDExYTI5NDdmYmZkNmNlOTYzZmNmNmRmNjhhODQ4In19LCJzaWduYXR1cmUiOnsiY29udGVudCI6Ik1FUUNJRmVFdTRkdXU5UHhYSDFqWWZZRmFnUUUrWkYzTCs3TkJoTVozZG9qUEU5REFpQWs4Vm4rYmRkV2Q0YlRtV2lQckh0ZXJ5cHBXbC9BaVVST1RrV1kvdjh6WVE9PSIsInB1YmxpY0tleSI6eyJjb250ZW50IjoiTFMwdExTMUNSVWRKVGlCUVZVSk1TVU1nUzBWWkxTMHRMUzBLVFVacmQwVjNXVWhMYjFwSmVtb3dRMEZSV1VsTGIxcEplbW93UkVGUlkwUlJaMEZGYzJReVdXYzVNRGtySzBaRmF5dGpiak5zVmt4Q1MwWndaUzlvVGdwdmIwRmtZVkkxWmxOd2MzVTVUbVV3T1hJM2FYUXhhVXgzUm5oa05FVnFVRkZ6YTJsQ2VYaHpaa0ZzVldONFdqWmFPVUZpZUVJeVZsUkJQVDBLTFMwdExTMUZUa1FnVUZWQ1RFbERJRXRGV1MwdExTMHRDZz09In19fX0=","integratedTime":1682131706,"logID":"c0d23d6ad406973f9559f3ba2d1ca01f84147d8ffc5b8445c224f98b9591801d","logIndex":18624203,"verification":{"inclusionProof":{"checkpoint":"rekor.sigstore.dev - 2605736670972794746\n14461401\nhiZ41EGZQqn3qWoXCV7NR4CET8Opt1BWZ56N5FsJuXQ=\nTimestamp: 1682132568542746071\n\n—  rekor.sigstore.dev  wNI9ajBFAiEAlXVguDvXhjyXnwjX0/D64F/nZesHWwJGCSaKyun0KlcCIEXq8yh7MN8BP0vW1aW/FYSBzV5fVwSJKd5NrOg75eaT\n","hashes":["76953dcdf1b59a3f682ee895bd4a4cb5868ee40a3d45ebf75bdc62adecdb2b4a","c8d6687d876151821b739a75821e111821e607743bf7a6f32e7681a2fa0c4501","7217c11743bfc97d1507f5681d9c3505b00e8d47ce7fcd90a8c2c14c51805e2e","7d6bde85aacb040500212f6567d81b4297a574377da748f378d439931f194247","b8f398cbfc968928b53974ea16c96c0ca4d61a222c1cc90ea24fd8ace57b07a1","1b1c51d9a3857dad776b8cae131ce9c4c17b8fb50a932bff58d33d5c0c8cd7b3","9db3f1057b4b0315360aa4d3225bc84c1855f223346337e32ee56db52b814084","44521e9d9f6a1b9c064b92d25c42a146488701f9e7787aa1f1a68a208d5edf64","deb3d900893c1871cdef5a234e770a60eb1b6fc507e8a5c35c3037f70bfbe4ce","d0103a677e2bf2598ba11017194e75fd86825dd4745dce2c0b247f90b7d3e92d","69d4cd1a5d76e4df7cc18552d76dce66d7d3c8c631241f49d23f5fd70f46f2f1","ba0e22b19049b1610e726a3481382451f37aabfc0c3606114918ebaec0e6b16e","3c9e72db0940d7be6cfaa67197efb5e3c48cdb96bd47b6afa8f621cc2790da5c","71e138a81c8b8e6871958ce12b747ef7e2c65ae1bfc9a5e0247734c7e372d899","3f7a2bb24688b2c4956a652ddba433123d92bba8cd565d880e2a9b871ea511e0","781de2e242cf8fe1432593030707a2e357e13c28632fc46ed3b158c9a1266fa1","ec4c6515563a676a411e44ad06b2df2dffda2c037787eeba00c95bc3b5345955","d63092c2277805dcb4cb361bea6e09ac7ed9e9e9192724b8f51e57e54bdf3531","9e040066dfe5f02004658386ac66cf0bb6ffe857ed71cb337c7f5545ecf4558b"],"logIndex":14460772,"rootHash":"862678d4419942a9f7a96a17095ecd4780844fc3a9b75056679e8de45b09b974","treeSize":14461401},"signedEntryTimestamp":"MEYCIQCyJq8dKr404aMxl8p5eNwDHHPh5+BF+jzmpOxCFYM3XgIhAOMkGSLCxUW9Wx5yhztUOANvFpyeXgS8GQlPgl9dSFXf"}}}
 ```
 
+```{admonition} What's Rekor?
+---
+class: seealso
+---
+[Rekor](https://docs.sigstore.dev/logging/overview/) is one of the primary components of the Sigstore project. It aims to provide an immutable, tamper-resistant
+ledger of metadata generated within a software project’s supply chain, similar to [Certificate Transparency](https://certificate.transparency.dev/).
+
+By default, and as we saw previously, cosign will publish evidence of your signature operations to a hosted instance of Rekor at rekor.sigstore.dev for
+independent validation and transparency.
+
+If you'd prefer not to upload signing details to Rekor, you can pass `--tlog-upload=false` during `cosign sign`.
+```
+
 Well, that returned a lot of _stuff_. If you'd like, you can also view the details in a web browser
 [here](https://search.sigstore.dev/?logIndex=18624203).
 
@@ -556,25 +588,29 @@ Well, that returned a lot of _stuff_. If you'd like, you can also view the detai
 ---
 class: seealso
 ---
-Today, the way that these signatures are hosted is that they are `in-toto`
-[attestations](https://github.com/in-toto/attestation) bundled into OCI artifacts, and uploaded to a registry with a
-specifically formatted name of `sha256-<DIGEST>.sig` where `<DIGEST>` is the image digest.
+These signatures are bundled into OCI artifacts, and uploaded to a registry with a specifically formatted name of `sha256-<DIGEST>.sig` where `<DIGEST>` is the
+image digest.
 
-This works great because the registry only needs to support OCI artifacts, which most (effectively all) of them do, and
-if you are running a container, you are always able to look up the digest of the related image.
+This works great because the registry only needs to support OCI artifacts, which most (effectively all) of them do, and if you are running a container, you are
+always able to look up the digest of the related image.
 
-Luckily, there is something better in the works here as well. Currently, the OCI
-[image](https://github.com/opencontainers/image-spec) and
-[distribution](https://github.com/opencontainers/distribution-spec) specifications have a release candidate for a
-version 1.1 which will support "Reference Types", meaning that these signatures will be able to be directly attached to
-a given OCI artifact.
+Luckily, there is something better in the works here as well. Currently, the OCI [image](https://github.com/opencontainers/image-spec) and
+[distribution](https://github.com/opencontainers/distribution-spec) specifications have a release candidate for a version 1.1 which will support "Reference
+Types", meaning that these signatures will be able to be directly attached to a given OCI artifact.
 
-Once this release is finalized, vendors providing registry software will need to update to support those new
-specifications, and then update their hosted registries. The jury is out on how long that will take, but we can be
-hopeful that it will come sooner rather than later 🤞
+Once this release is finalized, vendors providing registry software will need to update to support those new specifications, and then update their hosted
+registries. The jury is out on how long that will take, but we can be hopeful that it will come sooner rather than later 🤞
 
-If you'd like more of an introduction to Reference Types, I recommend the chainguard blog
-[here](https://www.chainguard.dev/unchained/intro-to-oci-reference-types).
+These Reference Types provide a way to describe and query artifacts in a registry. It does this by introducing `artifact.manifest` "mediaTypes", to the existing
+`image.manifest` and `image.index` "mediaTypes", along some other changes (such as replacing layers with "blobs" and creating an "artifactType" field).
+
+This new metadata allows attestations, such as [these in-toto Attestation Predicates](https://github.com/in-toto/attestation/tree/main/spec/predicates), to be
+stored as OCI Artifacts with added links (aka "manifests") which point from the artifact to an `image.manifest` (i.e. an individual OCI artifact containing an
+image).
+
+To learn more about this, I recommend Brandon Mitchell's [CloudNativeSecurityCon NA 2023 presentation](https://www.youtube.com/watch?v=_c1OdmP9Ssg)
+presentation. If you'd like some more technical details, see Steve Lasker's [Container Plumbing Days 2021](https://www.youtube.com/watch?v=CxrTQnjlOsU) however
+keep in mind that this presentation was given **years** before the specification was finalized.
 ```
 
 ## Making a Software Bill of Materials

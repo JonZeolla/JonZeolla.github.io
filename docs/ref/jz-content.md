@@ -9,8 +9,9 @@ hidden: true
 
 | Date       | Event                                  | Title                                                          |
 | ---------- | -------------------------------------- | -------------------------------------------------------------- |
+| 2023-12-04 | [2023 PGH InfoSec Day][2023-PInfoSec]  | Your Governance is Broken                                      |
 | 2023-11-06 | [2023 KubeCon][2023-KubeCon]           | [Lightning Talk][2023-KubeCon-Talk]                            |
-| 2023-11-16 | [2023 CloudSecNext][2023-CloudSecNext] | Event co-host                                                  |
+| 2023-10-16 | [2023 CloudSecNext][2023-CloudSecNext] | Event co-host                                                  |
 | 2023-10-13 | [2023 TRISS][2023-TRISS]               | Cloud Security Panel                                           |
 | 2023-09-22 | [2023 Pittsburgh TechFest][2023-TF]    | Platform Engineering and Security Guardrails                   |
 | 2023-09-07 | [Cloud Native Security Pgh][2023-CNSP] | Getting Started with Security Policy as Code                   |
@@ -67,6 +68,7 @@ hidden: true
 | 2012-08-07 | Pittsburgh Technical Institute         | Life After Graduation                                          |
 | 2011-10-05 | Pittsburgh Technical Institute         | Alumni Speaker Series                                          |
 
+[2023-PInfoSec]: https://web.cvent.com/event/2014576f-92db-4057-ae41-9b25a39a1909/websitePage:eb8094ff-eb19-4b4c-a88f-22e9f5e536bb "2023 Pittsburgh InfoSec Day"
 [2023-KubeCon-Talk]: https://kccncna2023.sched.com/event/1R2ll/cl-lightning-talk-empowering-the-deaf-and-hard-of-hearing-in-cloud-native-and-open-source-jon-zeolla-seiso-catherine-paganini-buoyant "2023 KubeCon Lightning Talk"
 [2023-CloudSecNext]: https://www.sans.org/cyber-security-training-events/cloudsecnext-summit-2023/ "2023 CloudSecNext"
 [2023-KubeCon]: https://events.linuxfoundation.org/kubecon-cloudnativecon-north-america/ "2023 KubeCon and CloudNativeCon"

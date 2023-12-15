@@ -41,11 +41,16 @@ This lab expects that you have an AWS Cloud9 environment configured. Step by ste
 
 Run the following inside your Cloud9 IDE to setup the lab environment:
 
+<!-- This is a hidden reference config used for testing; it must be valid JSON -->
+<div class="testConfig" style="display: none;">
+  { "cloud9_instance_type": "t3.large" }
+</div>
+
 ```{code-block} bash
 ---
 class: getting-started
 ---
-docker run -e HOST_USER="${USER}" --network host -v ~/logs:/root/logs -v ~/.ssh:/root/.ssh jonzeolla/labs:container-security-101
+docker run --network host -v /:/host jonzeolla/labs:container-security-101
 ```
 
 You're now ready to get started on the lab!

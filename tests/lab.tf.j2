@@ -1,0 +1,10 @@
+provider "aws" {
+  region = "{{ region }}"
+}
+
+module "lab" {
+  source = "../../terraform"
+
+  cloud9_name = "{{ cloud9_name }}"
+  cloud9_instance_type = "{{ cloud9_instance_type }}"
+}

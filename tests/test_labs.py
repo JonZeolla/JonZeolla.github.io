@@ -3,14 +3,18 @@
 Tests for my labs
 """
 
+import json
 import logging
 import os
+import subprocess
 import sys
+import time
 from pathlib import Path
-from tkinter import Tk
+from typing import Optional, Tuple
 
 import boto3
-import paramiko
+import pyperclip
+from jinja2 import Environment, FileSystemLoader
 from playwright.sync_api import (
     Browser,
     BrowserContext,
@@ -33,172 +37,175 @@ LOG.addHandler(std_err)
 LOG.addHandler(std_out)
 
 
-#########################################################################
-# These tests are all WIP and are likely not even directionally correct #
-#########################################################################
-def test_lab_code_blocks() -> None:
+def test_labs() -> None:
     """
     Discover all of the labs and test the code blocks in them
     """
-    cwd: Path = Path().absolute()
-    labs_dir: Path = Path("build/labs/")
-    labs: list[Path] = list(labs_dir.glob("**/[!index]*.html"))
-    tk: Tk = Tk()
+    labs: list[Path] = get_labs()
+
     # Hold the original clipboard contents to reinstate later
-    original_clipboard_content: str = tk.clipboard_get()
+    original_clipboard_content: str = pyperclip.paste()
 
     for lab in labs:
-        ip: str = deploy_cloudformation(lab=lab)
-        lab_url: str = f"file://{cwd}/{lab}"
-        LOG.debug(f"Getting the code blocks for lab {lab} from {lab_url}...")
-        code_blocks: list[str] = get_code_from_code_blocks(
-            lab_url=lab_url,
-            tk=tk,
+        # The returned config here is only what is in the lab's testConfig, and doesn't include defaults
+        getting_started, lab_commands, config = get_code_from_commands(
+            lab=lab,
         )
-        LOG.debug(f"Running the code blocks for lab {lab} on the server at {ip}...")
-        success: bool = run_code_blocks(code_blocks=code_blocks, ip=ip)
-        if not success:
-            if os.environment.get("CI") == "true":
-                LOG.error("Something failed; deleting the cloudformation stack")
-                if not delete_cloudformation(lab=lab):
-                    LOG.error(
-                        f"Unable to delete the cloudformation stack for lab {lab}"
-                    )
-            else:
-                LOG.warning(
-                    "Leaving the EC2 up for troubleshooting; don't forget to clean it up"
-                )
-            break
 
-        # This should always assert True
-        assert success
+        # This updates the config that was passed in with the final config that was used for rendering, which has defaults added where needed
+        instance_id, config = run_terraform(lab=lab, command="apply", config=config)
+
+        if getting_started:
+            assert run_commands(lab=lab, commands=getting_started, instance_id=instance_id, config=config)
+        else:
+            LOG.error(f"No getting started code blocks for lab {lab} detected...")
+            assert False
+
+        assert run_commands(lab=lab, commands=lab_commands, instance_id=instance_id, config=config)
 
     # Reinstate the original clipboard contents
-    tk.clipboard_clear()
-    tk.clipboard_append(original_clipboard_content)
-
-    assert success
+    pyperclip.copy(original_clipboard_content)
 
 
-def get_cloudformation_template_url(*, lab: Path) -> str:
+def run_terraform(*, lab: Path, command: str, config: dict[str, str]) -> Tuple[str, dict[str, str]]:
     """
-    Retrieve the cloudformation template from the provided and return its contents
+    Find and deploy the terraform for the provided lab
+
+    Only supports apply or destroy subcommands
+
+    Returns the instance ID of the created EC2 instance
     """
-    # Each lab has an accompanying JSON file stored in s3 for testing
-    s3 = boto3.client("s3")
-    s3.download_file("jonzeolla-labs", lab.name, lab.name)
-
-    cloudformation_template_path: Path = Path("TODO")
-    cloudformation_template: str = cloudformation_template_path.read_text()
-    # TODO: Either we need to read the file as yml to start, or we can try somethign like with open
-    # (cloudformation_template, "r") as stream: and see if it will just handle it as a string.  Then we can
-    # yaml.safe_load(stream) and extract info like the stack name, etc.
-
-    # TODO
-    return cloudformation_template
-
-
-def delete_cloudformation(*, lab: Path) -> bool:
-    """
-    Find and delete the cloudformation stack
-    Returns False when unsuccessful
-    """
-    cloudformation_template: str = get_cloudformation_template_url(lab=lab)
-    cloudformation = boto3.client("cloudformation")
-    cloudformation.delete_stack(StackName="Workshop")
-
-
-def deploy_cloudformation(*, lab: Path, ssh_public_key: Path) -> str:
-    """
-    Find and deploy the cloudformation stack inside a download class of the environment-setup div
-
-    Returns the IP address
-    """
-    cloudformation_template: str = get_cloudformation_template_url(lab=lab)
-
-    # TODO: Incomplete
-    parameters: list[dict[str, str | bool]] = [
-        {"ParameterKey": "SSHAccessKey", "ParameterValue": "Workshop"}
-    ]
-
-    # Then, we deploy the cloudformation template that we just downloaded
-    cloudformation = boto3.client("cloudformation")
-    response_create_stack: dict = cloudformation.create_stack(
-        StackName="Workshop",
-        TemplateBody=cloudformation_template,
-        Parameters=parameters,
-    )
-    stack_id: str = response_create_stack["StackId"]
-    response_describe_stacks: dict = cloudformation.describe_stacks(StackName=stack_id)
-    outputs: list[dict[str, str]] = response_describe_stacks["Stacks"][0]["Outputs"]
-    for output in outputs:
-        if output["OutputKey"] == "IPAddress":
-            ip: str = output["OutputValue"]
-            break
-    else:
-        LOG.error(
-            "Unable to determine the IP address of the deployed cloudformation template in lab {lab}"
-        )
+    if command not in ["apply", "destroy"]:
+        LOG.error(f"Unsupported terraform command {command}")
         sys.exit(1)
 
-    return ip
+    # This updates the config that was passed in with the final config that was used for rendering, which has defaults added where needed
+    config, terraform_module = render_lab_terraform(lab=lab, config_update=config)
+
+    # Run the terraform command
+    terraform_commands = [["terraform", "init"], ["terraform", command, "-auto-approve"]]
+    for tf_command in terraform_commands:
+        tf_command_string = " ".join(tf_command)
+        try:
+            LOG.info(f"{lab.stem}: Running {tf_command_string}...")
+            subprocess.run(tf_command, capture_output=True, text=True, cwd=terraform_module, check=True)
+        except subprocess.CalledProcessError as e:
+            LOG.error(f"{lab.stem}: Failed to run {tf_command_string} with the output of {e.stdout} and the error of {e.stderr}")
+            handle_failed_terraform(lab=lab)
+            sys.exit(1)
+
+    # Return the instance ID
+    instance_id = get_instance_id(lab=lab, terraform_module=terraform_module)
+    return instance_id, config
 
 
-def run_code_blocks(
-    *,
-    code_blocks: list[str],
-    ip: str,
-) -> bool:
+def get_instance_id(*, lab: Path, terraform_module: Path) -> str:
     """
-    Run the code in the provided code blocks on the server provided via ip
+    Get the instance ID from the terraform output
     """
-    # Allow but warn on empty code blocks
-    if not code_blocks:
-        LOG.warning(
-            "Passed an empty list of code blocks, allowing the build to pass, but this may not be expected"
+    instance_id_file = terraform_module.joinpath("instance_id")
+    try:
+        instance_id = instance_id_file.read_text().rstrip('\n')
+    except FileNotFoundError:
+        LOG.error(f"{lab.stem}: Failed to find the file {instance_id_file}")
+        sys.exit(1)
+    except PermissionError:
+        LOG.error(f"{lab.stem}: Failed to read the file {instance_id_file}")
+        sys.exit(1)
+
+    return instance_id
+
+def run_commands(*, lab: Path, commands: list[str], instance_id: str, config: dict[str, str]) -> bool:
+    """
+    Run the code in the provided code blocks on the provided EC2 instance
+
+    Return True for success and False for a failure
+    """
+    LOG.info(f"Running the provided code blocks for lab {lab} on the EC2 {instance_id}...")
+
+    if not commands:
+        LOG.error(
+                f"{lab.stem}: Passed an empty list of commands to run"
         )
-        return True
+        return False
 
-    # Setup ssh
-    private_key_path: Path = Path("~/.ssh/workshop.pem")
-    ssh: paramiko.SSHClient = paramiko.SSHClient()
-    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    private_key: paramiko.RSAKey = paramiko.RSAKey.from_private_key_file(
-        str(private_key_path)
-    )
-    ssh.connect(hostname=ip, username="ubuntu", pkey=private_key)
+    success: bool = False
+
+    # Setup
+    region = config["region"]
+    ssm_client = boto3.client("ssm", region_name=region)
 
     # Run each code block in the EC2 instance
-    for code in code_blocks:
-        # TODO: do we need to adjust the set -euo pipefail?
-        command: str = f'/bin/bash -c """set -euo pipefail && {code}"""'
-        LOG.info(f"Running '{command}'")
-        try:
-            stdin, stdout, stderr = ssh.exec_command(command)
-        except:
-            LOG.error(f"container.exec_run failed to run '{command}'")
+    for code_block in commands:
+        # Commands are always run from the user's home directory; if another dir is needed, the code block should handle it
+        get_user_command: str = "getent passwd 1000 | awk -F: '{print $1}'"
+        # TODO: Add `set -u` back in once "/home/ec2-user/.rvm/scripts/functions/rvmrc_env: line 66: rvm_saved_env: unbound variable" is fixed in Amazon Linux
+        # ~related to https://github.com/rvm/rvm/issues/4694
+        command: str = f"export user=$({get_user_command}) && su - ${{user}} --shell /bin/bash -c 'set -eo pipefail && cd && {code_block}'"
+        LOG.debug(f"{lab.stem}: Running {command}")
+        response = ssm_client.send_command(DocumentName="AWS-RunShellScript", Parameters={"commands": [command]}, InstanceIds=[instance_id])
+        success = wait_for_completion(ssm_client=ssm_client, command_id=response["Command"]["CommandId"], instance_id=instance_id)
+
+        if not success:
+            LOG.error(f"{lab.stem}: Failed running {command}")
+            handle_failed_terraform(lab=lab, instance_id=instance_id)
             return False
-
-        exit_code: int = stdout.channel.recv_exit_status()
-        if exit_code == 0:
-            LOG.debug(f"Successfully ran '{command}'")
-            continue
-
-        LOG.error(
-            f"Failed test when running '{command}' with the stdout '{stdout}' and stderr of '{stderr}'"
-        )
-
-        return False
 
     return True
 
 
-def get_code_from_code_blocks(*, lab_url: str, tk: Tk) -> list[str]:
+def wait_for_completion(*, ssm_client: boto3.client, command_id: str, instance_id: str) -> bool:
+    """
+    Wait for the provided command to complete and return the success or failure
+    """
+    LOG.debug(f"Waiting for the command {command_id} to complete on the EC2 {instance_id}...")
+    success: bool = False
+
+    while True:
+        response = ssm_client.list_commands(CommandId=command_id)
+        status = response["Commands"][0]["Status"]
+        if status == "Success":
+            LOG.debug(f"The run-command {command_id} completed successfully on the EC2 {instance_id}...")
+            success = True
+            break
+        elif status == "Failed":
+            ssm_client.get_command_invocation(CommandId=command_id, InstanceId=instance_id)
+            invocation_response = ssm_client.get_command_invocation(CommandId=command_id, InstanceId=instance_id)
+            stdout = invocation_response.get("StandardOutputContent")
+            stderr = invocation_response.get("StandardErrorContent")
+            LOG.error(f"stderr: {stderr}, stdout: {stdout}")
+            LOG.error(f"The run-command {command_id} failed on the EC2 {instance_id}, see above for the stdout and stderr...")
+
+            success = False
+            break
+        else:
+            LOG.debug(f"The run-command {command_id} is still running on the EC2 {instance_id}...")
+            time.sleep(2)
+
+    return success
+
+
+def handle_failed_terraform(*, lab: Path, instance_id: str = "") -> None:
+    """
+    Handle cleaning up after a failed terraform run
+    """
+    if os.environ.get("CI") == "true" or not instance_id:
+        run_terraform(lab=lab, command="destroy", config={})
+    else:
+        LOG.warning(
+            f"Leaving the EC2 {instance_id} up for troubleshooting..."
+        )
+
+
+def get_code_from_commands(*, lab: Path) -> Tuple[list[str], list[str], dict[str, str]]:
     """
     Get the code in the code blocks of the provided lab URL
 
     Returns all of the code blocks as a list of strings (one element per code block in the instructions)
     """
+    lab_url: str = f"file://{lab}"
+    LOG.debug(f"Getting the code blocks for the {lab.stem} lab from {lab_url}...")
+
     with sync_playwright() as playwright:
         browser: Browser = playwright.chromium.launch(slow_mo=50, headless=False)
         context: BrowserContext = browser.new_context()
@@ -207,10 +214,21 @@ def get_code_from_code_blocks(*, lab_url: str, tk: Tk) -> list[str]:
 
         # Find all the dropdowns that are hidden and open them. If you don't do this first, the loop below for clicking
         # the copy buttons will sometimes double account for code blocks because it will expand a dropdown when it
-        # thinks it's clicking a copy button, and it pulls the unchanged clipboard into the code_blocks list for a
+        # thinks it's clicking a copy button, and it pulls the unchanged clipboard into the commands list for a
         # second time
         toggle_divs: list[ElementHandle] = page.query_selector_all("div.toggle-hidden")
 
+        # Extract the testing config
+        config: dict = json.loads(page.inner_text(".testConfig"))
+
+        # Identify if there's a getting started override for testing
+        getting_started: list[str] = []
+        getting_started_override: bool = page.locator(".overrideGettingStarted").count() > 0
+        if getting_started_override:
+            LOG.debug("Detected a getting started override, using it...")
+            getting_started.append(page.inner_text(".overrideGettingStarted"))
+
+        # Click the dropdowns to expand them
         for div in toggle_divs:
             div.click()
 
@@ -218,14 +236,75 @@ def get_code_from_code_blocks(*, lab_url: str, tk: Tk) -> list[str]:
         copy_buttons: list[ElementHandle] = page.query_selector_all(
             'button[data-tooltip="Copy"]'
         )
-        code_blocks: list[str] = []
+        commands: list[str] = []
         for button in copy_buttons:
             # The force is because the copy button from sphinx-copybutton often isn't visible, and pywright will wait
             # until it times out without additional adjustments to accomodate. Hover doesn't work in headless mode, etc.
             button.click(force=True)
 
-            # Pull the clipboard content into the code_blocks list
-            clipboard_content: str = tk.clipboard_get()
-            code_blocks.append(clipboard_content)
+            # Pull the clipboard content into the commands list
+            clipboard_content: str = pyperclip.paste()
 
-    return code_blocks
+            # Get the parent's parent element, and then check if it has a class of getting-started
+            parent_element = button.evaluate_handle("button => button.parentElement").evaluate_handle("el => el.parentElement")
+            classes = parent_element.get_attribute('class').split()
+
+            if getting_started_override:
+                if 'getting-started' not in classes:
+                    commands.append(clipboard_content)
+            else:
+                if 'getting-started' in classes:
+                    getting_started.append(clipboard_content)
+                else:
+                    commands.append(clipboard_content)
+
+    return getting_started, commands, config
+
+
+def get_labs() -> list[Path]:
+    """
+    Discover and return a list of fully qualified lab instructions
+    """
+    labs_dir: Path = Path("build/labs/").absolute()
+    labs: list[Path] = list(labs_dir.glob("**/[!index]*.html"))
+    return labs
+
+
+def render_lab_terraform(*, lab: Path, config_update: dict[str, str]) -> Tuple[dict[str, str], Path]:
+    """
+    Render the lab-specific terraform live
+
+    Returns the final configuration used when rendering, as well as a Path to the rendered terraform module
+    """
+    terraform_template = Path("tests/lab.tf.j2")
+    terraform_module = Path("tests").joinpath(lab.stem)
+    terraform_module.mkdir(exist_ok=True)
+    LOG.debug(f"Using the terraform module {terraform_module}...")
+    terraform_live = terraform_module.joinpath(lab.stem).with_suffix(".tf")
+
+    # Set a default config, and then update it with the provided config
+    config = {"cloud9_name": lab.stem, "cloud9_instance_type": "t3.xlarge", "region": "us-east-1"}
+    config.update(config_update)
+
+    render_jinja2(template_file=terraform_template, config=config, output_file=terraform_live)
+
+    return config, terraform_module
+
+
+def render_jinja2(
+    *,
+    template_file: Path,
+    config: dict,
+    output_file: Path,
+    output_mode: Optional[int] = None,
+) -> None:
+    """Render the functions file"""
+    folder = str(template_file.parent)
+    file = str(template_file.name)
+    LOG.info(f"Rendering {template_file} into {output_file}...")
+    LOG.debug(f"Using config {config}...")
+    template = Environment(loader=FileSystemLoader(folder)).get_template(file)
+    out = template.render(config)
+    output_file.write_text(out)
+    if output_mode is not None:
+        output_file.chmod(output_mode)

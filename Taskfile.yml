@@ -97,23 +97,24 @@ tasks:
   test:
     desc: Run the project tests
     deps: [clean, build]
+    # Tests only work locally for now
+    platforms: [darwin]
     env:
       LOG_LEVEL: '{{ .CLI_ARGS | default "INFO" }}'
+      NUMBER_OF_LABS:
+        sh: find tests/ -name '*.md' | wc -l
     cmds:
-      - pipenv run pytest tests --log-cli-level "${LOG_LEVEL}"
+      - pipenv run pytest -n "${NUMBER_OF_LABS}" -v tests/ --log-cli-level "${LOG_LEVEL}"
 
   destroy:
     desc: Run terraform destroys and cleanup all of the test terraform modules
     cmds:
       - |
         for dir in $(find tests -type d -maxdepth 1 -mindepth 1); do
-          cd "${dir}"
-          failure=$?
-          if [[ ${failure} -ne 0 ]]; then
-            echo "Failed to cd into ${dir}"
-            exit 1
-          fi
+          pushd "${dir}" >/dev/null
+          echo "Running destroy in ${dir}..."
           terraform destroy -auto-approve
+          popd >/dev/null
         done
 
   update:

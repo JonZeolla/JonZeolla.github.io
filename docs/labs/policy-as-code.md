@@ -143,7 +143,9 @@ organization we'd like all of our developers to specify the correct organization
 
 First, let's take a look at our policy definition for `Dockerfile`s:
 
-```
+```{code-block} yaml
+---
+class: no-copybutton
 ---
 profile:
   name: "Require OCI Annotations"

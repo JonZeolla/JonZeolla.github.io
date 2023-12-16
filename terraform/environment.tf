@@ -73,7 +73,7 @@ data "aws_instance" "cloud9_instance" {
 
 # Setup a new instance profile for cloud9
 resource "aws_iam_instance_profile" "cloud9_instance_profile" {
-  name = "workshop_cloud9_instance_profile"
+  name = "workshop_cloud9_instance_profile_${var.cloud9_name}"
   role = aws_iam_role.instance_role.name
 }
 
@@ -89,8 +89,14 @@ data "aws_iam_policy_document" "instance_assume_role_policy" {
 }
 
 resource "aws_iam_role" "instance_role" {
-  name               = "workshop_instance_role"
+  name               = "workshop_instance_role-${var.cloud9_name}"
   assume_role_policy = data.aws_iam_policy_document.instance_assume_role_policy.json
+}
+
+# TODO: Reduce
+resource "aws_iam_role_policy_attachment" "admin" {
+  role       = aws_iam_role.instance_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "ec2_readonly_access" {

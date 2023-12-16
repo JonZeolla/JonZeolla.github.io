@@ -150,11 +150,11 @@ are building on top of the upstream `nginx` image, inheriting all of its secure 
 adding our changes on top.
 
 ```{code-block} bash
-cat << EOF > Dockerfile
+cat << HEREDOC > Dockerfile
 FROM nginx
 RUN groupadd --gid 53150 -r notroot && useradd -r -g notroot -s "/bin/bash" --create-home --uid 53150 notroot
 USER notroot
-EOF
+HEREDOC
 ```
 
 Then we can build the more secure image and examine it to see what the configured `User` is. Note the user on the last
@@ -541,6 +541,8 @@ to go subscribe to be notified of activity.
 Now, let's bring things full circle and verify the signature
 
 ```{code-block} console
+$  export COSIGN_PASSWORD='example'
+$ image_digest="$(docker inspect --format='{{index .RepoDigests 0}}' localhost:443/example-secure | cut -f2 -d@ )"
 $ docker run -e COSIGN_PASSWORD -u 0 --network workshop -v "$(pwd):/app" -w /app cgr.dev/chainguard/cosign verify --key cosign.pub registry:443/example-secure@"${image_digest}" --allow-insecure-registry
 
 Verification for registry:443/example-secure@sha256:8f5a0b6ab1511420fc6e00d01ca5bc4c87bb49d631c95e12d254f8c4831134c9 --
@@ -826,6 +828,7 @@ system layer first:
 ---
 emphasize-lines: 7-16
 ---
+$ mdigest=$(docker inspect --format='{{index .RepoDigests 0}}' example-secure | cut -f2 -d@)
 $ ldigest=$(curl -s -k https://localhost:443/v2/example-secure/manifests/$mdigest | jq -r '.layers[0].digest')
 $ echo $ldigest
 sha256:26c5c85e47da3022f1bdb9a112103646c5c29517d757e95426f16e4bd9533405
@@ -864,6 +867,7 @@ Okay, let's move onto the third and final component of an image, the configurati
 ---
 emphasize-lines: 7-10,12-16
 ---
+$ mdigest=$(docker inspect --format='{{index .RepoDigests 0}}' example-secure | cut -f2 -d@)
 $ cdigest=$(curl -s -k https://localhost:443/v2/example-secure/manifests/$mdigest | jq -r '.config.digest')
 $ echo $cdigest
 sha256:6b7f86a3d64be8fb0ece35d5b54b15b6bd117c7fdcf2f778350de9012186fd14

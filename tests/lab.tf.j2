@@ -2,7 +2,7 @@ provider "aws" {
   region = "{{ region }}"
 }
 
-module "lab" {
+module "{{ cloud9_name }}" {
   source = "../../terraform"
 
   cloud9_name = "{{ cloud9_name }}"

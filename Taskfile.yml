@@ -47,7 +47,7 @@ tasks:
           var: TOOLS
           split: ','
           as: tool
-        cmd: apt-get install -y --no-install-recommends {{.tool}}
+        cmd: sudo apt-get install -y --no-install-recommends {{.tool}}
 
   mac-brew-install:
     desc: Install something on a mac via brew

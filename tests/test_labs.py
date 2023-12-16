@@ -254,7 +254,7 @@ def get_code_from_commands(*, lab_path: Path) -> Lab:
         copy_buttons: list[ElementHandle] = page.query_selector_all(
             'button[data-tooltip="Copy"]'
         )
-        commands: list[str] = []
+        lab_commands: list[str] = []
         for button in copy_buttons:
             # The force is because the copy button from sphinx-copybutton often isn't visible, and pywright will wait
             # until it times out without additional adjustments to accomodate. Hover doesn't work in headless mode, etc.
@@ -263,20 +263,27 @@ def get_code_from_commands(*, lab_path: Path) -> Lab:
             # Pull the clipboard content into the commands list
             clipboard_content: str = pyperclip.paste()
 
-            # Get the parent's parent element, and then check if it has a class of getting-started
+            # Get the parent's parent element
             parent_element = button.evaluate_handle("button => button.parentElement").evaluate_handle("el => el.parentElement")
             classes = parent_element.get_attribute('class').split()
 
+            # Skip the code blocks that have a class of skip-tests
+            if 'skip-tests' in classes:
+                LOG.debug(f"Skipping the code block because it has a class of skip-tests...")
+                continue
+
             if getting_started_override:
+                # If there was an getting started override, add everything that isn't getting-started as a lab command
                 if 'getting-started' not in classes:
-                    commands.append(clipboard_content)
+                    lab_commands.append(clipboard_content)
             else:
+                # Check if the parent element has a class of getting-started
                 if 'getting-started' in classes:
                     getting_started.append(clipboard_content)
                 else:
-                    commands.append(clipboard_content)
+                    lab_commands.append(clipboard_content)
 
-    lab = Lab(getting_started=getting_started, lab_commands=commands, config=config, file=lab_path)
+    lab = Lab(getting_started=getting_started, lab_commands=lab_commands, config=config, file=lab_path)
     return lab
 
 

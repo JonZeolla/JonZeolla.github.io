@@ -30,27 +30,28 @@ This lab expects that you have an AWS Cloud9 environment configured. Step by ste
 <a href="../ref/aws_cloud9.html" target="_blank" rel="noopener">here</a>.
 ```
 
-Run the following inside your Cloud9 IDE to setup the lab environment:
+Run the lab setup container.
 
-First, configure the IP variable with your public IP - to find it, [go here](https://ipv4.icanhazip.com/).
+<!-- This is a hidden reference config used for testing; it must be valid JSON -->
+<div class="testConfig" style="display: none;">
+  { "cloud9_instance_type": "t3.xlarge" }
+</div>
+
+<!-- This is a hidden config used as needed to override the below getting-started class; it must be valid commands for setup -->
+<div class="overrideGettingStarted" style="display: none;">
+  docker run -e CLIENT_IP=1.1.1.1 --network host -v /:/host jonzeolla/labs:policy-as-code
+</div>
 
 ```{code-block} bash
 ---
 class: getting-started
 ---
-export CLIENT_IP=X.X.X.X # TODO: Replace this with your IP
+docker run -it --network host -v /:/host jonzeolla/labs:policy-as-code
 ```
 
-Now, run the lab setup container.
+You will then need to answer the prompt, asking for your client IP.
 
-```{code-block} bash
----
-class: getting-started
----
-docker run -e CLIENT_IP -e HOST_USER="${USER}" --network host -v ~/logs:/root/logs -v ~/.ssh:/root/.ssh jonzeolla/labs:policy-as-code
-```
-
-Then, you will need to wait for a while as the automation configures your enviornment. At the end you should see a message like this:
+After providing a valid client IP you will see the automation begin to configure your environment. At the end of the setup you should see a message like this:
 
 ![Ansible final configuration](../img/cloud9-login.png)
 
@@ -142,7 +143,9 @@ organization we'd like all of our developers to specify the correct organization
 
 First, let's take a look at our policy definition for `Dockerfile`s:
 
-```
+```{code-block} yaml
+---
+class: no-copybutton
 ---
 profile:
   name: "Require OCI Annotations"

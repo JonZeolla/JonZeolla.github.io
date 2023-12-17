@@ -13,6 +13,9 @@ defaults:
 jobs:
   test:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -31,5 +34,12 @@ jobs:
         run: task -v init
       - name: Generate the HTML
         run: task -v build
+      - name: Configure AWS Credentials using OIDC
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          role-to-assume: arn:aws:iam::728412089767:role/jonzeolla.com_lab_testing
+          aws-region: us-east-1
       - name: Test the project
         run: task -v test
+      - name: Cleanup from testing (just in case)
+        run: task -v destroy

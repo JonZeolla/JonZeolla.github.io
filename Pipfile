@@ -7,10 +7,13 @@ name = "pypi"
 
 [dev-packages]
 boto3 = "*"
+jinja2 = "*"
 myst-parser = "*"
 paramiko = "*"
 playwright = "*"
+pyperclip = "*"
 pytest = "*"
+pytest-xdist = "*"
 sphinx-copybutton = "*"
 sphinx-design = "*"
 sphinx-last-updated-by-git = "*"

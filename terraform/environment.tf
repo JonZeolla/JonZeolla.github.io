@@ -96,10 +96,11 @@ resource "aws_iam_role" "instance_role" {
 data "aws_iam_policy_document" "setup_access" {
   statement {
     actions = [
-      "ec2:AuthorizeSecurityGroupIngress",
       "ec2:AuthorizeSecurityGroupEgress",
+      "ec2:AuthorizeSecurityGroupIngress",
       "ec2:CreateTags",
       "ec2:Describe*",
+      "ec2:ModifyVolume",
       "sts:GetCallerIdentity",
       "ssm:UpdateInstanceInformation"
     ]

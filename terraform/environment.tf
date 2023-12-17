@@ -120,11 +120,6 @@ resource "aws_iam_role_policy_attachment" "setup_access" {
   policy_arn = aws_iam_policy.setup_access.arn
 }
 
-resource "aws_iam_role_policy_attachment" "ec2_readonly_access" {
-  role       = aws_iam_role.instance_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess"
-}
-
 resource "aws_iam_role_policy_attachment" "cloud9_ssm_access" {
   role       = aws_iam_role.instance_role.name
   policy_arn = "arn:aws:iam::aws:policy/AWSCloud9SSMInstanceProfile"

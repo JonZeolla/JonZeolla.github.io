@@ -826,7 +826,7 @@ system layer first:
 
 ```{code-block} console
 ---
-emphasize-lines: 8-17
+emphasize-lines: 9-18
 ---
 $ mdigest=$(docker inspect --format='{{index .RepoDigests 0}}' example-secure | cut -f2 -d@)
 $ ldigest=$(curl -s -k https://localhost:443/v2/example-secure/manifests/$mdigest | jq -r '.layers[0].digest')
@@ -834,8 +834,8 @@ $ echo $ldigest
 sha256:26c5c85e47da3022f1bdb9a112103646c5c29517d757e95426f16e4bd9533405
 $ curl -s -k https://localhost:443/v2/example-secure/blobs/$ldigest | sha256sum
 26c5c85e47da3022f1bdb9a112103646c5c29517d757e95426f16e4bd9533405  -
-$ curl -s -k https://localhost:443/v2/example-secure/blobs/$ldigest | tar -tvzf - > filesystem
-$ head filesystem
+$ curl -s -k https://localhost:443/v2/example-secure/blobs/$ldigest | tar -tvzf - > image_filesystem
+$ head image_filesystem
 lrwxrwxrwx 0/0               0 2023-11-20 00:00 bin -> usr/bin
 drwxr-xr-x 0/0               0 2023-09-29 20:04 boot/
 drwxr-xr-x 0/0               0 2023-11-20 00:00 dev/

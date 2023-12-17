@@ -866,7 +866,7 @@ Okay, let's move onto the third and final component of an image, the configurati
 
 ```{code-block} console
 ---
-emphasize-lines: 7-10,12-16
+emphasize-lines: 8-11,13-17
 ---
 $ mdigest=$(docker inspect --format='{{index .RepoDigests 0}}' example-secure | cut -f2 -d@)
 $ cdigest=$(curl -s -k https://localhost:443/v2/example-secure/manifests/$mdigest | jq -r '.config.digest')

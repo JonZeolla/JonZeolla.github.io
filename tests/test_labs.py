@@ -48,8 +48,11 @@ class Lab:
 
 def get_labs() -> list[Path]:
     """
-    Discover and return a list of fully qualified lab instructions
+    Discover and return a list of Path objects pointing to lab instructions
     """
+    # Fix a race with generating the lab artifacts
+    time.sleep(1)
+
     labs_dir: Path = Path("build/labs/").absolute()
     labs: list[Path] = list(labs_dir.glob("**/[!index]*.html"))
     return labs
@@ -61,7 +64,7 @@ def run_terraform(*, lab: Lab, command: str) -> Tuple[str, dict[str, str]]:
 
     Only supports apply or destroy subcommands
 
-    Returns the instance ID of the created EC2 instance
+    Returns the instance ID of the created EC2 instance and the final config used when rendering the terraform
     """
     if command not in ["apply", "destroy"]:
         LOG.error(f"Unsupported terraform command {command}")
@@ -89,7 +92,7 @@ def run_terraform(*, lab: Lab, command: str) -> Tuple[str, dict[str, str]]:
 
 def get_instance_id(*, lab: Lab, terraform_module: Path) -> str:
     """
-    Get the instance ID from the terraform output
+    Get the instance ID from the provided lab's generated terraform module folder
     """
     instance_id_file = terraform_module.joinpath("instance_id")
     try:
@@ -102,6 +105,7 @@ def get_instance_id(*, lab: Lab, terraform_module: Path) -> str:
         sys.exit(1)
 
     return instance_id
+
 
 def sanitize_code_block(*, code_block: str) -> str:
     """
@@ -131,9 +135,10 @@ def sanitize_code_block(*, code_block: str) -> str:
     LOG.debug(f"Sanitized {code_block} into {sanitized_code_block}")
     return sanitized_code_block
 
+
 def run_commands(*, lab: Lab, type: str, commands: list[str], instance_id: str, render_config: dict[str, str]) -> bool:
     """
-    Run the code in the provided code blocks on the provided EC2 instance
+    Run the commands on the EC2 instance via SSM
 
     Return True for success and False for a failure
     """
@@ -173,7 +178,7 @@ def run_commands(*, lab: Lab, type: str, commands: list[str], instance_id: str, 
 
 def wait_for_completion(*, ssm_client: boto3.client, command_id: str, instance_id: str) -> bool:
     """
-    Wait for the provided command to complete and return the success or failure
+    Wait for the provided command to complete and return whether or not it was successful
     """
     LOG.debug(f"Waiting for the command {command_id} to complete on the EC2 {instance_id}...")
     success: bool = False
@@ -204,7 +209,7 @@ def wait_for_completion(*, ssm_client: boto3.client, command_id: str, instance_i
 
 def handle_failed_terraform(*, lab: Lab, instance_id: str = "") -> None:
     """
-    Handle cleaning up after a failed terraform run
+    Handle cleanup after a failed terraform run
     """
     if os.environ.get("CI") == "true" or not instance_id:
         run_terraform(lab=lab, command="destroy")
@@ -218,7 +223,7 @@ def get_code_from_commands(*, lab_path: Path) -> Lab:
     """
     Get the code in the code blocks of the provided lab URL
 
-    Returns a Lab dataclass
+    Returns a Lab object
     """
     lab_url: str = f"file://{lab_path}"
     LOG.debug(f"Getting the code blocks for the {lab_path.stem} lab from {lab_url}...")
@@ -315,7 +320,9 @@ def render_jinja2(
     output_file: Path,
     output_mode: Optional[int] = None,
 ) -> None:
-    """Render the functions file"""
+    """
+    Render the provided template file
+    """
     folder = str(template_file.parent)
     file = str(template_file.name)
     LOG.info(f"Rendering {template_file} into {output_file}...")
@@ -327,10 +334,10 @@ def render_jinja2(
         output_file.chmod(output_mode)
 
 
-# Typically this would be a session fixture, but since we are parallelizing with pytest-xdist we just parameterize the test and call this like a normal function
+# Typically this would be a session fixture, but since we plan to parallelize with pytest-xdist we parameterize the test and call this like a normal function
 def lab_setup() -> list[Lab]:
     """
-    Setup the labs
+    Setup all of the labs and return a list of Lab objects
     """
     # Hold the original clipboard contents to reinstate later
     original_clipboard_content: str = pyperclip.paste()

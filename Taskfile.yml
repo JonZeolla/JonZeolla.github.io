@@ -103,7 +103,7 @@ tasks:
       LOG_LEVEL: '{{ .CLI_ARGS | default "INFO" }}'
       # Not used; change -n0 below to -n "${NUMBER_OF_LABS}" when tests are parallelizable
       NUMBER_OF_LABS:
-        sh: find tests/ -name '*.md' | wc -l
+        sh: find docs/labs/ -name '*.md' | wc -l
     cmds:
       - pipenv run pytest -n0 -v tests/ --log-cli-level "${LOG_LEVEL}"
 

@@ -269,7 +269,7 @@ def get_code_from_commands(*, lab_path: Path) -> Lab:
 
             # Skip the code blocks that have a class of skip-tests
             if 'skip-tests' in classes:
-                LOG.warn(f"Skipping a code block in {lab_path.stem} because it has a class of skip-tests...")
+                LOG.warning(f"Skipping a code block in {lab_path.stem} because it has a class of skip-tests...")
                 continue
 
             if getting_started_override:

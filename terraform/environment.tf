@@ -93,10 +93,30 @@ resource "aws_iam_role" "instance_role" {
   assume_role_policy = data.aws_iam_policy_document.instance_assume_role_policy.json
 }
 
-# TODO: Reduce
-resource "aws_iam_role_policy_attachment" "admin" {
+data "aws_iam_policy_document" "setup_access" {
+  statement {
+    actions = [
+      "ec2:AuthorizeSecurityGroupIngress",
+      "ec2:AuthorizeSecurityGroupEgress",
+      "ec2:CreateTags",
+      "ec2:Describe*",
+      "sts:GetCallerIdentity",
+      "ssm:UpdateInstanceInformation"
+    ]
+
+    resources = ["*"]
+    effect    = "Allow"
+  }
+}
+
+resource "aws_iam_policy" "setup_access" {
+  name   = "workshop_setup_access-${var.cloud9_name}"
+  policy = data.aws_iam_policy_document.setup_access.json
+}
+
+resource "aws_iam_role_policy_attachment" "setup_access" {
   role       = aws_iam_role.instance_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
+  policy_arn = aws_iam_policy.setup_access.arn
 }
 
 resource "aws_iam_role_policy_attachment" "ec2_readonly_access" {

@@ -44,6 +44,7 @@ If you're into certifications I have a few
 
 ## Awards
 
+* 2023 Best Places to Work - Seiso
 * 2023 Cybersecurity Innovator Finalist - Seiso
 * 2022 Best Places to Work - Seiso
 * 2021 Start-Up Innovator of the Year - Seiso

@@ -9,7 +9,7 @@ hidden: true
 
 | Date       | Event                                  | Title                                                          |
 | ---------- | -------------------------------------- | -------------------------------------------------------------- |
-| 2024-09-10 | [Alabama CSA][Alabama-CSA]             | TODO                                                                    |
+| 2024-09-10 | [Alabama CSA][Alabama-CSA]             | TODO                                                           |
 | 2023-12-04 | [2023 PGH InfoSec Day][2023-PInfoSec]  | [Your Governance is Broken][2023-PInfoSec-Talk]                |
 | 2023-11-06 | [2023 KubeCon][2023-KubeCon]           | [Lightning Talk][2023-KubeCon-Talk]                            |
 | 2023-10-16 | [2023 CloudSecNext][2023-CloudSecNext] | Event co-host                                                  |

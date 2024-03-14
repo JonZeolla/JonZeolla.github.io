@@ -5,11 +5,12 @@ hidden: true
 ```{toctree}
 ```
 
-# Presentations and Events
+# Event Presentations
 
 | Date       | Event                                  | Title                                                          |
 | ---------- | -------------------------------------- | -------------------------------------------------------------- |
-| 2023-12-04 | [2023 PGH InfoSec Day][2023-PInfoSec]  | Your Governance is Broken                                      |
+| 2024-09-10 | [Alabama CSA][Alabama-CSA]             | TODO                                                                    |
+| 2023-12-04 | [2023 PGH InfoSec Day][2023-PInfoSec]  | [Your Governance is Broken][2023-PInfoSec-Talk]                |
 | 2023-11-06 | [2023 KubeCon][2023-KubeCon]           | [Lightning Talk][2023-KubeCon-Talk]                            |
 | 2023-10-16 | [2023 CloudSecNext][2023-CloudSecNext] | Event co-host                                                  |
 | 2023-10-13 | [2023 TRISS][2023-TRISS]               | Cloud Security Panel                                           |
@@ -68,6 +69,8 @@ hidden: true
 | 2012-08-07 | Pittsburgh Technical Institute         | Life After Graduation                                          |
 | 2011-10-05 | Pittsburgh Technical Institute         | Alumni Speaker Series                                          |
 
+[Alabama-CSA]: https://circle.cloudsecurityalliance.org/alabama/home "Cloud Security Alliance Alabama Chapter"
+[2023-PInfoSec-Talk]: https://www.youtube.com/watch?v=tKKrqNduBwA "Your Governance Is Broken"
 [2023-PInfoSec]: https://web.cvent.com/event/2014576f-92db-4057-ae41-9b25a39a1909/websitePage:eb8094ff-eb19-4b4c-a88f-22e9f5e536bb "2023 Pittsburgh InfoSec Day"
 [2023-KubeCon-Talk]: https://kccncna2023.sched.com/event/1R2ll/cl-lightning-talk-empowering-the-deaf-and-hard-of-hearing-in-cloud-native-and-open-source-jon-zeolla-seiso-catherine-paganini-buoyant "2023 KubeCon Lightning Talk"
 [2023-CloudSecNext]: https://www.sans.org/cyber-security-training-events/cloudsecnext-summit-2023/ "2023 CloudSecNext"
@@ -87,41 +90,45 @@ hidden: true
 [2015-SCIS-PasswordCracking]: https://www.youtube.com/watch?v=QP7AEeeT-xQ "Password Cracking"
 [2015-SCIS-WirelessKeylog]: https://www.youtube.com/watch?v=ftRUj6esm1o "Wireless Keyloggers and KeySweeper"
 
-# Trainings
+# My Training Classes
 
-| Date       | Event                            | Training                                                                            |
-| ---------- | -------------------------------- | ----------------------------------------------------------------------------------- |
-| 2023-11-27 | Pittsburgh Code & Supply         | [Container Security 101][2023-ContainerSec101] ([Event link][2023-PCS])             |
-| 2023-11-01 | SANS Workshop                    | [Mastering Policy as Code][2023-PolicyasCode]                                       |
-| 2023-10-18 | SANS Dallas Cloud Sec Next 2023  | [SEC540][SEC540]                                                                    |
-| 2023-10-16 | SANS Workshop                    | [Container Security 101][2023-ContainerSec101]                                      |
-| 2023-09-25 | SANS Managing Security Risk 2023 | [SEC540][SEC540]                                                                    |
-| 2023-09-04 | SANS Cloud Security London 2023  | [SEC540][SEC540]                                                                    |
-| 2023-08-07 | Private                          | [SEC540][SEC540]                                                                    |
-| 2023-07-10 | SANS SANSFIRE 2023               | [SEC540][SEC540]                                                                    |
-| 2023-05-21 | SANS Cyber Security East         | [SEC540][SEC540]                                                                    |
-| 2023-04-27 | SANS Workshop                    | [Container Security 101][2023-ContainerSec101]                                      |
-| 2023-03-06 | SANS Las Vegas Winter 2023       | [SEC540][SEC540]                                                                    |
-| 2023-02-20 | SANS Cloud Defender Dallas 2023  | [SEC540][SEC540]                                                                    |
-| 2022-11-07 | SANS Cyber Security East         | [SEC540][SEC540]                                                                    |
-| 2022-09-26 | SANS Baltimore Fall 2022         | [SEC540][SEC540]                                                                    |
-| 2022-07-10 | SANS London 2022                 | [SEC540][SEC540]                                                                    |
-| 2022-06-13 | SANS Cloud Defender Summer 2022  | [SEC540][SEC540]                                                                    |
-| 2022-04-10 | SANS 2022                        | [SEC540][SEC540]                                                                    |
-| 2022-02-28 | SANS Cyber Security Central      | [SEC540][SEC540]                                                                    |
-| 2019-06-27 | BSides Pittsburgh                | Blue Team CTF                                                                       |
-| 2018-05-10 | Steel City InfoSec               | [Smart Contract Security][2018-SmartContractSecurity] (Collab with Justin Leapline) |
-| 2018-02-08 | Steel City InfoSec               | [Attacking Block Cipher Cryptography][2018-BlockCipherCrypto]                       |
-| 2017-02-09 | Steel City InfoSec               | [Security Data Analysis][2017-SecurityDataAnalysis]                                 |
-| 2016-08-11 | Steel City InfoSec               | [Proximity Attacks Lab][2016-ProximityAttacks]                                      |
-| 2016-05-12 | Steel City InfoSec               | [Automotive Security Lab][2016-AutomotiveSecurity] (Collab with Dan Klinedinst)     |
-| 2016-02-11 | Steel City InfoSec               | [SDR Security][2016-SDRSecurity] (Collab with David)                                |
-| 2015-09-24 | Steel City InfoSec               | [Password Cracking Lab][2015-PasswordCracking]                                      |
-| 2015-07-07 | Pittsburgh Code & Supply         | [Wifi Security][2015-WifiSecurity]                                                  |
-| 2015-01-22 | Steel City InfoSec               | Audio Surveillance                                                                  |
-| 2015-04-09 | Steel City InfoSec               | [Attacker drop boxes][2015-Attackerdropboxes] (Collab with Brian Gray)              |
-| 2015-01-22 | Steel City InfoSec               | [Eavesdropping at a distance][2015-LaserMicrophones] (Collab with Brian Gray)       |
-| 2013-03-07 | Steel City InfoSec               | Wifi Security                                                                       |
+| Date       | Event                             | Training                                                                            |
+| ---------- | --------------------------------- | ----------------------------------------------------------------------------------- |
+| 2024-05-09 | SANS Security West San Diego 2024 | [SEC540][SEC540]                                                                    |
+| 2024-04-01 | Private                           | [SEC540][SEC540]                                                                    |
+| 2024-03-24 | SANS Orlando 2024                 | [SEC540][SEC540]                                                                    |
+| 2024-02-19 | SANS Security East 2024 (Nola)    | [SEC540][SEC540]                                                                    |
+| 2023-11-27 | Pittsburgh Code & Supply          | [Container Security 101][2023-ContainerSec101] ([Event link][2023-PCS])             |
+| 2023-11-01 | SANS Workshop                     | [Mastering Policy as Code][2023-PolicyasCode]                                       |
+| 2023-10-18 | SANS Dallas Cloud Sec Next 2023   | [SEC540][SEC540]                                                                    |
+| 2023-10-16 | SANS Workshop                     | [Container Security 101][2023-ContainerSec101]                                      |
+| 2023-09-25 | SANS Managing Security Risk 2023  | [SEC540][SEC540]                                                                    |
+| 2023-09-04 | SANS Cloud Security London 2023   | [SEC540][SEC540]                                                                    |
+| 2023-08-07 | Private                           | [SEC540][SEC540]                                                                    |
+| 2023-07-10 | SANS SANSFIRE 2023                | [SEC540][SEC540]                                                                    |
+| 2023-05-21 | SANS Cyber Security East          | [SEC540][SEC540]                                                                    |
+| 2023-04-27 | SANS Workshop                     | [Container Security 101][2023-ContainerSec101]                                      |
+| 2023-03-06 | SANS Las Vegas Winter 2023        | [SEC540][SEC540]                                                                    |
+| 2023-02-20 | SANS Cloud Defender Dallas 2023   | [SEC540][SEC540]                                                                    |
+| 2022-11-07 | SANS Cyber Security East          | [SEC540][SEC540]                                                                    |
+| 2022-09-26 | SANS Baltimore Fall 2022          | [SEC540][SEC540]                                                                    |
+| 2022-07-10 | SANS London 2022                  | [SEC540][SEC540]                                                                    |
+| 2022-06-13 | SANS Cloud Defender Summer 2022   | [SEC540][SEC540]                                                                    |
+| 2022-04-10 | SANS 2022                         | [SEC540][SEC540]                                                                    |
+| 2022-02-28 | SANS Cyber Security Central       | [SEC540][SEC540]                                                                    |
+| 2019-06-27 | BSides Pittsburgh                 | Blue Team CTF                                                                       |
+| 2018-05-10 | Steel City InfoSec                | [Smart Contract Security][2018-SmartContractSecurity] (Collab with Justin Leapline) |
+| 2018-02-08 | Steel City InfoSec                | [Attacking Block Cipher Cryptography][2018-BlockCipherCrypto]                       |
+| 2017-02-09 | Steel City InfoSec                | [Security Data Analysis][2017-SecurityDataAnalysis]                                 |
+| 2016-08-11 | Steel City InfoSec                | [Proximity Attacks Lab][2016-ProximityAttacks]                                      |
+| 2016-05-12 | Steel City InfoSec                | [Automotive Security Lab][2016-AutomotiveSecurity] (Collab with Dan Klinedinst)     |
+| 2016-02-11 | Steel City InfoSec                | [SDR Security][2016-SDRSecurity] (Collab with David)                                |
+| 2015-09-24 | Steel City InfoSec                | [Password Cracking Lab][2015-PasswordCracking]                                      |
+| 2015-07-07 | Pittsburgh Code & Supply          | [Wifi Security][2015-WifiSecurity]                                                  |
+| 2015-01-22 | Steel City InfoSec                | Audio Surveillance                                                                  |
+| 2015-04-09 | Steel City InfoSec                | [Attacker drop boxes][2015-Attackerdropboxes] (Collab with Brian Gray)              |
+| 2015-01-22 | Steel City InfoSec                | [Eavesdropping at a distance][2015-LaserMicrophones] (Collab with Brian Gray)       |
+| 2013-03-07 | Steel City InfoSec                | Wifi Security                                                                       |
 
 [2023-PCS]: https://www.meetup.com/pittsburgh-code-supply/events/297107969/ "Pittsburgh Code & Supply Container Security 101 Workshop"
 [2023-PolicyasCode]: https://jonzeolla.com/labs/policy-as-code.html "Mastering Policy as Code"

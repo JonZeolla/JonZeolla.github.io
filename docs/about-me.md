@@ -85,6 +85,7 @@ If you're into certifications I have a few
 
 ## Open Source Software
 
+* [cookiecutter-python](https://github.com/SeisoLLC/cookiecutter-python)
 * [easy_infra](https://github.com/SeisoLLC/easy_infra)
 * [goat](https://github.com/SeisoLLC/goat)
 * [zeek-kafka](https://github.com/SeisoLLC/zeek-kafka)

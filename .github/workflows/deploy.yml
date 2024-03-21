@@ -13,25 +13,13 @@ defaults:
   run:
     shell: 'bash --noprofile --norc -Eeuo pipefail {0}'
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
 concurrency:
   group: "pages"
   cancel-in-progress: false
 
 jobs:
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      id-token: write
-      pages: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -63,9 +51,20 @@ jobs:
       - name: Cleanup from testing (just in case)
         run: task -v destroy
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v3
         with:
           path: './build'
+  deploy:
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+      pages: write
+    steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4

@@ -26,6 +26,8 @@ If you only want to run a specific test, set the variable `LAB` to the name of t
 LAB=container-security-101 task test
 ```
 
+The same pattern exists for `task destroy`.
+
 ## Lessons Learned
 
 The AWS cli is only setup upon opening the Cloud9 console, so we need to manually get and set the region for ansible's use

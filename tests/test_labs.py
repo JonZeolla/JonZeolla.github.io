@@ -65,7 +65,7 @@ def get_labs() -> list[Path]:
         LOG.error(f"Failed to find the lab {lab}")
         sys.exit(1)
     else:
-        labs: list[Path] = [labs_dir.glob("**/[!index]*.html")]
+        labs: list[Path] = list(labs_dir.glob("**/[!index]*.html"))
         return labs
 
 

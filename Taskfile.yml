@@ -111,12 +111,21 @@ tasks:
     desc: Run terraform destroys and cleanup all of the test terraform modules
     cmds:
       - |
-        for dir in $(find tests -type d -maxdepth 1 -mindepth 1); do
-          pushd "${dir}" >/dev/null
-          echo "Running destroy in ${dir}..."
+        if [[ -z "${LAB+x}" ]]; then
+          for dir in $(find tests -type d -maxdepth 1 -mindepth 1); do
+            pushd "${dir}" >/dev/null
+            echo "Running destroy in ${dir}..."
+            terraform init
+            terraform destroy -auto-approve
+            popd >/dev/null
+          done
+        else
+          pushd "tests/${LAB}" >/dev/null
+          echo "Running destroy in tests/${LAB}..."
+          terraform init
           terraform destroy -auto-approve
           popd >/dev/null
-        done
+        fi
 
   update:
     desc: Update the project dev and runtime dependencies, and other misc components
@@ -137,3 +146,7 @@ tasks:
       - find {{.ROOT_DIR}} -type f -name '.DS_Store' -delete
       - find {{.ROOT_DIR}} -type f -name '.Thumbs.db' -delete
       - find {{.ROOT_DIR}} -type f -name '.coverage' -delete
+      - find {{.ROOT_DIR}} -type d -name '.terraform' -exec rm -rf {} +
+      - find {{.ROOT_DIR}} -type f -name '.terraform.lock.hcl' -delete
+      # Leaving this commented out because it could accidentally kill state for a deployed environment; the above terraform lines should be enough
+      # - find {{.ROOT_DIR}}/tests -type d -maxdepth 1 -mindepth 1 -exec rm -rf {} +

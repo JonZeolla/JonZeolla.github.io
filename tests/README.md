@@ -18,6 +18,14 @@ How it works:
     1. Run the lab_commands code blocks in the Cloud9 EC2 instance
 1. Restore the host clipboard
 
+## Configuring tests
+
+If you only want to run a specific test, set the variable `LAB` to the name of that tests (i.e. the base name of the lab file under `build/labs/`), i.e.:
+
+```bash
+LAB=container-security-101 task test
+```
+
 ## Lessons Learned
 
 The AWS cli is only setup upon opening the Cloud9 console, so we need to manually get and set the region for ansible's use

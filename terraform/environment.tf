@@ -196,5 +196,5 @@ variable "cloud9_instance_type" {
 variable "cloud9_image" {
   description = "The image to use for the Cloud9 environment"
   type        = string
-  default     = "amazonlinux-2-x86_64"
+  default     = "amazonlinux-2023-x86_64"
 }

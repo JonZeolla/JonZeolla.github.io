@@ -8,6 +8,8 @@ Developing against this project assumes that you have the docker daemon running,
 Run `task init` to setup your local environment, `task build` to build the project, and `task test` to test it. You can run `task open` to open the root
 `index.html` in your local browser.
 
+If you only want to test a single lab, set the `LAB` environment variable; more on this in the [tests README](./tests/README.md#configuring-tests).
+
 If you'd like to turn debug logging on, set your `LOG_LEVEL` environment variable to `DEBUG`.
 
 To autobuild as files change, run `nohup task -w build >/dev/null 2>&1 &` and clean up the job with `pkill -f 'task -w build'`

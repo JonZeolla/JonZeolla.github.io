@@ -137,3 +137,7 @@ tasks:
       - find {{.ROOT_DIR}} -type f -name '.DS_Store' -delete
       - find {{.ROOT_DIR}} -type f -name '.Thumbs.db' -delete
       - find {{.ROOT_DIR}} -type f -name '.coverage' -delete
+      - find {{.ROOT_DIR}} -type d -name '.terraform' -exec rm -rf {} +
+      - find {{.ROOT_DIR}} -type f -name '.terraform.lock.hcl' -delete
+      # Leaving this commented out because it could accidentally kill state for a deployed environment; the above terraform lines should be enough
+      # - find {{.ROOT_DIR}}/tests -type d -maxdepth 1 -mindepth 1 -exec rm -rf {} +

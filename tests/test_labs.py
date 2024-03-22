@@ -38,6 +38,7 @@ std_out.addFilter(lambda x: x.levelno < logging.ERROR)
 LOG.addHandler(std_err)
 LOG.addHandler(std_out)
 
+
 @dataclass
 class Lab:
     getting_started: list[str]
@@ -54,8 +55,18 @@ def get_labs() -> list[Path]:
     time.sleep(1)
 
     labs_dir: Path = Path("build/labs/").absolute()
-    labs: list[Path] = list(labs_dir.glob("**/[!index]*.html"))
-    return labs
+
+    if "LAB" in os.environ:
+        lab: Path = labs_dir.joinpath(f"{os.environ['LAB']}.html")
+
+        if lab.exists():
+            return [lab]
+
+        LOG.error(f"Failed to find the lab {lab}")
+        sys.exit(1)
+    else:
+        labs: list[Path] = [labs_dir.glob("**/[!index]*.html")]
+        return labs
 
 
 def run_terraform(*, lab: Lab, command: str) -> Tuple[str, dict[str, str]]:
@@ -71,17 +82,30 @@ def run_terraform(*, lab: Lab, command: str) -> Tuple[str, dict[str, str]]:
         sys.exit(1)
 
     # This creates the final config that was used for rendering, which has defaults added where needed
-    render_config, terraform_module = render_lab_terraform(lab=lab, config_update=lab.config)
+    render_config, terraform_module = render_lab_terraform(
+        lab=lab, config_update=lab.config
+    )
 
     # Run the terraform command
-    terraform_commands = [["terraform", "init"], ["terraform", command, "-auto-approve"]]
+    terraform_commands = [
+        ["terraform", "init"],
+        ["terraform", command, "-auto-approve"],
+    ]
     for tf_command in terraform_commands:
         tf_command_string = " ".join(tf_command)
         try:
             LOG.info(f"{lab.file.stem}: Running {tf_command_string}...")
-            subprocess.run(tf_command, capture_output=True, text=True, cwd=terraform_module, check=True)
+            subprocess.run(
+                tf_command,
+                capture_output=True,
+                text=True,
+                cwd=terraform_module,
+                check=True,
+            )
         except subprocess.CalledProcessError as e:
-            LOG.error(f"{lab.file.stem}: Failed to run {tf_command_string} with the output of {e.stdout} and the error of {e.stderr}")
+            LOG.error(
+                f"{lab.file.stem}: Failed to run {tf_command_string} with the output of {e.stdout} and the error of {e.stderr}"
+            )
             handle_failed_terraform(lab=lab)
             sys.exit(1)
 
@@ -96,7 +120,7 @@ def get_instance_id(*, lab: Lab, terraform_module: Path) -> str:
     """
     instance_id_file = terraform_module.joinpath("instance_id")
     try:
-        instance_id = instance_id_file.read_text().rstrip('\n')
+        instance_id = instance_id_file.read_text().rstrip("\n")
     except FileNotFoundError:
         LOG.error(f"{lab.file.stem}: Failed to find the file {instance_id_file}")
         sys.exit(1)
@@ -122,7 +146,7 @@ def sanitize_code_block(*, code_block: str) -> str:
         return sanitized_code_block
 
     # Reduce multiple newlines to a single newline
-    while '\n\n' in sanitized_code_block:
+    while "\n\n" in sanitized_code_block:
         sanitized_code_block = sanitized_code_block.replace("\n\n", "\n")
 
     # Replace newlines with && chaining for the SSM command
@@ -136,18 +160,25 @@ def sanitize_code_block(*, code_block: str) -> str:
     return sanitized_code_block
 
 
-def run_commands(*, lab: Lab, type: str, commands: list[str], instance_id: str, render_config: dict[str, str]) -> bool:
+def run_commands(
+    *,
+    lab: Lab,
+    type: str,
+    commands: list[str],
+    instance_id: str,
+    render_config: dict[str, str],
+) -> bool:
     """
     Run the commands on the EC2 instance via SSM
 
     Return True for success and False for a failure
     """
-    LOG.info(f"Running the {type} code blocks for lab {lab.file.stem} on the EC2 {instance_id}...")
+    LOG.info(
+        f"Running the {type} code blocks for lab {lab.file.stem} on the EC2 {instance_id}..."
+    )
 
     if not commands:
-        LOG.error(
-                f"{lab.file.stem}: Passed an empty list of commands to run"
-        )
+        LOG.error(f"{lab.file.stem}: Passed an empty list of commands to run")
         return False
 
     success: bool = False
@@ -163,10 +194,20 @@ def run_commands(*, lab: Lab, type: str, commands: list[str], instance_id: str, 
         sanitized_code_block = sanitize_code_block(code_block=code_block)
         # TODO: Add `set -u` back in once "/home/ec2-user/.rvm/scripts/functions/rvmrc_env: line 66: rvm_saved_env: unbound variable" is fixed in Amazon Linux
         # ~related to https://github.com/rvm/rvm/issues/4694
-        command: str = f"export user=$({get_user_command}) && su - ${{user}} --shell /bin/bash -c 'set -eo pipefail && cd && {sanitized_code_block}'"
+        command: str = (
+            f"export user=$({get_user_command}) && su - ${{user}} --shell /bin/bash -c 'set -eo pipefail && cd && {sanitized_code_block}'"
+        )
         LOG.debug(f"{lab.file.stem}: Running {command}")
-        response = ssm_client.send_command(DocumentName="AWS-RunShellScript", Parameters={"commands": [command]}, InstanceIds=[instance_id])
-        success = wait_for_completion(ssm_client=ssm_client, command_id=response["Command"]["CommandId"], instance_id=instance_id)
+        response = ssm_client.send_command(
+            DocumentName="AWS-RunShellScript",
+            Parameters={"commands": [command]},
+            InstanceIds=[instance_id],
+        )
+        success = wait_for_completion(
+            ssm_client=ssm_client,
+            command_id=response["Command"]["CommandId"],
+            instance_id=instance_id,
+        )
 
         if not success:
             LOG.error(f"{lab.file.stem}: Failed running {command}")
@@ -176,32 +217,46 @@ def run_commands(*, lab: Lab, type: str, commands: list[str], instance_id: str, 
     return True
 
 
-def wait_for_completion(*, ssm_client: boto3.client, command_id: str, instance_id: str) -> bool:
+def wait_for_completion(
+    *, ssm_client: boto3.client, command_id: str, instance_id: str
+) -> bool:
     """
     Wait for the provided command to complete and return whether or not it was successful
     """
-    LOG.debug(f"Waiting for the command {command_id} to complete on the EC2 {instance_id}...")
+    LOG.debug(
+        f"Waiting for the command {command_id} to complete on the EC2 {instance_id}..."
+    )
     success: bool = False
 
     while True:
         response = ssm_client.list_commands(CommandId=command_id)
         status = response["Commands"][0]["Status"]
         if status == "Success":
-            LOG.debug(f"The run-command {command_id} completed successfully on the EC2 {instance_id}...")
+            LOG.debug(
+                f"The run-command {command_id} completed successfully on the EC2 {instance_id}..."
+            )
             success = True
             break
         elif status == "Failed":
-            ssm_client.get_command_invocation(CommandId=command_id, InstanceId=instance_id)
-            invocation_response = ssm_client.get_command_invocation(CommandId=command_id, InstanceId=instance_id)
+            ssm_client.get_command_invocation(
+                CommandId=command_id, InstanceId=instance_id
+            )
+            invocation_response = ssm_client.get_command_invocation(
+                CommandId=command_id, InstanceId=instance_id
+            )
             stdout = invocation_response.get("StandardOutputContent")
             stderr = invocation_response.get("StandardErrorContent")
             LOG.error(f"stderr: {stderr}, stdout: {stdout}")
-            LOG.error(f"The run-command {command_id} failed on the EC2 {instance_id}, see above for the stdout and stderr...")
+            LOG.error(
+                f"The run-command {command_id} failed on the EC2 {instance_id}, see above for the stdout and stderr..."
+            )
 
             success = False
             break
         else:
-            LOG.debug(f"The run-command {command_id} is still running on the EC2 {instance_id}...")
+            LOG.debug(
+                f"The run-command {command_id} is still running on the EC2 {instance_id}..."
+            )
             time.sleep(2)
 
     return success
@@ -214,9 +269,7 @@ def handle_failed_terraform(*, lab: Lab, instance_id: str = "") -> None:
     if os.environ.get("CI") == "true" or not instance_id:
         run_terraform(lab=lab, command="destroy")
     else:
-        LOG.warning(
-            f"Leaving the EC2 {instance_id} up for troubleshooting..."
-        )
+        LOG.warning(f"Leaving the EC2 {instance_id} up for troubleshooting...")
 
 
 def get_code_from_commands(*, lab_path: Path) -> Lab:
@@ -246,7 +299,9 @@ def get_code_from_commands(*, lab_path: Path) -> Lab:
 
         # Identify if there's a getting started override for testing
         getting_started: list[str] = []
-        getting_started_override: bool = page.locator(".overrideGettingStarted").count() > 0
+        getting_started_override: bool = (
+            page.locator(".overrideGettingStarted").count() > 0
+        )
         if getting_started_override:
             LOG.debug("Detected a getting started override, using it...")
             getting_started.append(page.inner_text(".overrideGettingStarted"))
@@ -269,30 +324,41 @@ def get_code_from_commands(*, lab_path: Path) -> Lab:
             clipboard_content: str = pyperclip.paste()
 
             # Get the parent's parent element
-            parent_element = button.evaluate_handle("button => button.parentElement").evaluate_handle("el => el.parentElement")
-            classes = parent_element.get_attribute('class').split()
+            parent_element = button.evaluate_handle(
+                "button => button.parentElement"
+            ).evaluate_handle("el => el.parentElement")
+            classes = parent_element.get_attribute("class").split()
 
             # Skip the code blocks that have a class of skip-tests
-            if 'skip-tests' in classes:
-                LOG.warning(f"Skipping a code block in {lab_path.stem} because it has a class of skip-tests...")
+            if "skip-tests" in classes:
+                LOG.warning(
+                    f"Skipping a code block in {lab_path.stem} because it has a class of skip-tests..."
+                )
                 continue
 
             if getting_started_override:
                 # If there was an getting started override, add everything that isn't getting-started as a lab command
-                if 'getting-started' not in classes:
+                if "getting-started" not in classes:
                     lab_commands.append(clipboard_content)
             else:
                 # Check if the parent element has a class of getting-started
-                if 'getting-started' in classes:
+                if "getting-started" in classes:
                     getting_started.append(clipboard_content)
                 else:
                     lab_commands.append(clipboard_content)
 
-    lab = Lab(getting_started=getting_started, lab_commands=lab_commands, config=config, file=lab_path)
+    lab = Lab(
+        getting_started=getting_started,
+        lab_commands=lab_commands,
+        config=config,
+        file=lab_path,
+    )
     return lab
 
 
-def render_lab_terraform(*, lab: Lab, config_update: dict[str, str]) -> Tuple[dict[str, str], Path]:
+def render_lab_terraform(
+    *, lab: Lab, config_update: dict[str, str]
+) -> Tuple[dict[str, str], Path]:
     """
     Render the lab-specific terraform live
 
@@ -305,10 +371,18 @@ def render_lab_terraform(*, lab: Lab, config_update: dict[str, str]) -> Tuple[di
     terraform_live = terraform_module.joinpath(lab.file.stem).with_suffix(".tf")
 
     # Set a default config, and then update it with the provided config
-    render_config = {"cloud9_name": lab.file.stem, "cloud9_instance_type": "t3.xlarge", "region": "us-east-1"}
+    render_config = {
+        "cloud9_name": lab.file.stem,
+        "cloud9_instance_type": "t3.xlarge",
+        "region": "us-east-1",
+    }
     render_config.update(config_update)
 
-    render_jinja2(template_file=terraform_template, config=render_config, output_file=terraform_live)
+    render_jinja2(
+        template_file=terraform_template,
+        config=render_config,
+        output_file=terraform_live,
+    )
 
     return render_config, terraform_module
 
@@ -369,9 +443,21 @@ def test_lab(lab: Lab) -> None:
     instance_id, render_config = run_terraform(lab=lab, command="apply")
 
     if lab.getting_started:
-        assert run_commands(lab=lab, type="getting started", commands=lab.getting_started, instance_id=instance_id, render_config=render_config)
+        assert run_commands(
+            lab=lab,
+            type="getting started",
+            commands=lab.getting_started,
+            instance_id=instance_id,
+            render_config=render_config,
+        )
     else:
         LOG.error(f"No getting started code blocks for lab {lab} detected...")
         assert False
 
-    assert run_commands(lab=lab, type="lab commands", commands=lab.lab_commands, instance_id=instance_id, render_config=render_config)
+    assert run_commands(
+        lab=lab,
+        type="lab commands",
+        commands=lab.lab_commands,
+        instance_id=instance_id,
+        render_config=render_config,
+    )

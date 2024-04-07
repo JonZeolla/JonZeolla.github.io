@@ -81,10 +81,10 @@ tasks:
   build:
     desc: Build the project
     # Sources are needed for auto-rebuilding via the taskfile watch feature
-    # sources:
-    #   - docs/**/*.md
-    #   - docs/**/*.py
-    #   - docs/**/*.rst
+    sources:
+      - docs/**/*.md
+      - docs/**/*.py
+      - docs/**/*.rst
     cmds:
       - pipenv run sphinx-build -b html docs build
 

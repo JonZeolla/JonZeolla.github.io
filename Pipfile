@@ -8,7 +8,8 @@ name = "pypi"
 [dev-packages]
 boto3 = "*"
 jinja2 = "*"
-myst-parser = "*"
+# Pending a release > 2.0.0
+myst-parser = {ref = "79a301e5741f6875c48376b4308c07e1bee60118", git = "git+https://github.com/executablebooks/MyST-Parser.git"}
 paramiko = "*"
 playwright = "*"
 pyperclip = "*"
@@ -25,4 +26,4 @@ sphinxcontrib-googleanalytics = "*"
 sphinxcontrib-mermaid = "*"
 
 [requires]
-python_version = "3.11"
+python_version = "3.12"

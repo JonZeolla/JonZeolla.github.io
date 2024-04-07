@@ -69,6 +69,9 @@ hidden: true
 | 2012-08-07 | Pittsburgh Technical Institute         | Life After Graduation                                          |
 | 2011-10-05 | Pittsburgh Technical Institute         | Alumni Speaker Series                                          |
 
+You can also watch my recorded presentations by going to [this YouTube
+playlist](https://www.youtube.com/watch?v=Y1TGQWOmrTI&list=PLDvTIewuIyaKK2wk49iq5_rxUcNioSr0y).
+
 [Alabama-CSA]: https://circle.cloudsecurityalliance.org/alabama/home "Cloud Security Alliance Alabama Chapter"
 [2023-PInfoSec-Talk]: https://www.youtube.com/watch?v=tKKrqNduBwA "Your Governance Is Broken"
 [2023-PInfoSec]: https://web.cvent.com/event/2014576f-92db-4057-ae41-9b25a39a1909/websitePage:eb8094ff-eb19-4b4c-a88f-22e9f5e536bb "2023 Pittsburgh InfoSec Day"

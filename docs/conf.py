@@ -41,6 +41,7 @@ html_css_files: list[str] = ["css/custom.css"]
 # https://myst-parser.readthedocs.io/en/latest/syntax/optional.html
 
 myst_enable_extensions: list[str] = ["attrs_block", "attrs_inline", "colon_fence"]
+myst_links_external_new_tab: bool = True
 
 # -- Options for sphinx-copybutton --
 # https://github.com/executablebooks/sphinx-copybutton/blob/master/docs/use.md

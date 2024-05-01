@@ -63,6 +63,7 @@ If you're into certifications I have a few
 
 ## Volunteer Work
 
+* Cloud Native Security Con 2024 - Program Committee Member
 * KubeCon/CloudNativeCon North America 2023 - [Cybersecurity Program Committee
   Member](https://www.credly.com/earner/earned/badge/b5fe6313-37ad-41f9-a3b0-a07e6003c6ac)
 * [CNCF TAG-Security](https://github.com/cncf/tag-security) Member since 2020

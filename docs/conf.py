@@ -7,7 +7,7 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project: str = "Jon Zeolla"
-copyright: str = "2023, Jon Zeolla"
+copyright: str = "2024, Jon Zeolla"
 author: str = "Jon Zeolla"
 
 # -- General configuration --

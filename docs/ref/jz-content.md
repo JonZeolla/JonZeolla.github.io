@@ -98,6 +98,7 @@ playlist](https://www.youtube.com/watch?v=Y1TGQWOmrTI&list=PLDvTIewuIyaKK2wk49iq
 | Date       | Event                             | Training                                                                            |
 | ---------- | --------------------------------- | ----------------------------------------------------------------------------------- |
 | 2024-05-09 | SANS Security West San Diego 2024 | [SEC540][SEC540]                                                                    |
+| 2024-05-01 | Private                           | [Container Security 101 and 201][2023-ContainerSec]                                 |
 | 2024-04-01 | Private                           | [SEC540][SEC540]                                                                    |
 | 2024-03-24 | SANS Orlando 2024                 | [SEC540][SEC540]                                                                    |
 | 2024-02-19 | SANS Security East 2024 (Nola)    | [SEC540][SEC540]                                                                    |
@@ -133,6 +134,7 @@ playlist](https://www.youtube.com/watch?v=Y1TGQWOmrTI&list=PLDvTIewuIyaKK2wk49iq
 | 2015-01-22 | Steel City InfoSec                | [Eavesdropping at a distance][2015-LaserMicrophones] (Collab with Brian Gray)       |
 | 2013-03-07 | Steel City InfoSec                | Wifi Security                                                                       |
 
+[2023-ContainerSec]: https://jonzeolla.com/labs/index.html "Container Security 101 and 201"
 [2023-PCS]: https://www.meetup.com/pittsburgh-code-supply/events/297107969/ "Pittsburgh Code & Supply Container Security 101 Workshop"
 [2023-PolicyasCode]: https://jonzeolla.com/labs/policy-as-code.html "Mastering Policy as Code"
 [2023-ContainerSec101]: https://jonzeolla.com/labs/container-security-101.html "Container Security 101"

@@ -70,11 +70,10 @@ Alright, now it's time to get a little bit ... deeper.
 
 So far we've covered a little bit about docker images and OCI artifacts, but what exactly _is_ an image?
 
-You may remember from our [terminology](terminology) section that an image is a bundle of configuration, metadata, and
-files in a structured format.
+You may remember from our [terminology](terminology) section that an image is a bundle of configuration, metadata, and files in a structured format.
 
-That bundle can be uniquely identified using an image manifest digest, which is just another name for the digest we've
-been using all along. Here you can retrieve the manifest digest and use it to make API calls to the registry:
+That bundle can be uniquely identified using an image manifest digest, which is just another name for the digest we've been using all along. Here you can
+retrieve the manifest digest and use it to make API calls to the registry:
 
 ```{code-block} console
 ---
@@ -82,34 +81,32 @@ emphasize-lines: 3,5,7
 ---
 $ mdigest=$(docker inspect --format='{{index .RepoDigests 0}}' example | cut -f2 -d@)
 $ echo $mdigest
-sha256:63e226a559065a971cfd911a91fefe7f1c96693186467ad182ca9dd9b64d078c
+sha256:ffca993f5894de4a3d720cfaa3fadb7dabb961562bbf3b96bcddbc24158d15c9
 $ curl -k https://localhost:443/v2/example/tags/list
-{"name":"example","tags":["sha256-63e226a559065a971cfd911a91fefe7f1c96693186467ad182ca9dd9b64d078c.sig","latest"]}
+{"name":"example","tags":["latest"]}
 $ curl -s -k https://localhost:443/v2/example/manifests/$mdigest | sha256sum
-63e226a559065a971cfd911a91fefe7f1c96693186467ad182ca9dd9b64d078c  -
+ffca993f5894de4a3d720cfaa3fadb7dabb961562bbf3b96bcddbc24158d15c9  -
 $ curl -s -k https://localhost:443/v2/example/manifests/$mdigest | head -14
 {
    "schemaVersion": 2,
    "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
    "config": {
       "mediaType": "application/vnd.docker.container.image.v1+json",
-      "size": 7705,
-      "digest": "sha256:6b7f86a3d64be8fb0ece35d5b54b15b6bd117c7fdcf2f778350de9012186fd14"
+      "size": 7637,
+      "digest": "sha256:2e46f376087fd12317a3f756a27449728881576e2efe0ed466ee1cdec5b9ed9b"
    },
    "layers": [
       {
          "mediaType": "application/vnd.docker.image.rootfs.diff.tar.gzip",
-         "size": 31418228,
-         "digest": "sha256:26c5c85e47da3022f1bdb9a112103646c5c29517d757e95426f16e4bd9533405"
+         "size": 29150479,
+         "digest": "sha256:b0a0cf830b12453b7e15359a804215a7bcccd3788e2bcecff2a03af64bbd4df7"
       },
 ```
 
-Note that the digest is the same on each of the above highlighted lines, even the one that is the result of a
-`sha256sum`, showing that it is a content addressable store. That is, the contents of the data returned by the API are
-the same as its SHA-256 sum.
+Note that the digest is the same on each of the above highlighted lines, even the one that is the result of a `sha256sum`, showing that it is a **content
+addressable store**. That is, the contents of the data returned by the API are the same as its SHA-256 sum.
 
-You can repeat this same sort of approach for the other two key components of an image; let's look at the first file
-system layer first:
+You can repeat this same sort of approach for the other two key components of an image; let's look at the first file system layer first:
 
 ```{code-block} console
 ---
@@ -118,18 +115,18 @@ emphasize-lines: 9-18
 $ mdigest=$(docker inspect --format='{{index .RepoDigests 0}}' example | cut -f2 -d@)
 $ ldigest=$(curl -s -k https://localhost:443/v2/example/manifests/$mdigest | jq -r '.layers[0].digest')
 $ echo $ldigest
-sha256:26c5c85e47da3022f1bdb9a112103646c5c29517d757e95426f16e4bd9533405
+sha256:b0a0cf830b12453b7e15359a804215a7bcccd3788e2bcecff2a03af64bbd4df7
 $ curl -s -k https://localhost:443/v2/example/blobs/$ldigest | sha256sum
-26c5c85e47da3022f1bdb9a112103646c5c29517d757e95426f16e4bd9533405  -
+b0a0cf830b12453b7e15359a804215a7bcccd3788e2bcecff2a03af64bbd4df7  -
 $ curl -s -k https://localhost:443/v2/example/blobs/$ldigest | tar -tvzf - > image_filesystem
 $ head image_filesystem
-lrwxrwxrwx 0/0               0 2023-11-20 00:00 bin -> usr/bin
-drwxr-xr-x 0/0               0 2023-09-29 20:04 boot/
-drwxr-xr-x 0/0               0 2023-11-20 00:00 dev/
-drwxr-xr-x 0/0               0 2023-11-20 00:00 etc/
--rw------- 0/0               0 2023-11-20 00:00 etc/.pwd.lock
+lrwxrwxrwx 0/0               0 2024-04-23 15:00 bin -> usr/bin
+drwxr-xr-x 0/0               0 2024-01-28 21:20 boot/
+drwxr-xr-x 0/0               0 2024-04-23 15:00 dev/
+drwxr-xr-x 0/0               0 2024-04-23 15:00 etc/
+-rw------- 0/0               0 2024-04-23 15:00 etc/.pwd.lock
 -rw-r--r-- 0/0            3040 2023-05-25 15:54 etc/adduser.conf
-drwxr-xr-x 0/0               0 2023-11-20 00:00 etc/alternatives/
+drwxr-xr-x 0/0               0 2024-04-23 15:00 etc/alternatives/
 -rw-r--r-- 0/0             100 2023-05-11 02:04 etc/alternatives/README
 lrwxrwxrwx 0/0               0 2022-06-17 15:35 etc/alternatives/awk -> /usr/bin/mawk
 lrwxrwxrwx 0/0               0 2022-06-17 15:35 etc/alternatives/awk.1.gz -> /usr/share/man/man1/mawk.1.gz
@@ -137,17 +134,15 @@ lrwxrwxrwx 0/0               0 2022-06-17 15:35 etc/alternatives/awk.1.gz -> /us
 
 What's particularly notable here is that we can actually start to investigate the files that are in this layer!
 
-Now, why is it called a layer? Well, the filesystem for images is built on something called the Union filesystem, or
-Unionfs. It allows us to have multiple different bundles of files (layers) which are then iteratively decompressed on
-top of each other when you run a container to then create the final, merged filesystem that you actually see at runtime.
+Now, why is it called a layer? Well, the filesystem for images is built on something called the Union filesystem, or Unionfs. It allows us to have multiple
+different bundles of files (layers) which are then iteratively decompressed on top of each other when you run a container to then create the final, merged
+filesystem that you actually see at runtime.
 
-This also means that, just because a file has a certain set of contents at runtime doesn't mean that's the _only_
-version of that file in the image. You may find a different file in a prior layer that was overwritten by the newer
-layer.
+This also means that, just because a file has a certain set of contents at runtime doesn't mean that's the _only_ version of that file in the image. You may
+find a different file in a prior layer that was overwritten by the newer layer.
 
-This is where we can encounter security issues. These files become "hidden" at runtime, but they are very much available
-in the image itself, if you know where to look, and sometimes they can contain sensitive information such as passwords
-or keys.
+This is where we can encounter security issues. These files become "hidden" at runtime, but they are very much available in the image itself, if you know where
+to look, and sometimes they can contain sensitive information such as passwords or keys.
 
 Okay, let's move onto the third and final component of an image, the configuration!
 
@@ -158,37 +153,35 @@ emphasize-lines: 8-11,13-17
 $ mdigest=$(docker inspect --format='{{index .RepoDigests 0}}' example | cut -f2 -d@)
 $ cdigest=$(curl -s -k https://localhost:443/v2/example/manifests/$mdigest | jq -r '.config.digest')
 $ echo $cdigest
-sha256:6b7f86a3d64be8fb0ece35d5b54b15b6bd117c7fdcf2f778350de9012186fd14
+sha256:2e46f376087fd12317a3f756a27449728881576e2efe0ed466ee1cdec5b9ed9b
 $ curl -s -k https://localhost:443/v2/example/blobs/$cdigest | sha256sum
-6b7f86a3d64be8fb0ece35d5b54b15b6bd117c7fdcf2f778350de9012186fd14  -
+2e46f376087fd12317a3f756a27449728881576e2efe0ed466ee1cdec5b9ed9b  -
 $ curl -s -k https://localhost:443/v2/example/blobs/$cdigest | jq -r '.config.Env[]'
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-NGINX_VERSION=1.23.4
-NJS_VERSION=0.7.11
-PKG_RELEASE=1~bullseye
-$ curl -s -k https://localhost:443/v2/example/blobs/$cdigest | jq -r '.history[16]'
+NGINX_VERSION=1.25.5
+NJS_VERSION=0.8.4
+NJS_RELEASE=2~bookworm
+PKG_RELEASE=1~bookworm
+$ curl -s -k https://localhost:443/v2/example/blobs/$cdigest | jq -r '.history[17]'
 {
-  "created": "2023-04-26T00:50:44.615696269Z",
+  "created": "2024-05-01T16:59:07.223837745Z",
   "created_by": "RUN /bin/sh -c groupadd --gid 53150 -r notroot && useradd -r -g notroot -s \"/bin/bash\" --create-home --uid 53150 notroot # buildkit",
   "comment": "buildkit.dockerfile.v0"
 }
 ```
 
-Just like with the layers, we can see some very interesting information by dissecting an image configuration. In the
-highlighted lines above we see the environment variables that this image has configured, as well as some of the
-historical steps taken at build time. Specifically, I am showing the user creation step from earlier in the lab.
+Just like with the layers, we can see some very interesting information by dissecting an image configuration. In the highlighted lines above we see the
+environment variables that this image has configured, as well as some of the historical steps taken at build time. Specifically, I am showing the user creation
+step from earlier in the lab.
 
-This information is available to anybody who can pull the image, and is another place where you may find sensitive
-information exposed unintentionally. For instance, was a secret passed in at build time and used to pull code from your
-internal repositories? Or perhaps a secret is needed at runtime to decrypt some files and it's stored as an environment
-variable. Both of those are easily exposed to anybody with read access.
+This information is available to anybody who can pull the image, and is another place where you may find sensitive information exposed unintentionally. For
+instance, was a secret passed in at build time and used to pull code from your internal repositories? Or perhaps a secret is needed at runtime to decrypt some
+files and it's stored as an environment variable. Both of those are easily exposed to anybody with read access.
 
-The real solution here is to avoid secrets from being stored in your images in the first place. While there are many
-reasonable approaches to prevent this, I highly recommend [multi-stage
-builds](https://docs.docker.com/build/building/multi-stage/) and providing secrets at build time safely using
-[environment variables](https://github.com/moby/buildkit/pull/1534), and dynamically retrieving sensitive information at
-runtime via integrations with secrets stores like [HashiCorp Vault](https://www.vaultproject.io/), [AWS Secrets
-Manager](https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html), etc.
+The real solution here is to avoid secrets from being stored in your images in the first place. While there are many reasonable approaches to prevent this, I
+highly recommend [multi-stage builds](https://docs.docker.com/build/building/multi-stage/) and providing secrets at build time safely using [environment
+variables](https://github.com/moby/buildkit/pull/1534), and dynamically retrieving sensitive information at runtime via integrations with secrets stores like
+[HashiCorp Vault](https://www.vaultproject.io/), [AWS Secrets Manager](https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html), etc.
 
 ```{note}
 As a brief aside, if using `curl` to custom-create API queries isn't your thing, but you still need to take a peek under
@@ -198,9 +191,8 @@ the covers from time to time, I recommend using
 
 ```{seealso}
 Want more like the above? Well, to start I recommend checking out
-[this](https://raesene.github.io/blog/2023/02/11/Fun-with-Containers-adding-tracking-to-your-images/) incredibly
-interesting blog post about how OCI images can be modified to track when it's pulled, and anything online from a group
-that calls themselves SIG-Honk.
+[this](https://raesene.github.io/blog/2023/02/11/Fun-with-Containers-adding-tracking-to-your-images/) incredibly interesting blog post about how OCI images can
+be modified to track when it's pulled, and anything online from a group that calls themselves SIG-Honk.
 
 Also, keep an eye out for additional labs by myself in the future 😉
 ```
@@ -209,8 +201,7 @@ Also, keep an eye out for additional labs by myself in the future 😉
 
 Alright, now it's time for our last section, a container escape.
 
-We'll start by running a standard Ubuntu container with some additional privileges which are sometimes used when trying
-to troubleshoot permissions issues:
+We'll start by running a standard Ubuntu container with some additional privileges which are sometimes used when trying to troubleshoot permissions issues:
 
 ```{code-block} console
 ---
@@ -224,8 +215,7 @@ Digest: sha256:562456a05a0dbd62a671c1854868862a4687bf979a96d48ae8e766642cd911e8
 Status: Downloaded newer image for ubuntu:24.04
 ```
 
-Then, by abusing the additional access from the `--privileged` argument, we can mount the host filesystem, which in my
-example is on `/dev/nvme0n1p1`:
+Then, by abusing the additional access from the `--privileged` argument, we can mount the host filesystem, which in my example is on `/dev/nvme0n1p1`:
 
 ```{code-block} console
 ---
@@ -249,8 +239,8 @@ $ mount /dev/nvme0n1p1 /mnt
 $ chroot /mnt
 ```
 
-Now that we've `chroot`ed into that filesystem, we are effectively on the host computer. Let's see see if we can find
-anything juicy, and maybe drop a quick backdoor for ourselves later:
+Now that we've `chroot`ed into that filesystem, we are effectively on the host computer. Let's see see if we can find anything juicy, and maybe drop a quick
+backdoor for ourselves later:
 
 ```{code-block} console
 ---
@@ -293,8 +283,8 @@ ssh-ed25519 AAAAC3NzAAAAAAAAATE5AAAAIH/JRUsEfBrjsVQmeyBrjsVQmeyBrjsVQmeyBrjsVQYI
 
 ### Fix
 
-How do we prevent these sort of issues? Specific to this breakout, even if we continue to allow `--privileged`, we can
-mitigate some of the impact by requiring that non-root users be used at runtime. For instance:
+How do we prevent these sort of issues? Specific to this breakout, even if we continue to allow `--privileged`, we can mitigate some of the impact by requiring
+that non-root users be used at runtime. For instance:
 
 ```{code-block} bash
 ---
@@ -307,7 +297,7 @@ Now when we go to mount the host filesystem or run `chroot`, we get an error:
 
 ```{code-block} console
 ---
-emphasize-lines: 14
+emphasize-lines: 15-16,18
 class: skip-tests
 ---
 $ mount | grep '/dev/'
@@ -353,11 +343,9 @@ Container](https://www.panoptica.app/research/7-ways-to-escape-a-container)" blo
 
 If you've made it this far, congratulations!
 
-Have any ideas or feedback on this lab? Connect with me [on LinkedIn](https://linkedin.com/in/jonzeolla/) and send me a
-message.
+Have any ideas or feedback on this lab? Connect with me [on LinkedIn](https://linkedin.com/in/jonzeolla/) and send me a message.
 
-If you'd like more content like this, check out SANS [SEC540 class](http://sans.org/sec540) for 5 full days of Cloud
-Security and DevSecOps training.
+If you'd like more content like this, check out SANS [SEC540 class](http://sans.org/sec540) for 5 full days of Cloud Security and DevSecOps training.
 
 ## Cleanup
 

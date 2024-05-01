@@ -71,8 +71,8 @@ For more background, see docker's [What is a Container?](https://www.docker.com/
 
 ## Creating images
 
-As described in [the terminology section](terminology), images are bundles. Those bundles need to be created (or
-"built"), and the primary way that we do that is by creating a `Dockerfile`. For instance:
+As described in [the terminology section](terminology), images are bundles. Those bundles need to be created (or "built"), and the primary way that we do that
+is by creating a `Dockerfile`. For instance:
 
 ```{code-block} bash
 ---
@@ -86,18 +86,14 @@ EXPOSE 80
 ```
 
 In the above example, you see that we are starting with `FROM nginx`. This means two things:
-1. We are implicitly using the special `latest` tag of `nginx` (see other available tags
-   [here](https://hub.docker.com/_/nginx/tags)).
-1. We are also implicitly pulling the images from Docker Hub, which is the default
-   [Registry](https://docs.docker.com/registry/) for `docker`.
+1. We are implicitly using the special `latest` tag of `nginx` (see other available tags [here](https://hub.docker.com/_/nginx/tags)).
+1. We are also implicitly pulling the images from Docker Hub, which is the default [Registry](https://docs.docker.com/registry/) for `docker`.
 
-Based on these two items, `FROM nginx` is functionally equivalent to `FROM docker.io/nginx:latest`. This will be
-important later.
+Based on these two items, `FROM nginx` is functionally equivalent to `FROM docker.io/nginx:latest`. This will be important later.
 
 ### Unsafe default configurations
 
-There are a myriad of ways a container or image can be insecure. In our example, the image we were just looking at above
-does not define a `USER`:
+There are a myriad of ways a container or image can be insecure. In our example, the image we were just looking at above does not define a `USER`:
 
 ```{code-block} console
 ---
@@ -129,21 +125,18 @@ root
 ```
 
 ```{note}
-If you need to quickly scan a `Dockerfile` to find issues, I suggest [hadolint](https://github.com/hadolint/hadolint)
-based on its out-of-the-box rules, and if you need more customized options I would look at
-[conftest](https://www.conftest.dev/) from the Open Policy Agent (OPA) project (you can check out an example
+If you need to quickly scan a `Dockerfile` to find issues, I suggest [hadolint](https://github.com/hadolint/hadolint) based on its out-of-the-box rules, and if
+you need more customized options I would look at [conftest](https://www.conftest.dev/) from the Open Policy Agent (OPA) project (you can check out an example
 `Dockerfile` policy [here](https://github.com/open-policy-agent/conftest/tree/master/examples/docker)).
 ```
 
 ### Changing the user
 
-Running as `root` is not preferred, and although there are [ways to
-secure](https://docs.docker.com/engine/security/userns-remap/) a process that must run as `root`, it should not be the
-default. So, let's fix that.
+Running as `root` is not preferred, and although there are [ways to secure](https://docs.docker.com/engine/security/userns-remap/) a process that must run as
+`root`, it should not be the default. So, let's fix that.
 
-We'll start by creating a `Dockerfile` that defines a more secure image. It starts with `FROM nginx`, meaning that we
-are building on top of the upstream `nginx` image, inheriting all of its secure (or insecure) properties, and then
-adding our changes on top.
+We'll start by creating a `Dockerfile` that defines a more secure image. It starts with `FROM nginx`, meaning that we are building on top of the upstream
+`nginx` image, inheriting all of its secure (or insecure) properties, and then adding our changes on top.
 
 ```{code-block} bash
 cat << HEREDOC > Dockerfile
@@ -153,8 +146,7 @@ USER notroot
 HEREDOC
 ```
 
-Then we can build the more secure image and examine it to see what the configured `User` is. Note the user on the last
-line is _not_ the root user.
+Then we can build the more secure image and examine it to see what the configured `User` is. Note the user on the last line is _not_ the root user.
 
 ```{code-block} console
 ---
@@ -179,73 +171,66 @@ notroot
 
 Success!
 
-You can also confirm that the container will not use the root user by default by running the container and checking the
-current user.
+You can also confirm that the container will not use the root user by default by running the container and checking the current user.
 
 ```{code-block} console
 $ docker run example-secure whoami
 notroot
 ```
 
-Does this mean it's impossible to run this container insecurely? Absolutely not! For instance, let's re-run that command
-with one additional argument, asking it to use the `root` user explicitly.
+Does this mean it's impossible to run this container insecurely? Absolutely not! For instance, let's re-run that command with one additional argument, asking it
+to use the `root` user explicitly.
 
 ```{code-block} console
 $ docker run --user 0 example-secure whoami
 root
 ```
 
-All we've done is make a more secure configuration _the default_, not impossible. While this is a great start, further
-securing your container runtimes requires a host of additional layers of security; what we generally refer to as Policy
-as Code. Check back in the future for a lab on that 😀
+All we've done is make a more secure configuration _the default_, not impossible. While this is a great start, further securing your container runtimes requires
+a host of additional layers of security; what we generally refer to as Policy as Code. Check back in the future for a lab on that 😀
 
 ```{seealso}
 ---
 class: dropdown
 ---
-Everything we've been doing so far has created docker images which are functional, but not OCI-compliant. This means
-they do not follow the OCI Image specification.
+Everything we've been doing so far has created docker images which are functional, but not OCI-compliant. This means they do not follow the OCI Image
+specification.
 
 This can lead to confusion in downstream use cases, when your runtime expects a given artifact structure.
 
-If you'd like to use the `docker` command line to create an OCI-compliant output, you can run `docker buildx build -o
-type=oci,dest=example.tar .`
+If you'd like to use the `docker` command line to create an OCI-compliant output, you can run `docker buildx build -o type=oci,dest=example.tar .`
 
-However, this will not necessarily make it usable on your system. If you run a `docker load` to make `example.tar`
-usable, it will no longer be OCI-compliant, so you will need to use a third party tool (such as `crane`) to push your
-`example.tar` OCI-compliant image to a registry.
+However, this will not necessarily make it usable on your system. If you run a `docker load` to make `example.tar` usable, it will no longer be OCI-compliant,
+so you will need to use a third party tool (such as `crane`) to push your `example.tar` OCI-compliant image to a registry.
 ```
 
 ## Image signing
 
 Now we have a (more) secure docker image called `example-secure`.
 
-If we wanted to share this image so others could run it, we could `docker login` and then `docker push` it to the docker
-hub registry (we don't do that in this lab, but if you'd like to, there are instructions
-[here](https://docs.docker.com/get-started/04_sharing_app/)).
+If we wanted to share this image so others could run it, we could `docker login` and then `docker push` it to the docker hub registry (we don't do that in this
+lab, but if you'd like to, there are instructions [here](https://docs.docker.com/get-started/04_sharing_app/)).
 
 But, if we did that, how would the consumers of the image know that it came from us?
 
-Ostensibly, only "we" have access to push images to the registry. But what if an attacker is able to compromise a set of
-credentials that allows pushing a malicious image?
+Ostensibly, only "we" have access to push images to the registry. But what if an attacker is able to compromise a set of credentials that allows pushing a
+malicious image?
 
 Enter image signing.
 
-Similar to code signing, image signing allows us to create a cryptographic signature using a private key and then we can
-"associate" it with the image (more on that later). Then, consumers of our images can verify the signature to ensure
-that the person who pushed the image not only had sufficient access to push the image, but also access to our image
-signing private key.
+Similar to code signing, image signing allows us to create a cryptographic signature using a private key and then we can "associate" it with the image (more on
+that later). Then, consumers of our images can verify the signature to ensure that the person who pushed the image not only had sufficient access to push the
+image, but also access to our image signing private key.
 
 ### Image signing setup
 
-The most precise way to sign an image is to sign the digest, as opposed to a tag (e.g. `latest`) which can point to
-different versions of an image over time. Let's retrieve the digest for our `example-secure` image:
+The most precise way to sign an image is to sign the digest, as opposed to a tag (e.g. `latest`) which can point to different versions of an image over time.
+Let's retrieve the digest for our `example-secure` image:
 
 ```{code-block} console
 $ docker inspect --format='{{index .RepoDigests 0}}' example-secure || true
 
-template parsing error: template: :1:2: executing "" at <index .RepoDigests 0>: error calling index: reflect: slice
-index out of range
+template parsing error: template: :1:2: executing "" at <index .RepoDigests 0>: error calling index: reflect: slice index out of range
 ```
 
 Hmm, that didn't work. Let's try a couple other ways:
@@ -260,9 +245,8 @@ example-secure   latest    <none>    cad64b88527f   2 hours ago   159MB
 
 Well, it looks like we don't have an image digest 🤔
 
-What we're seeing is another `docker` specific implementation detail. The digest will not be created for new images
-until it is pushed to a registry (technically we must use the _manifest_ digest, and a v2 registry), or if it was pulled
-_from_ a v2 registry.
+What we're seeing is another `docker` specific implementation detail. The digest will not be created for new images until it is pushed to a registry
+(technically we must use the _manifest_ digest, and a v2 registry), or if it was pulled _from_ a v2 registry.
 
 For example, the `nginx:latest` image that we pulled previously from docker hub does have an image digest:
 
@@ -272,22 +256,20 @@ nginx@sha256:63b44e8ddb83d5dd8020327c1f40436e37a6fffd3ef2498a6204df23be6e7e94
 ```
 
 ```{note}
-The actual SHA-256 digest that you receive may differ from the above. This is because the implicit `latest` tag is
-updated over time to point to the latest released image, and is exactly why we sign digests instead of tags.
+The actual SHA-256 digest that you receive may differ from the above. This is because the implicit `latest` tag is updated over time to point to the latest
+released image, and is exactly why we sign digests instead of tags.
 
-You are able to get the best of both worlds by combining the two approaches and adding the tag as an "annotation" (which
-we will do later).
+You are able to get the best of both worlds by combining the two approaches and adding the tag as an "annotation" (which we will do later).
 ```
 
-However, we want our `example-secure` image to have a digest. We can fix this by running a v2 registry locally and then
-pushing the image to it!
+However, we want our `example-secure` image to have a digest. We can fix this by running a v2 registry locally and then pushing the image to it!
 
 We'll start by setting up HTTPS, and then pulling down a registry image and running the container.
 
 ```{note}
-If you look closely, you'll notice the use of a "dummy" container below; this is being used to load files into a volume
-and is a well known [work-around](https://github.com/moby/moby/issues/25245#issuecomment-365980572) for a feature that
-can be voted for [here](https://github.com/docker/cli/issues/1436).
+If you look closely, you'll notice the use of a "dummy" container below; this is being used to load files into a volume and is a well known
+[work-around](https://github.com/moby/moby/issues/25245#issuecomment-365980572) for a feature that can be voted for
+[here](https://github.com/docker/cli/issues/1436).
 ```
 
 ```{code-block} console
@@ -331,8 +313,8 @@ Question: Do you know what `fa830229c72a484fa1b1c18ffc9039712b2561d4aa5c8f7856ed
 ---
 class: dropdown hint
 ---
-What we're seeing is not an image digest, but rather a container ID. This is a unique identifier that `docker` creates
-for each container. If you were to run the same command again, you will receive a different identifier, for instance:
+What we're seeing is not an image digest, but rather a container ID. This is a unique identifier that `docker` creates for each container. If you were to run
+the same command again, you will receive a different identifier, for instance:
 
 ```{code-block} bash
 ---
@@ -343,7 +325,8 @@ $ docker run -d -p 443:443 --name registry2 registry:2
 892c9c6be865fe31007e6c30984983d0a02f9173501c93e4f801afaef42d5469
 ```
 
-Note that now I received an ID starting with `892c9` whereas previously the same command gave an ID starting with `fa830`. You can see the container IDs for all of your running commands by running `docker ps` and examining the first column:
+Note that now I received an ID starting with `892c9` whereas previously the same command gave an ID starting with `fa830`. You can see the container IDs for all
+of your running commands by running `docker ps` and examining the first column:
 
 ```{code-block} console
 $ docker ps
@@ -351,8 +334,8 @@ CONTAINER ID   IMAGE        COMMAND                  CREATED          STATUS    
 fa830229c72a   registry:2   "/entrypoint.sh /etc…"   15 minutes ago   Up 15 minutes   0.0.0.0:443->443/tcp   registry
 ```
 
-However, you'll notice that the container ID is truncated. This truncation is to simplify the readability of the output.
-If you'd like avoid truncation, add the `--no-trunc` option:
+However, you'll notice that the container ID is truncated. This truncation is to simplify the readability of the output. If you'd like avoid truncation, add the
+`--no-trunc` option:
 
 ```{code-block} console
 $ docker ps --no-trunc
@@ -363,8 +346,8 @@ fa830229c72a484fa1b1c18ffc9039712b2561d4aa5c8f7856ed00b3e275ed65   registry:2   
 
 You'll notice that the output is significantly longer and harder to read now, but it avoids any truncation.
 
-If you'd like to interact with a running container, you can use this container ID, or the associated name (in my
-example, `registry`). For instance, here we use the container ID (which will be different in your case):
+If you'd like to interact with a running container, you can use this container ID, or the associated name (in my example, `registry`). For instance, here we use
+the container ID (which will be different in your case):
 
 ```{code-block} console
 ---
@@ -387,19 +370,18 @@ PID   USER     TIME  COMMAND
 
 But wait, `fa8302` isn't the full container id, nor is it the one that `docker ps` showed me earlier, so what gives?
 
-Well, `docker` has access to a full list of container IDs on your system, and so it allows you to provide the minimum
-number of characters required to uniquely identify a container, for brevity. How convenient!
+Well, `docker` has access to a full list of container IDs on your system, and so it allows you to provide the minimum number of characters required to uniquely
+identify a container, for brevity. How convenient!
 :::
 
-Now that there's a registry running locally, we can push our `example-secure` image to it, but first we are going to
-re-tag that image to include the registry information so it knows what destination to push _to_.
+Now that there's a registry running locally, we can push our `example-secure` image to it, but first we are going to re-tag that image to include the registry
+information so it knows what destination to push _to_.
 
 ```{code-block} console
 $ docker tag example-secure localhost:443/example-secure
 ```
 
-Now, when we push the fully qualified image name, it will know to use the registry hosted locally, instead of the
-implicit docker hub registry.
+Now, when we push the fully qualified image name, it will know to use the registry hosted locally, instead of the implicit docker hub registry.
 
 ```{code-block} console
 $ docker push localhost:443/example-secure
@@ -425,9 +407,8 @@ localhost:443/example-secure@sha256:5ebcdc0d0e56fc8ab8d7095e2107a830d4624b0044e6
 
 ### Image signing
 
-Now that we have an image digest, we can properly sign the image. In order to perform our signing and validation
-operations, we'll be using the `cosign` tool, which is an [Open Source Security Foundation](https://openssf.org/)
-project under the [sigstore](https://www.sigstore.dev/) umbrella.
+Now that we have an image digest, we can properly sign the image. In order to perform our signing and validation operations, we'll be using the `cosign` tool,
+which is an [Open Source Security Foundation](https://openssf.org/) project under the [sigstore](https://www.sigstore.dev/) umbrella.
 
 ```{note}
 ---
@@ -453,8 +434,8 @@ In order to sign the image, we will:
 1. Sign the `example-secure` image using the private key
 1. Verify the `example-secure` signature using the public key
 
-We're also going to be using a number of new `docker` arguments below; if you'd like to look into those further, see the
-`docker` cli documentation [here](https://docs.docker.com/engine/reference/commandline/cli/).
+We're also going to be using a number of new `docker` arguments below; if you'd like to look into those further, see the `docker` cli documentation
+[here](https://docs.docker.com/engine/reference/commandline/cli/).
 
 ```{code-block} console
 $ docker pull cgr.dev/chainguard/cosign
@@ -484,21 +465,20 @@ Pushing signature to: registry:443/example-secure
 
 We've officially signed our `example-secure` image!
 
-In the above command, we generated a public and private keypair, signed the manifest digest of the
-`localhost:443/example-secure` image, and pushed that signature to our local registry to live alongside the image.
+In the above command, we generated a public and private keypair, signed the manifest digest of the `localhost:443/example-secure` image, and pushed that
+signature to our local registry to live alongside the image.
 
-We also added an annotation of `tag` with the value of `latest` to describe what we are signing at the moment, which is
-the `latest` tag. These annotations provide valuable additional context, and it is very common to add annotations such
-as the `git` commit hash, details about the CI/CD pipeline that built and signed the image, etc.
+We also added an annotation of `tag` with the value of `latest` to describe what we are signing at the moment, which is the `latest` tag. These annotations
+provide valuable additional context, and it is very common to add annotations such as the `git` commit hash, details about the CI/CD pipeline that built and
+signed the image, etc.
 
 ```{note}
 ---
 class: dropdown
 ---
-Interested in skipping the `cosign generate-key-pair` step from above? You can, with what sigstore calls "keyless
-signing". In reality, just like serverless isn't serverless, keyless also isn't keyless. It's just that you don't have
-to generate or manage the keys yourself; they are created on the fly, tied to an OIDC identity, used to create a
-short-lived certificate and to facilitate the signing process, and then securely erased.
+Interested in skipping the `cosign generate-key-pair` step from above? You can, with what sigstore calls "keyless signing". In reality, just like serverless
+isn't serverless, keyless also isn't keyless. It's just that you don't have to generate or manage the keys yourself; they are created on the fly, tied to an
+OIDC identity, used to create a short-lived certificate and to facilitate the signing process, and then securely erased.
 
 To learn more, check out the [keyless documentation](https://docs.sigstore.dev/signing/overview/) and [Life of a Sigstore
 Signature](https://www.youtube.com/watch?v=DrHrkSsozB0) presentation at SigstoreCon NA 2022 (slides
@@ -510,28 +490,26 @@ post](https://www.chainguard.dev/unchained/life-of-a-sigstore-signature)).
 ---
 class: dropdown
 ---
-Although the private key is encrypted, many secret scanning tools don't have exclusions for encrypted cosign private
-keys and will still flag them as insecure.
+Although the private key is encrypted, many secret scanning tools don't have exclusions for encrypted cosign private keys and will still flag them as insecure.
 
-For instance, [gitleaks](https://github.com/gitleaks/gitleaks) (one of my favourite secret scanning tools) will flag an
-encrypted cosign private key, and doesn't have a straightforward workaround due to the Go programming language's regex
-library's choice not to support negative lookaheads (see the issue I opened on this
-[here](https://github.com/gitleaks/gitleaks/issues/1034)). The best approach in most cases, albeit imperfect, is to
-exclude the specific `.key` file from your secret scanning tool.
+For instance, [gitleaks](https://github.com/gitleaks/gitleaks) (one of my favourite secret scanning tools) will flag an encrypted cosign private key, and
+doesn't have a straightforward workaround due to the Go programming language's regex library's choice not to support negative lookaheads (see the issue I opened
+on this [here](https://github.com/gitleaks/gitleaks/issues/1034)). The best approach in most cases, albeit imperfect, is to exclude the specific `.key` file
+from your secret scanning tool.
 ```
 
 :::{seealso}
 ---
 class: dropdown
 ---
-Technically, the above approach is not the most secure way to do this because it has a race condition. It requires that
-an image be pushed prior to being signed, and has no way to accommodate signing failures.
+Technically, the above approach is not the most secure way to do this because it has a race condition. It requires that an image be pushed prior to being
+signed, and has no way to accommodate signing failures.
 
-However, there is not a great alternative right now. `docker` doesn't populate the repo digest until it's `docker
-push`ed, and `cosign` also doesn't support a sign-then-push workflow.
+However, there is not a great alternative right now. `docker` doesn't populate the repo digest until it's `docker push`ed, and `cosign` also doesn't support a
+sign-then-push workflow.
 
-There is an [issue open](https://github.com/sigstore/cosign/issues/1905) on the `cosign` project to fix this, feel free
-to go subscribe to be notified of activity.
+There is an [issue open](https://github.com/sigstore/cosign/issues/1905) on the `cosign` project to fix this, feel free to go subscribe to be notified of
+activity.
 :::
 
 Now, let's bring things full circle and verify the signature
@@ -556,15 +534,14 @@ $ echo $?
 ---
 class: dropdown
 ---
-If you looked carefully, you may have seen the `--allow-insecure-registry` argument. This is only for our test
-environment, where we are using a self-signed certificate for the registry. In production this should **not** ever be
-used.
+If you looked carefully, you may have seen the `--allow-insecure-registry` argument. This is only for our test environment, where we are using a self-signed
+certificate for the registry. In production this should **not** ever be used.
 ```
 
 It worked!
 
-And in addition, evidence of this signing process was added to a public, software supply chain transparency log called
-rekor. Let's check out an example signature that I did previously, following these same steps:
+And in addition, evidence of this signing process was added to a public, software supply chain transparency log called rekor. Let's check out an example
+signature that I did previously, following these same steps:
 
 ```{code-block} console
 $ curl https://rekor.sigstore.dev/api/v1/log/entries/24296fb24b8ad77ad9ca41820f93cdbef2264692ced5c142d19e2ba859ab9f2b500d1917afe8ef30
@@ -618,18 +595,16 @@ keep in mind that this presentation was given **years** before the specification
 
 ## Making a Software Bill of Materials
 
-Now that we have a docker image, we want to have a structured way to know what's in it, and if there are any
-vulnerabilities that may need tending to. There are a few different approaches we can take here, but the most modern
-(and increasingly popular) is to generate a Software Bill of Materials (SBOM), and then assess that SBOM artifact for
-issues.
+Now that we have a docker image, we want to have a structured way to know what's in it, and if there are any vulnerabilities that may need tending to. There are
+a few different approaches we can take here, but the most modern (and increasingly popular) is to generate a Software Bill of Materials (SBOM), and then assess
+that SBOM artifact for issues.
 
-This is effectively how Software Composition Analysis (SCA) tools have worked for years, except that we're now uniformly
-using standard formats for determining software composition, such as [SPDX](https://spdx.dev/) and
-[CycloneDX](https://cyclonedx.org/), which are meant for information exchange (such as between vendors and software
-consumers). SBOMs can also support enrichment through specifications like
+This is effectively how Software Composition Analysis (SCA) tools have worked for years, except that we're now uniformly using standard formats for determining
+software composition, such as [SPDX](https://spdx.dev/) and [CycloneDX](https://cyclonedx.org/), which are meant for information exchange (such as between
+vendors and software consumers). SBOMs can also support enrichment through specifications like
 [VEX](https://www.ntia.gov/files/ntia/publications/vex_one-page_summary.pdf) (see the nitty gritty on VEX
-[here](https://docs.oasis-open.org/csaf/csaf/v2.0/csd01/csaf-v2.0-csd01.html#45-profile-5-vex) and a recent more
-opinionated specification called OpenVEX [here](https://github.com/openvex/spec/blob/main/OPENVEX-SPEC.md)).
+[here](https://docs.oasis-open.org/csaf/csaf/v2.0/csd01/csaf-v2.0-csd01.html#45-profile-5-vex) and a recent more opinionated specification called OpenVEX
+[here](https://github.com/openvex/spec/blob/main/OPENVEX-SPEC.md)).
 
 Let's get started by creating an SBOM with a popular generation tool, [`syft`](https://github.com/anchore/syft):
 
@@ -654,25 +629,21 @@ class: dropdown
 ---
 This SBOM may not show _exactly_ what ends up running in production.
 
-While dependencies are typically downloaded at build time, processes in containers could technically also download
-additional dependencies or make other changes at runtime. In practice, it is significantly less popular and easier to
-monitor for/prevent, but something to be aware of.
+While dependencies are typically downloaded at build time, processes in containers could technically also download additional dependencies or make other changes
+at runtime. In practice, it is significantly less popular and easier to monitor for/prevent, but something to be aware of.
 ```
 
-This will create a new file, `example-secure.sbom.json` containing an SBOM of what it was able to find in our
-`example-secure` image, identifying 143 (!?!) different artifacts. Think that our 160MB container only had `nginx` in
-it? Think again!
+This will create a new file, `example-secure.sbom.json` containing an SBOM of what it was able to find in our `example-secure` image, identifying 143 (!?!)
+different artifacts. Think that our 160MB container only had `nginx` in it? Think again!
 
-You also may be asking, which of the above standard SBOM formats did this output in? Great question; and the answer is
-none of the above. When you run with the `json` output format (like we just did) `syft` uses a proprietary SBOM format
-to "get as much information out of Syft as possible!"
+You also may be asking, which of the above standard SBOM formats did this output in? Great question; and the answer is none of the above. When you run with the
+`json` output format (like we just did) `syft` uses a proprietary SBOM format to "get as much information out of Syft as possible!"
 
 ## Vulnerability scanning images
 
-Now, why did we use the `json` output format for our SBOM? Well, in this case we would like to pass this SBOM file into
-another tool called [`grype`](https://github.com/anchore/grype) to do some vulnerability scanning. Since both tools are
-developed and maintained by Anchore, you can see why this format is the _only_ SBOM format which is supported to do a
-`grype` scan.
+Now, why did we use the `json` output format for our SBOM? Well, in this case we would like to pass this SBOM file into another tool called
+[`grype`](https://github.com/anchore/grype) to do some vulnerability scanning. Since both tools are developed and maintained by Anchore, you can see why this
+format is the _only_ SBOM format which is supported to do a `grype` scan.
 
 ```{code-block} console
 $ docker run -v "$(pwd):/tmp" anchore/grype sbom:example-secure.sbom.json --output json --file example-secure.vulns.json
@@ -692,16 +663,13 @@ $ jq '.matches | length' < example-secure.vulns.json
 
 In this example we can see that this container has 144 vulnerabilities of various severities.
 
-Now that we know what we know about `nginx`, let's take a look at an alternative container which also contains a
-functional `nginx` binary, but brings along with it fewer accessories (i.e. attack surface).
+Now that we know what we know about `nginx`, let's take a look at an alternative container which also contains a functional `nginx` binary, but brings along
+with it fewer accessories (i.e. attack surface).
 
-One newer alternative are the chainguard images, built on
-[wolfi](https://www.chainguard.dev/unchained/introducing-wolfi-the-first-linux-un-distro), which are meant to be free,
-minimal, secure-by-default, and heavily maintained images that provide a secure foundation for others to build on top
-of.
+One newer alternative are the chainguard images, built on [wolfi](https://www.chainguard.dev/unchained/introducing-wolfi-the-first-linux-un-distro), which are
+meant to be free, minimal, secure-by-default, and heavily maintained images that provide a secure foundation for others to build on top of.
 
-Let's re-run our SBOM generation and vulnerability scan steps from before, but this time against the
-`cgr.dev/chainguard/nginx` version of `nginx`:
+Let's re-run our SBOM generation and vulnerability scan steps from before, but this time against the `cgr.dev/chainguard/nginx` version of `nginx`:
 
 ```{code-block} console
 $ docker run -v "$(pwd):/tmp" -v /var/run/docker.sock:/var/run/docker.sock anchore/syft:latest docker:cgr.dev/chainguard/nginx -o json --file chainguard-nginx.sbom.json
@@ -724,17 +692,15 @@ Huh, 0 vulnerabilities; did it even work?
 
 Or at least, that's where my mind goes when I see something _so_ extreme.
 
-But, that's actually by design. Chainguard is so proud of their consistently low vulnerabilities that they provide an
-[interactive
-graph](https://visualization-ui.chainguard.app/bar?left=nginx%3alatest&right=cgr.dev%2fchainguard%2fnginx%3alatest) that
-you can use to compare the `nginx:latest` findings to the `cgr.dev/chainguard/nginx:latest` findings (at least according
-to [Trivy](https://github.com/aquasecurity/trivy), another popular docker image vulnerability scanning tool).
+But, that's actually by design. Chainguard is so proud of their consistently low vulnerabilities that they provide an [interactive
+graph](https://visualization-ui.chainguard.app/bar?left=nginx%3alatest&right=cgr.dev%2fchainguard%2fnginx%3alatest) that you can use to compare the
+`nginx:latest` findings to the `cgr.dev/chainguard/nginx:latest` findings (at least according to [Trivy](https://github.com/aquasecurity/trivy), another popular
+docker image vulnerability scanning tool).
 
 ```{note}
-Worried about those "unknown relationship type" errors? I was too, until I found [this
-issue](https://github.com/anchore/grype/issues/1244) describing that this is due to new information coming from `syft`
-that `grype` hasn't been updated to be able to make use of yet. If you're running this lab and not seeing those issues,
-it means that `grype` has had a release and is now in sync with the `syft` outputs.
+Worried about those "unknown relationship type" errors? I was too, until I found [this issue](https://github.com/anchore/grype/issues/1244) describing that this
+is due to new information coming from `syft` that `grype` hasn't been updated to be able to make use of yet. If you're running this lab and not seeing those
+issues, it means that `grype` has had a release and is now in sync with the `syft` outputs.
 ```
 
 I wonder, do we even need our `example-secure` image from before? Let's quickly check the user of this new `nginx`
@@ -749,12 +715,11 @@ Well, that's definitely not the `root` user (UID 0)! 🎉
 
 It seems like this may be one good option (of numerous) that we could build on top of.
 
-All of this analysis is really just a start, and if you are looking for a new image to build on top of, you likely would
-have more questions to ask before you have enough information to make a decision.
+All of this analysis is really just a start, and if you are looking for a new image to build on top of, you likely would have more questions to ask before you
+have enough information to make a decision.
 
-To get you pointed in the right direction for some additional investigation, you can use the `cosign tree` command to
-"Display supply chain security related artifacts for an image such as signatures, SBOMs and attestations". Let's take a
-look at what else the `cgr.dev/chainguard/nginx` image has available:
+To get you pointed in the right direction for some additional investigation, you can use the `cosign tree` command to "Display supply chain security related
+artifacts for an image such as signatures, SBOMs and attestations". Let's take a look at what else the `cgr.dev/chainguard/nginx` image has available:
 
 ```{code-block} console
 $ docker run cgr.dev/chainguard/cosign tree cgr.dev/chainguard/nginx
@@ -770,15 +735,14 @@ $ docker run cgr.dev/chainguard/cosign tree cgr.dev/chainguard/nginx
    └── 🍒 sha256:c67b16667b9e1e9dd520b654d93ace750a05169494636b2581079f827e4259c6
 ```
 
-Not bad! In addition to a signature and SBOM, there are 4 other attestations available for this image that we could use
-to evaluate and make policy decisions about whether or not we're comfortable using it in our environment.
+Not bad! In addition to a signature and SBOM, there are 4 other attestations available for this image that we could use to evaluate and make policy decisions
+about whether or not we're comfortable using it in our environment.
 
 ## Conclusion
 
 If you've made it this far, congratulations!
 
-Have any ideas or feedback on this lab? Connect with me [on LinkedIn](https://linkedin.com/in/jonzeolla/) and send me a
-message.
+Have any ideas or feedback on this lab? Connect with me [on LinkedIn](https://linkedin.com/in/jonzeolla/) and send me a message.
 
 Looking for more? Check out my [Container Security 201 lab](container-security-201).
 

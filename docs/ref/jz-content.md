@@ -10,7 +10,7 @@ hidden: true
 | Date       | Event                                        | Title                                                          |
 | ---------- | -------------------------------------------- | -------------------------------------------------------------- |
 | 2024-09-10 | [Alabama CSA][Alabama-CSA]                   | TODO                                                           |
-| 2024-06-27 | [2024 Cloud Native Security Con][2024-CNSC]  | Cloud Native GRC                                               |
+| 2024-06-27 | Cloud Native Security Con                    | [Cloud Native GRC][2024-CNSC] ([Slides][2024-CNSCSlides])      |
 | 2024-05-07 | [AI Hackathon][2024-05-AIHack]               | AI Hackathon                                                   |
 | 2023-12-04 | [2023 PGH InfoSec Day][2023-PInfoSec]        | [Your Governance is Broken][2023-PInfoSec-Talk]                |
 | 2023-11-06 | [2023 KubeCon][2023-KubeCon]                 | [Lightning Talk][2023-KubeCon-Talk]                            |
@@ -76,6 +76,7 @@ playlist](https://www.youtube.com/watch?v=Y1TGQWOmrTI&list=PLDvTIewuIyaKK2wk49iq
 
 [Alabama-CSA]: https://circle.cloudsecurityalliance.org/alabama/home "Cloud Security Alliance Alabama Chapter"
 [2024-CNSC]: https://jonzeolla.com/TODO.html "Cloud Native GRC"
+[2024-CNSCSlides]: https://docs.google.com/presentation/d/167QYSLeDlz2pipln_V5kCVI2UWAIMRNpOQHBtIKikqg/edit?usp=drive_link "Cloud Native GRC Slides"
 [2024-05-AIHack]: https://community.cncf.io/events/details/cncf-cloud-native-security-pittsburgh-presents-ai-hackathon/ "Cloud Native Security AI Hackathon"
 [2023-PInfoSec-Talk]: https://www.youtube.com/watch?v=tKKrqNduBwA "Your Governance Is Broken"
 [2023-PInfoSec]: https://web.cvent.com/event/2014576f-92db-4057-ae41-9b25a39a1909/websitePage:eb8094ff-eb19-4b4c-a88f-22e9f5e536bb "2023 Pittsburgh InfoSec Day"
@@ -169,7 +170,7 @@ playlist](https://www.youtube.com/watch?v=Y1TGQWOmrTI&list=PLDvTIewuIyaKK2wk49iq
 | 2018-02-28 | Packet Pushers         | [Datanauts 123: Security without Firewalls][2018-PacketPushers]                   |
 | 2016-06-01 | Packet Pushers         | [Datanauts 036: Busting The Security Silo In The Data Center][2016-PacketPushers] |
 
-[2024-Seiso]: https://jonzeolla.com/TODO.html "Seiso Side Up - Seiso's Origins"
+[2024-Seiso]: https://seisosideup.podbean.com/e/episode-2-meet-the-seiso-founders/ "Seiso Side Up - Seiso's Origins"
 [2023-WedOffensive]: https://redsiege.com/wednesday-offensive/ "Wednesday Offensive - 9/13"
 [2023-Logicast]: https://logicastvideo.podbean.com/e/season-2-episode-20-iam-roles-crypto-mining-and-hats/ "Season 2 Episode 20 - IAM Roles, Crypto Mining and Hats"
 [2021-CSP]: https://cloudsecuritypodcast.tv/season-2/security-governance-and-compliance-in-serverless-applications/ "Cloud Security Podcast: Security Governance and Compliance in Serverless Applications"

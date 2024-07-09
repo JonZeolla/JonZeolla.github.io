@@ -170,7 +170,7 @@ playlist](https://www.youtube.com/watch?v=Y1TGQWOmrTI&list=PLDvTIewuIyaKK2wk49iq
 | 2018-02-28 | Packet Pushers         | [Datanauts 123: Security without Firewalls][2018-PacketPushers]                   |
 | 2016-06-01 | Packet Pushers         | [Datanauts 036: Busting The Security Silo In The Data Center][2016-PacketPushers] |
 
-[2024-Seiso]: https://seisosideup.podbean.com/e/episode-2-meet-the-seiso-founders/ "Seiso Side Up - Seiso's Origins"
+[2024-Seiso]: https://open.spotify.com/episode/61atUIAeVe3RHQUFpcseOT "Seiso Side Up - Seiso's Origins"
 [2023-WedOffensive]: https://redsiege.com/wednesday-offensive/ "Wednesday Offensive - 9/13"
 [2023-Logicast]: https://logicastvideo.podbean.com/e/season-2-episode-20-iam-roles-crypto-mining-and-hats/ "Season 2 Episode 20 - IAM Roles, Crypto Mining and Hats"
 [2021-CSP]: https://cloudsecuritypodcast.tv/season-2/security-governance-and-compliance-in-serverless-applications/ "Cloud Security Podcast: Security Governance and Compliance in Serverless Applications"

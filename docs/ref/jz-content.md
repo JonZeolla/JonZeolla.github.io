@@ -75,7 +75,7 @@ You can also watch my recorded presentations by going to [this YouTube
 playlist](https://www.youtube.com/watch?v=Y1TGQWOmrTI&list=PLDvTIewuIyaKK2wk49iq5_rxUcNioSr0y).
 
 [Alabama-CSA]: https://circle.cloudsecurityalliance.org/alabama/home "Cloud Security Alliance Alabama Chapter"
-[2024-CNSC]: https://jonzeolla.com/TODO.html "Cloud Native GRC"
+[2024-CNSC]: https://youtu.be/HvLkkrNFiK8?si=pKXy-VvlDktl9ezU "Cloud Native GRC"
 [2024-CNSCSlides]: https://docs.google.com/presentation/d/167QYSLeDlz2pipln_V5kCVI2UWAIMRNpOQHBtIKikqg/edit?usp=drive_link "Cloud Native GRC Slides"
 [2024-05-AIHack]: https://community.cncf.io/events/details/cncf-cloud-native-security-pittsburgh-presents-ai-hackathon/ "Cloud Native Security AI Hackathon"
 [2023-PInfoSec-Talk]: https://www.youtube.com/watch?v=tKKrqNduBwA "Your Governance Is Broken"

@@ -59,6 +59,8 @@ If you're into certifications I have a few
 * [BSides Pittsburgh](https://bsidespgh.com/) organizer since 2014
 * [PittSec](https://pittsec.com/) founder since 2018
 * CNCF [TAG-Security](https://github.com/cncf/tag-security) and [Ambassador](https://www.credly.com/badges/b8d3938a-219d-42f7-b175-0820e2cb1db7)
+* CNCF TAG Contributor Strategy's [Deaf & Hard of Hearing Working Group](https://contribute.cncf.io/about/deaf-and-hard-of-hearing/) (resources
+  [here](https://contribute.cncf.io/accessibility/deaf-and-hard-of-hearing/))
 * [AWS Community Builder](https://aws.amazon.com/developer/community/community-builders/community-builders-directory/)
 
 ## Volunteer Work

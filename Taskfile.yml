@@ -15,22 +15,22 @@ interval: '500ms'
 
 tasks:
   lock:
-    desc: Generate a Pipfile.lock if Pipfile changed from last run
+    desc: Update uv.lock if pyproject.toml has changed
     internal: true
     sources:
-      - Pipfile
+      - pyproject.toml
     generates:
-      - Pipfile.lock
+      - uv.lock
     cmds:
-      - pipenv lock
+      - uv lock
 
-  init-pipenv:
-    desc: Initializes the pipenv virtual environment if Pipfile.lock changes
+  init-uv:
+    desc: Initializes uv if uv.lock changes
     internal: true
     sources:
-      - Pipfile.lock
+      - uv.lock
     cmds:
-      - pipenv install --deploy --ignore-pipfile --dev
+      - uv sync
 
   runner-apt-install:
     desc: Install something on a GitHub Actions runner via apt
@@ -74,9 +74,9 @@ tasks:
     desc: Initialize the repo for local use; intended to be run after git clone
     deps: [lock]
     cmds:
-      - task: init-pipenv
+      - task: init-uv
       - task: init-install-tools
-      - pipenv run playwright install --with-deps chromium
+      - uv run playwright install --with-deps chromium
 
   build:
     desc: Build the project
@@ -86,7 +86,7 @@ tasks:
       - docs/**/*.py
       - docs/**/*.rst
     cmds:
-      - pipenv run sphinx-build -b html docs build
+      - uv run sphinx-build -b html docs build
 
   open:
     desc: Open the home page
@@ -105,7 +105,7 @@ tasks:
       NUMBER_OF_LABS:
         sh: find docs/labs/ -name '*.md' | wc -l
     cmds:
-      - pipenv run pytest -n0 -v tests/ --log-cli-level "${LOG_LEVEL}"
+      - uv run pytest -n0 -v tests/ --log-cli-level "${LOG_LEVEL}"
 
   destroy:
     desc: Run terraform destroys and cleanup all of the test terraform modules
@@ -128,9 +128,9 @@ tasks:
         fi
 
   update:
-    desc: Update the project dev and runtime dependencies, and other misc components
+    desc: Update the project dependencies, and other misc components
     cmds:
-      - pipenv update
+      - uv lock
 
   clean:
     desc: Clean up build artifacts, cache files/directories, temp files, etc.

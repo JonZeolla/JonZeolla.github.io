@@ -3,7 +3,7 @@
 ## Getting setup
 
 Developing against this project assumes that you have the docker daemon running, the docker cli properly configured, and a modern version of both
-[`task`](https://taskfile.dev/) and [`pipenv`](https://pipenv.pypa.io/en/latest/) installed and configured.
+[`task`](https://taskfile.dev/installation/) and [`uv`](https://docs.astral.sh/uv/getting-started/installation/) installed and configured.
 
 Run `task init` to setup your local environment, `task build` to build the project, and `task test` to test it. You can run `task open` to open the root
 `index.html` in your local browser.

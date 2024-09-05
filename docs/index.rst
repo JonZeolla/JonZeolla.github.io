@@ -20,12 +20,15 @@ Welcome to my page!
 
 I ❤️ cloud native security & compliance
 
-Right now I'm spending *most* of my time building |seiso| and contributing in the |cncf| and |ossf|, although I'm also
-having fun working on |easy_infra|.
+Right now I'm spending *most* of my time building |zenable| and contributing in the |cncf| and |ossf|.
 
 If you're here for a lab, `click here <labs/index.html>`_.
 
 You can also find a bit about my background `here <about-me.html>`_.
+
+.. |zenable| image:: img/zenable.png
+  :height: 4ex
+  :target: https://zenable.io
 
 .. |seiso| image:: img/seiso.png
   :height: 3ex
@@ -38,10 +41,6 @@ You can also find a bit about my background `here <about-me.html>`_.
 .. |ossf| image:: img/ossf.png
   :height: 3ex
   :target: https://openssf.org/
-
-.. |easy_infra| image:: img/easy_infra.png
-  :height: 5ex
-  :target: https://github.com/SeisoLLC/easy_infra
 
 .. toctree::
    :maxdepth: 2

@@ -71,8 +71,7 @@ hidden: true
 | 2012-08-07 | Pittsburgh Technical Institute               | Life After Graduation                                          |
 | 2011-10-05 | Pittsburgh Technical Institute               | Alumni Speaker Series                                          |
 
-You can also watch my recorded presentations by going to [this YouTube
-playlist](https://www.youtube.com/watch?v=Y1TGQWOmrTI&list=PLDvTIewuIyaKK2wk49iq5_rxUcNioSr0y).
+You can also watch my recorded presentations by going to [this YouTube playlist](https://jonzeolla.com/youtube.html).
 
 [Alabama-CSA]: https://circle.cloudsecurityalliance.org/alabama/home "Cloud Security Alliance Alabama Chapter"
 [2024-CSABirm]: https://www.meetup.com/cloud-security-alliance-alabama-chapter/events/302397794/ "Automating Cloud Security with Jon Zeolla"

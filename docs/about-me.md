@@ -31,16 +31,19 @@ hidden: true
 :width: 20px
 ```
 
-Jon Zeolla is the co-founder and CTO of Seiso where he is responsible for cloud native security and compliance innovation. He works with Seiso's most complex
-clients, actively contributes to open source projects, and shapes industry standards, primarily in the areas of Zero Trust, DevSecOps, and Cloud Security.
+Jon Zeolla is the founder and CEO of Zenable, a tech company that’s streamlining cloud-native security. Jon aims to eliminate corporate toil and inefficiency by
+automating governance and simplifying data gathering and analysis.
 
-Feel free to connect with me on [LinkedIn](https://linkedin.com/in/jonzeolla).
+He’s also a founder of Seiso where they partner with tech companies to implement low-friction security and compliance. His work at Seiso earned him the 2021
+Start-Up Innovator of the Year Award.
 
-Check out my presentations, trainings, etc. [here](project:./ref/jz-content.md).
+Finally, he stays active in the community by sharing his expertise as a [SANS Certified Instructor](https://www.sans.org/profiles/jon-zeolla), [CNCF
+Ambassador](https://www.cncf.io/people/ambassadors/?p=jon-zeolla), and [IANS Faculty
+member](https://www.iansresearch.com/our-faculty/faculty/detail/jon-zeolla).
 
-If you're into certifications I have a few
-[here](https://drive.google.com/drive/u/0/folders/0B2NDLONqoOuTcXU1Uk5yVnBFMW8?resourcekey=0-iM4bgThWU8AStx5cR7RIow) and
-[here](https://www.credly.com/users/jon-zeolla/badges).
+Feel free to connect on [LinkedIn](https://linkedin.com/in/jonzeolla).
+
+Check out Jon's [presentations and trainings](project:./ref/jz-content.md).
 
 ## Awards
 
@@ -58,7 +61,7 @@ If you're into certifications I have a few
   [here](https://www.meetup.com/steel-city-infosec/events/?type=past)
 * [BSides Pittsburgh](https://bsidespgh.com/) organizer since 2014
 * [PittSec](https://pittsec.com/) founder since 2018
-* CNCF [TAG-Security](https://github.com/cncf/tag-security) and [Ambassador](https://www.credly.com/badges/b8d3938a-219d-42f7-b175-0820e2cb1db7)
+* CNCF [TAG-Security](https://github.com/cncf/tag-security) and [Ambassador](https://www.cncf.io/people/ambassadors/?p=jon-zeolla)
 * CNCF TAG Contributor Strategy's [Deaf & Hard of Hearing Working Group](https://contribute.cncf.io/about/deaf-and-hard-of-hearing/) (resources
   [here](https://contribute.cncf.io/accessibility/deaf-and-hard-of-hearing/))
 * [AWS Community Builder](https://aws.amazon.com/developer/community/community-builders/community-builders-directory/)
@@ -77,14 +80,14 @@ If you're into certifications I have a few
 * [Kubernetes SIG-Security](https://github.com/kubernetes/sig-security/tree/main) Policy Working Group Member since 2022
   * 2023 [Kubernetes Governance, Risk, and Compliance White
     Paper](https://github.com/kubernetes/sig-security/blob/8cf0dd5dc8b9c7e67be71b19e3b4683645b99a68/sig-security-docs/papers/policy_grc/Kubernetes_Policy_WG_Paper_v1_101123.pdf)
-* NSF Grant #2000902 Advisory Board Member since 2022
+* FBI Citizens Academy 2016 graduate
+* NSF Grant #2000902 Advisory Board Member in 2022
 * DataWorks Summit, CyberSecurity Track Chair in 2018
 * [CAMLIS Organizer](https://www.camlis.org/) in 2018
 * [Apache Software Foundation Committer](http://home.apache.org/committer-index.html) since 2017
-* FBI Citizens Academy 2016 graduate
 * CIS Apple iOS 7 Benchmark in 2013
 * [Forbes Road CTC](https://forbesroad.org/) Occupational Advisory Committee since 2012
-* [Pittsburgh Technology College](https://ptcollege.edu/) advisory board since 2011
+* [Pittsburgh Technology College](https://ptcollege.edu/) advisory board 2011-2024
 
 ## Open Source Software
 
@@ -97,12 +100,15 @@ If you're into certifications I have a few
 
 ## Current Work
 
+* Founder and CEO at [Zenable](https://www.zenable.io/#The-Team-slider)
 * Co-founder and CTO at [Seiso](https://sei.so/jon)
 * Instructor at [SANS](https://www.sans.org/profiles/jon-zeolla/)
 * Faculty member at [IANS](https://www.iansresearch.com/our-faculty/faculty/detail/jon-zeolla)
 
 ## Hobbies
 
-* Weightlifting
+* Weightlifting (>400 Wilks Coefficient, >1250lb combined at 180lb bw)
 * Mountain Biking
 * Chess
+* [Certifications](https://drive.google.com/drive/u/0/folders/0B2NDLONqoOuTcXU1Uk5yVnBFMW8?resourcekey=0-iM4bgThWU8AStx5cR7RIow) and
+[badges](https://www.credly.com/users/jon-zeolla/badges).

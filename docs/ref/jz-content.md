@@ -9,7 +9,7 @@ hidden: true
 
 | Date       | Event                                        | Title                                                          |
 | ---------- | -------------------------------------------- | -------------------------------------------------------------- |
-| 2024-09-10 | [Alabama CSA][Alabama-CSA]                   | TODO                                                           |
+| 2024-09-10 | [Alabama CSA][Alabama-CSA]                   | [Automating Cloud Security][2024-CSABirm]                      |
 | 2024-06-27 | Cloud Native Security Con                    | [Cloud Native GRC][2024-CNSC] ([Slides][2024-CNSCSlides])      |
 | 2024-05-07 | [AI Hackathon][2024-05-AIHack]               | AI Hackathon                                                   |
 | 2023-12-04 | [2023 PGH InfoSec Day][2023-PInfoSec]        | [Your Governance is Broken][2023-PInfoSec-Talk]                |
@@ -71,10 +71,10 @@ hidden: true
 | 2012-08-07 | Pittsburgh Technical Institute               | Life After Graduation                                          |
 | 2011-10-05 | Pittsburgh Technical Institute               | Alumni Speaker Series                                          |
 
-You can also watch my recorded presentations by going to [this YouTube
-playlist](https://www.youtube.com/watch?v=Y1TGQWOmrTI&list=PLDvTIewuIyaKK2wk49iq5_rxUcNioSr0y).
+You can also watch my recorded presentations by going to [this YouTube playlist](https://jonzeolla.com/youtube.html).
 
 [Alabama-CSA]: https://circle.cloudsecurityalliance.org/alabama/home "Cloud Security Alliance Alabama Chapter"
+[2024-CSABirm]: https://www.meetup.com/cloud-security-alliance-alabama-chapter/events/302397794/ "Automating Cloud Security with Jon Zeolla"
 [2024-CNSC]: https://youtu.be/HvLkkrNFiK8?si=pKXy-VvlDktl9ezU "Cloud Native GRC"
 [2024-CNSCSlides]: https://docs.google.com/presentation/d/167QYSLeDlz2pipln_V5kCVI2UWAIMRNpOQHBtIKikqg/edit?usp=drive_link "Cloud Native GRC Slides"
 [2024-05-AIHack]: https://community.cncf.io/events/details/cncf-cloud-native-security-pittsburgh-presents-ai-hackathon/ "Cloud Native Security AI Hackathon"
@@ -102,24 +102,25 @@ playlist](https://www.youtube.com/watch?v=Y1TGQWOmrTI&list=PLDvTIewuIyaKK2wk49iq
 
 | Date       | Event                             | Training                                                                            |
 | ---------- | --------------------------------- | ----------------------------------------------------------------------------------- |
+| 2024-11-19 | Private                           | [Container Security 101 and 201][ContainerSec101201]                                |
 | 2024-10-02 | SANS CloudSecNext 2024            | [SEC540][SEC540]                                                                    |
 | 2024-09-04 | SANS Network Security Las Vegas   | [SEC540][SEC540]                                                                    |
 | 2024-07-00 | Private                           | [SEC540][SEC540]                                                                    |
 | 2024-05-09 | SANS Security West San Diego 2024 | [SEC540][SEC540]                                                                    |
-| 2024-05-00 | Private                           | [Container Security 101 and 201][2023-ContainerSec]                                 |
+| 2024-05-00 | Private                           | [Container Security 101 and 201][ContainerSec101201]                                |
 | 2024-04-00 | Private                           | [SEC540][SEC540]                                                                    |
 | 2024-03-24 | SANS Orlando 2024                 | [SEC540][SEC540]                                                                    |
 | 2024-02-19 | SANS Security East 2024 (Nola)    | [SEC540][SEC540]                                                                    |
-| 2023-11-27 | Pittsburgh Code & Supply          | [Container Security 101][2023-ContainerSec101] ([Event link][2023-PCS])             |
+| 2023-11-27 | Pittsburgh Code & Supply          | [Container Security 101][ContainerSec101] ([Event link][2023-PCS])                  |
 | 2023-11-01 | SANS Workshop                     | [Mastering Policy as Code][2023-PolicyasCode]                                       |
 | 2023-10-18 | SANS Dallas Cloud Sec Next 2023   | [SEC540][SEC540]                                                                    |
-| 2023-10-16 | SANS Workshop                     | [Container Security 101][2023-ContainerSec101]                                      |
+| 2023-10-16 | SANS Workshop                     | [Container Security 101][ContainerSec101]                                           |
 | 2023-09-25 | SANS Managing Security Risk 2023  | [SEC540][SEC540]                                                                    |
 | 2023-09-04 | SANS Cloud Security London 2023   | [SEC540][SEC540]                                                                    |
 | 2023-08-00 | Private                           | [SEC540][SEC540]                                                                    |
 | 2023-07-10 | SANS SANSFIRE 2023                | [SEC540][SEC540]                                                                    |
 | 2023-05-21 | SANS Cyber Security East          | [SEC540][SEC540]                                                                    |
-| 2023-04-27 | SANS Workshop                     | [Container Security 101][2023-ContainerSec101]                                      |
+| 2023-04-27 | SANS Workshop                     | [Container Security 101][ContainerSec101]                                           |
 | 2023-03-06 | SANS Las Vegas Winter 2023        | [SEC540][SEC540]                                                                    |
 | 2023-02-20 | SANS Cloud Defender Dallas 2023   | [SEC540][SEC540]                                                                    |
 | 2022-11-07 | SANS Cyber Security East          | [SEC540][SEC540]                                                                    |
@@ -142,10 +143,10 @@ playlist](https://www.youtube.com/watch?v=Y1TGQWOmrTI&list=PLDvTIewuIyaKK2wk49iq
 | 2015-01-22 | Steel City InfoSec                | [Eavesdropping at a distance][2015-LaserMicrophones] (Collab with Brian Gray)       |
 | 2013-03-07 | Steel City InfoSec                | Wifi Security                                                                       |
 
-[2023-ContainerSec]: https://jonzeolla.com/labs/index.html "Container Security 101 and 201"
+[ContainerSec101201]: https://jonzeolla.com/labs/container-security-101.html "Container Security 101 and 201"
 [2023-PCS]: https://www.meetup.com/pittsburgh-code-supply/events/297107969/ "Pittsburgh Code & Supply Container Security 101 Workshop"
 [2023-PolicyasCode]: https://jonzeolla.com/labs/policy-as-code.html "Mastering Policy as Code"
-[2023-ContainerSec101]: https://jonzeolla.com/labs/container-security-101.html "Container Security 101"
+[ContainerSec101]: https://jonzeolla.com/labs/container-security-101.html "Container Security 101"
 [SEC540]: https://sans.org/sec540 "SANS SEC540: Cloud Security and DevSecOps Automation"
 [2018-BlockCipherCrypto]: https://github.com/JonZeolla/lab-BlockCipherCryptography "Attacking Block Cipher Cryptography"
 [2018-SmartContractSecurity]: https://github.com/JonZeolla/lab-SmartContractSecurity "Smart Contract Security"
@@ -162,7 +163,8 @@ playlist](https://www.youtube.com/watch?v=Y1TGQWOmrTI&list=PLDvTIewuIyaKK2wk49iq
 
 | Date       | Name                   | Details                                                                           |
 | ---------- | ---------------------- | --------------------------------------------------------------------------------- |
-| 2024-05-23 | Seiso Side-up Podcast  | [Seiso's Origins][2024-Seiso]                                                     |
+| 2024-08-30 | Seiso Side-up Podcast  | [Easy_Infra][2024-SeisoEasyInfra]                                                 |
+| 2024-05-23 | Seiso Side-up Podcast  | [Seiso's Origins][2024-SeisoOrigins]                                              |
 | 2023-09-13 | Wednesday Offensive    | [Cloud-native security][2023-WedOffensive]                                        |
 | 2023-05-30 | Logicast               | [Season 2 Episode 20 - IAM Roles, Crypto Mining and Hats][2023-Logicast]          |
 | 2021-11-06 | Cloud Security Podcast | [Security Governance and Compliance in Serverless Applications][2021-CSP]         |
@@ -170,7 +172,8 @@ playlist](https://www.youtube.com/watch?v=Y1TGQWOmrTI&list=PLDvTIewuIyaKK2wk49iq
 | 2018-02-28 | Packet Pushers         | [Datanauts 123: Security without Firewalls][2018-PacketPushers]                   |
 | 2016-06-01 | Packet Pushers         | [Datanauts 036: Busting The Security Silo In The Data Center][2016-PacketPushers] |
 
-[2024-Seiso]: https://open.spotify.com/episode/61atUIAeVe3RHQUFpcseOT "Seiso Side Up - Seiso's Origins"
+[2024-SeisoEasyInfra]: https://open.spotify.com/episode/4Ro93bIrRUU6LqK3dB4z8h "Seiso Side Up - Easy_Infra"
+[2024-SeisoOrigins]: https://open.spotify.com/episode/61atUIAeVe3RHQUFpcseOT "Seiso Side Up - Seiso's Origins"
 [2023-WedOffensive]: https://redsiege.com/wednesday-offensive/ "Wednesday Offensive - 9/13"
 [2023-Logicast]: https://logicastvideo.podbean.com/e/season-2-episode-20-iam-roles-crypto-mining-and-hats/ "Season 2 Episode 20 - IAM Roles, Crypto Mining and Hats"
 [2021-CSP]: https://cloudsecuritypodcast.tv/season-2/security-governance-and-compliance-in-serverless-applications/ "Cloud Security Podcast: Security Governance and Compliance in Serverless Applications"

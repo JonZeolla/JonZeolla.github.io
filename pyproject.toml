@@ -1,2 +1,28 @@
+[project]
+name = "jonzeolla.com"
+version = "0"
+description = "jonzeolla.com"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+  "boto3",
+  "jinja2",
+  "myst-parser",
+  "paramiko",
+  "playwright",
+  "pyperclip",
+  "pytest",
+  "pytest-xdist",
+  "sphinx-copybutton",
+  "sphinx-design",
+  "sphinx-last-updated-by-git",
+  "sphinx-prompt",
+  "sphinx-rtd-theme>=2",
+  "sphinx-tippy",
+  "sphinx-togglebutton",
+  "sphinxcontrib-googleanalytics",
+  "sphinxcontrib-mermaid",
+]
+
 [pytest]
 log_cli = "True"

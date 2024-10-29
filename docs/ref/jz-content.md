@@ -9,6 +9,7 @@ hidden: true
 
 | Date       | Event                                        | Title                                                          |
 | ---------- | -------------------------------------------- | -------------------------------------------------------------- |
+| 2024-10-28 | [Pittsburgh InfoSec Day 2024][PGHINFOSECDAY] | [Your Governance Is (Still) Broken][2024-gov-still-broken]     |
 | 2024-09-10 | [Alabama CSA][Alabama-CSA]                   | [Automating Cloud Security][2024-CSABirm]                      |
 | 2024-06-27 | Cloud Native Security Con                    | [Cloud Native GRC][2024-CNSC] ([Slides][2024-CNSCSlides])      |
 | 2024-05-07 | [AI Hackathon][2024-05-AIHack]               | AI Hackathon                                                   |
@@ -73,6 +74,8 @@ hidden: true
 
 You can also watch my recorded presentations by going to [this YouTube playlist](https://jonzeolla.com/youtube.html).
 
+[PGHINFOSECDAY]: https://www.pghinfosecday.com/ "Pittsburgh InfoSec Day"
+[2024-gov-still-broken]: https://github.com/JonZeolla/monopreso/tree/main/presentations/2024-10-PGH-InfoSec-Day "Your Governance is (still) Broken"
 [Alabama-CSA]: https://circle.cloudsecurityalliance.org/alabama/home "Cloud Security Alliance Alabama Chapter"
 [2024-CSABirm]: https://www.meetup.com/cloud-security-alliance-alabama-chapter/events/302397794/ "Automating Cloud Security with Jon Zeolla"
 [2024-CNSC]: https://youtu.be/HvLkkrNFiK8?si=pKXy-VvlDktl9ezU "Cloud Native GRC"
@@ -102,8 +105,9 @@ You can also watch my recorded presentations by going to [this YouTube playlist]
 
 | Date       | Event                             | Training                                                                            |
 | ---------- | --------------------------------- | ----------------------------------------------------------------------------------- |
-| 2024-11-19 | Private                           | [Container Security 101 and 201][ContainerSec101201]                                |
-| 2024-10-02 | SANS CloudSecNext 2024            | [SEC540][SEC540]                                                                    |
+| 2025-03-03 | SANS Security East Baltimore 2025 | [SEC540][SEC540]                                                                    |
+| 2024-12-04 | SANS Seattle 2024                 | [SEC540][SEC540]                                                                    |
+| 2024-10-07 | Private                           | [SEC540][SEC540]                                                                    |
 | 2024-09-04 | SANS Network Security Las Vegas   | [SEC540][SEC540]                                                                    |
 | 2024-07-00 | Private                           | [SEC540][SEC540]                                                                    |
 | 2024-05-09 | SANS Security West San Diego 2024 | [SEC540][SEC540]                                                                    |

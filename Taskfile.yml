@@ -130,7 +130,7 @@ tasks:
   update:
     desc: Update the project dependencies, and other misc components
     cmds:
-      - '{{if eq .GITHUB_ACTIONS "true"}}brew upgrade uv{{end}}'
+      - '{{if ne .GITHUB_ACTIONS "true"}}brew upgrade uv{{end}}'
       - uv lock --upgrade
 
   clean:

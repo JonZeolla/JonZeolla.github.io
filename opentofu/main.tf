@@ -77,7 +77,7 @@ resource "aws_key_pair" "lab_keypair" {
 
 resource "local_file" "private_key" {
   content         = tls_private_key.lab_keypair.private_key_openssh
-  filename        = "./zenable-${random_pet.lab.id}.key"
+  filename        = "./jonzeolla-${random_pet.lab.id}.key"
   file_permission = "0600"
 }
 

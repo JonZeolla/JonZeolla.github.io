@@ -10,12 +10,12 @@ How it works:
         1. getting_started code blocks, which have a 2x parent div of class "getting-started"
         1. lab_commands code blocks, which are all non-getting_started code blocks
         1. config, which is an embedded JSON blob hidden in the lab for use when testing
-    1. Render the tests/lab.tf.j2 Jinja2 template into a per-lab folder (which points to the terraform/environment.tf module)
-    1. Run a `terraform init && terraform apply -auto-approve` in the lab module
-        1. If this fails and (CI=true or an EC2 instance was never created), then run `terraform init && terraform destroy -auto-approve` and exit 1
+    1. Render the tests/lab.tf.j2 Jinja2 template into a per-lab folder (which points to the `opentofu/` module)
+    1. Run a `tofu init && tofu apply -auto-approve` in the lab module
+        1. If this fails and (CI=true or an EC2 instance was never created), then run `tofu init && tofu destroy -auto-approve` and exit 1
         1. If the above is not true, keep the instance up but fail the tests, allowing follow-on troubleshooting.
-    1. Run the getting_started code blocks in the Cloud9 EC2 instance
-    1. Run the lab_commands code blocks in the Cloud9 EC2 instance
+    1. Run the getting_started code blocks in the EC2 instance
+    1. Run the lab_commands code blocks in the EC2 instance
 1. Restore the host clipboard
 
 ## Configuring tests
@@ -30,6 +30,8 @@ The same pattern exists for `task destroy`.
 
 ## Lessons Learned
 
+### Cloud9 (no longer supported)
+
 The AWS cli is only setup upon opening the Cloud9 console, so we need to manually get and set the region for ansible's use
 
 Cloud9 AMIs have curl but not jq, so you could use python instead like this (note the escaping):
@@ -43,5 +45,5 @@ created on interactive use of the Cloud9 console (since they are tied to the AWS
 interactive use causes `aws` commands to use the instance profile, which defaults to `AWSCloud9SSMAccessRole` and doesn't have enough access to read attributes
 as expected by `amazon.aws.ec2_ami_info`.
 
-To fix this, we create and attach a custom role as a part of the `terraform/envirnoment.tf`. If this doesn't happen, you'll get a permission denied issue,
-currently starting with ec2:DescribeImages but this could change as the playbooks are updated.
+To fix this, we create and attach a custom role as a part of the `opentofu/`. If this doesn't happen, you'll get a permission denied issue, currently starting
+with ec2:DescribeImages but this could change as the playbooks are updated.

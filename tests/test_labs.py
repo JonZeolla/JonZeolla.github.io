@@ -69,56 +69,56 @@ def get_labs() -> list[Path]:
         return labs
 
 
-def run_terraform(*, lab: Lab, command: str) -> Tuple[str, dict[str, str]]:
+def run_opentofu(*, lab: Lab, command: str) -> Tuple[str, dict[str, str]]:
     """
-    Find and deploy the terraform for the provided lab
+    Find and deploy the opentofu for the provided lab
 
     Only supports apply or destroy subcommands
 
-    Returns the instance ID of the created EC2 instance and the final config used when rendering the terraform
+    Returns the instance ID of the created EC2 instance and the final config used when rendering the opentofu
     """
     if command not in ["apply", "destroy"]:
-        LOG.error(f"Unsupported terraform command {command}")
+        LOG.error(f"Unsupported tofu command {command}")
         sys.exit(1)
 
     # This creates the final config that was used for rendering, which has defaults added where needed
-    render_config, terraform_module = render_lab_terraform(
+    render_config, opentofu_module = render_lab_opentofu(
         lab=lab, config_update=lab.config
     )
 
-    # Run the terraform command
-    terraform_commands = [
-        ["terraform", "init"],
-        ["terraform", command, "-auto-approve"],
+    # Run the opentofu command
+    opentofu_commands = [
+        ["tofu", "init"],
+        ["tofu", command, "-auto-approve"],
     ]
-    for tf_command in terraform_commands:
-        tf_command_string = " ".join(tf_command)
+    for opentofu_command in opentofu_commands:
+        opentofu_command_string = " ".join(opentofu_command)
         try:
-            LOG.info(f"{lab.file.stem}: Running {tf_command_string}...")
+            LOG.info(f"{lab.file.stem}: Running {opentofu_command_string}...")
             subprocess.run(
-                tf_command,
+                opentofu_command,
                 capture_output=True,
                 text=True,
-                cwd=terraform_module,
+                cwd=opentofu_module,
                 check=True,
             )
         except subprocess.CalledProcessError as e:
             LOG.error(
-                f"{lab.file.stem}: Failed to run {tf_command_string} with the output of {e.stdout} and the error of {e.stderr}"
+                f"{lab.file.stem}: Failed to run {opentofu_command_string} with the output of {e.stdout} and the error of {e.stderr}"
             )
-            handle_failed_terraform(lab=lab)
+            handle_failed_opentofu(lab=lab)
             sys.exit(1)
 
     # Return the instance ID
-    instance_id = get_instance_id(lab=lab, terraform_module=terraform_module)
+    instance_id = get_instance_id(lab=lab, opentofu_module=opentofu_module)
     return instance_id, render_config
 
 
-def get_instance_id(*, lab: Lab, terraform_module: Path) -> str:
+def get_instance_id(*, lab: Lab, opentofu_module: Path) -> str:
     """
-    Get the instance ID from the provided lab's generated terraform module folder
+    Get the instance ID from the provided lab's generated opentofu module folder
     """
-    instance_id_file = terraform_module.joinpath("instance_id")
+    instance_id_file = opentofu_module.joinpath("instance_id")
     try:
         instance_id = instance_id_file.read_text().rstrip("\n")
     except FileNotFoundError:
@@ -211,7 +211,7 @@ def run_commands(
 
         if not success:
             LOG.error(f"{lab.file.stem}: Failed running {command}")
-            handle_failed_terraform(lab=lab, instance_id=instance_id)
+            handle_failed_opentofu(lab=lab, instance_id=instance_id)
             return False
 
     return True
@@ -262,12 +262,12 @@ def wait_for_completion(
     return success
 
 
-def handle_failed_terraform(*, lab: Lab, instance_id: str = "") -> None:
+def handle_failed_opentofu(*, lab: Lab, instance_id: str = "") -> None:
     """
-    Handle cleanup after a failed terraform run
+    Handle cleanup after a failed opentofu run
     """
     if os.environ.get("CI") == "true" or not instance_id:
-        run_terraform(lab=lab, command="destroy")
+        run_opentofu(lab=lab, command="destroy")
     else:
         LOG.warning(f"Leaving the EC2 {instance_id} up for troubleshooting...")
 
@@ -317,7 +317,7 @@ def get_code_from_commands(*, lab_path: Path) -> Lab:
         lab_commands: list[str] = []
         for button in copy_buttons:
             # The force is because the copy button from sphinx-copybutton often isn't visible, and pywright will wait
-            # until it times out without additional adjustments to accomodate. Hover doesn't work in headless mode, etc.
+            # until it times out without additional adjustments to accommodate. Hover doesn't work in headless mode, etc.
             button.click(force=True)
 
             # Pull the clipboard content into the commands list
@@ -356,35 +356,35 @@ def get_code_from_commands(*, lab_path: Path) -> Lab:
     return lab
 
 
-def render_lab_terraform(
+def render_lab_opentofu(
     *, lab: Lab, config_update: dict[str, str]
 ) -> Tuple[dict[str, str], Path]:
     """
-    Render the lab-specific terraform live
+    Render the lab-specific opentofu live
 
-    Returns the final configuration used when rendering, as well as a Path to the rendered terraform module
+    Returns the final configuration used when rendering, as well as a Path to the rendered opentofu module
     """
-    terraform_template = Path("tests/lab.tf.j2")
-    terraform_module = Path("tests").joinpath(lab.file.stem)
-    terraform_module.mkdir(exist_ok=True)
-    LOG.debug(f"Using the terraform module {terraform_module}...")
-    terraform_live = terraform_module.joinpath(lab.file.stem).with_suffix(".tf")
+    opentofu_template = Path("tests/lab.tf.j2")
+    opentofu_module = Path("tests").joinpath(lab.file.stem)
+    opentofu_module.mkdir(exist_ok=True)
+    LOG.debug(f"Using the opentofu module {opentofu_module}...")
+    opentofu_live = opentofu_module.joinpath(lab.file.stem).with_suffix(".tf")
 
     # Set a default config, and then update it with the provided config
     render_config = {
-        "cloud9_name": lab.file.stem,
-        "cloud9_instance_type": "t3.xlarge",
+        "lab_name": lab.file.stem,
+        "lab_instance_type": "t3.xlarge",
         "region": "us-east-1",
     }
     render_config.update(config_update)
 
     render_jinja2(
-        template_file=terraform_template,
+        template_file=opentofu_template,
         config=render_config,
-        output_file=terraform_live,
+        output_file=opentofu_live,
     )
 
-    return render_config, terraform_module
+    return render_config, opentofu_module
 
 
 def render_jinja2(
@@ -440,7 +440,7 @@ def test_lab(lab: Lab) -> None:
     Test the code blocks in the provided lab
     """
     # This updates the config that was passed in with the final config that was used for rendering, which has defaults added where needed
-    instance_id, render_config = run_terraform(lab=lab, command="apply")
+    instance_id, render_config = run_opentofu(lab=lab, command="apply")
 
     if lab.getting_started:
         assert run_commands(

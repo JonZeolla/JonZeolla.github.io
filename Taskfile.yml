@@ -69,6 +69,9 @@ tasks:
       - task: runner-apt-install
         vars:
           TOOLS: xclip
+      - task: mac-brew-install
+        vars:
+          TOOLS: opentofu
 
   init:
     desc: Initialize the repo for local use; intended to be run after git clone

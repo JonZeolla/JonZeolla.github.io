@@ -36,5 +36,3 @@ jobs:
           aws-region: us-east-1
       - name: Test the project
         run: task -v test
-      - name: Cleanup from testing (just in case)
-        run: task -v destroy

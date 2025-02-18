@@ -108,22 +108,22 @@ tasks:
       - uv run pytest -n0 -v tests/ --log-cli-level "${LOG_LEVEL}"
 
   destroy:
-    desc: Run terraform destroys and cleanup all of the test terraform modules
+    desc: Run tofu destroys and cleanup all of the test opentofu modules
     cmds:
       - |
         if [[ -z "${LAB+x}" ]]; then
           for dir in $(find tests -type d -maxdepth 1 -mindepth 1); do
             pushd "${dir}" >/dev/null
             echo "Running destroy in ${dir}..."
-            terraform init
-            terraform destroy -auto-approve
+            tofu init
+            tofu destroy -auto-approve
             popd >/dev/null
           done
         else
           pushd "tests/${LAB}" >/dev/null
           echo "Running destroy in tests/${LAB}..."
-          terraform init
-          terraform destroy -auto-approve
+          tofu init
+          tofu destroy -auto-approve
           popd >/dev/null
         fi
 

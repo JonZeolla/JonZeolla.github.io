@@ -2,9 +2,8 @@ provider "aws" {
   region = "{{ region }}"
 }
 
-module "{{ cloud9_name }}" {
-  source = "../../terraform"
+module "{{ lab_name }}" {
+  source = "../../opentofu"
 
-  cloud9_name = "{{ cloud9_name }}"
-  cloud9_instance_type = "{{ cloud9_instance_type }}"
+  instance_type = "{{ lab_instance_type }}"
 }

@@ -26,11 +26,12 @@ sudo --preserve-env=USER_HOME \
 ## Install some baseline tools
 # In the future we want to move from python3-pip to uv pip
 sudo apt-get update
-sudo apt -y install nmap \
+sudo apt -y install cgroup-tools \
+                    nmap \
                     net-tools \
                     postgresql-client \
-                    unzip \
-                    python3-pip
+                    python3-pip \
+                    unzip
 
 ## Install the aws cli
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"

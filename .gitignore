@@ -1,4 +1,4 @@
-cosign.key
+*.key
 cosign.pub
 build/
 .task/

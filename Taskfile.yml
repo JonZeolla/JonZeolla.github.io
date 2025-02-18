@@ -107,9 +107,27 @@ tasks:
     cmds:
       - uv run pytest -n0 -v tests/ --log-cli-level "${LOG_LEVEL}"
 
-  destroy:
-    desc: Run tofu destroys and cleanup all of the test opentofu modules
+  # Essentially an alias
+  deploy:
+    desc: Deploy the lab environment
     cmds:
+      - task: deploy-lab
+
+  # Essentially an alias
+  lab:
+    desc: Deploy the lab environment
+    cmds:
+      - task: deploy-lab
+
+  deploy-lab:
+    desc: Deploy the lab environment
+    cmds:
+      - cd lab && tofu init && tofu apply -auto-approve
+
+  destroy:
+    desc: Run tofu destroys and cleanup all of the labs and test opentofu modules
+    cmds:
+      - cd lab && tofu init && tofu destroy -auto-approve
       - |
         if [[ -z "${LAB+x}" ]]; then
           for dir in $(find tests -type d -maxdepth 1 -mindepth 1); do

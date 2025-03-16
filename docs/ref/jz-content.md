@@ -109,7 +109,8 @@ You can also watch my recorded presentations by going to [this YouTube playlist]
 | Date       | Event                             | Training                                                                            |
 | ---------- | --------------------------------- | ----------------------------------------------------------------------------------- |
 | 2025-06-02 | SANS Baltimore Spring 2025        | [SEC540][SEC540]                                                                    |
-| 2025-03-17 | SANS San Antonio Spring 2025      | [SEC540][SEC540]                                                                    |
+| 2025-04-13 | SANS 2025 (Orlando)               | [SEC540][SEC540]                                                                    |
+| 2025-03-17 | SANS OnDemand Recording           | [SEC540][SEC540]                                                                    |
 | 2025-03-03 | SANS Security East Baltimore 2025 | [SEC540][SEC540]                                                                    |
 | 2024-12-04 | SANS Seattle 2024                 | [SEC540][SEC540]                                                                    |
 | 2024-10-07 | Private                           | [SEC540][SEC540]                                                                    |
@@ -172,6 +173,7 @@ You can also watch my recorded presentations by going to [this YouTube playlist]
 
 | Date       | Name                   | Details                                                                           |
 | ---------- | ---------------------- | --------------------------------------------------------------------------------- |
+| 2025-03-XX | Seiso Side-up Podcast  | [AI][2025-SeisoAI]                                                                |
 | 2024-08-30 | Seiso Side-up Podcast  | [Easy_Infra][2024-SeisoEasyInfra]                                                 |
 | 2024-05-23 | Seiso Side-up Podcast  | [Seiso's Origins][2024-SeisoOrigins]                                              |
 | 2023-09-13 | Wednesday Offensive    | [Cloud-native security][2023-WedOffensive]                                        |
@@ -181,6 +183,7 @@ You can also watch my recorded presentations by going to [this YouTube playlist]
 | 2018-02-28 | Packet Pushers         | [Datanauts 123: Security without Firewalls][2018-PacketPushers]                   |
 | 2016-06-01 | Packet Pushers         | [Datanauts 036: Busting The Security Silo In The Data Center][2016-PacketPushers] |
 
+[2025-SeisoAI]: https://open.spotify.com/episode/TODO "Seiso Side Up - AI"
 [2024-SeisoEasyInfra]: https://open.spotify.com/episode/4Ro93bIrRUU6LqK3dB4z8h "Seiso Side Up - Easy_Infra"
 [2024-SeisoOrigins]: https://open.spotify.com/episode/61atUIAeVe3RHQUFpcseOT "Seiso Side Up - Seiso's Origins"
 [2023-WedOffensive]: https://redsiege.com/wednesday-offensive/ "Wednesday Offensive - 9/13"

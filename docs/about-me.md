@@ -72,19 +72,20 @@ Check out Jon's [presentations and trainings](project:./ref/jz-content.md).
 * KubeCon/CloudNativeCon North America 2023 - [Cybersecurity Program Committee
   Member](https://www.credly.com/earner/earned/badge/b5fe6313-37ad-41f9-a3b0-a07e6003c6ac)
 * [CNCF TAG-Security](https://github.com/cncf/tag-security) Member since 2020
+  * 2024-25 [Automated Governance Maturity Model](https://github.com/cncf/tag-security/issues/1426)
   * 2023 [Pixie security review](https://github.com/cncf/tag-security/issues/1068) ([Pixie](https://github.com/pixie-io/pixie))
   * 2022 [Cloud Native Security Controls Catalog](https://docs.google.com/spreadsheets/d/1H9J0phBbg47fsyiLNG1-5NXms46KKxTH9ZjcU07no6A/edit#gid=1938257679) ([issue
     635](https://github.com/cncf/tag-security/issues/635),
     [blog](https://www.cncf.io/blog/2022/06/07/introduction-to-the-cloud-native-security-controls-catalog/))
   * 2021 Serverless Security White Paper ([issue 546](https://github.com/cncf/tag-security/issues/546))
-* [Kubernetes SIG-Security](https://github.com/kubernetes/sig-security/tree/main) Policy Working Group Member since 2022
+* [Kubernetes SIG-Security](https://github.com/kubernetes/sig-security/tree/main) Policy Working Group Member since 2022 (sporadic)
   * 2023 [Kubernetes Governance, Risk, and Compliance White
     Paper](https://github.com/kubernetes/sig-security/blob/8cf0dd5dc8b9c7e67be71b19e3b4683645b99a68/sig-security-docs/papers/policy_grc/Kubernetes_Policy_WG_Paper_v1_101123.pdf)
 * FBI Citizens Academy 2016 graduate
+* [Apache Software Foundation Committer](http://home.apache.org/committer-index.html) since 2017
 * NSF Grant #2000902 Advisory Board Member in 2022
 * DataWorks Summit, CyberSecurity Track Chair in 2018
 * [CAMLIS Organizer](https://www.camlis.org/) in 2018
-* [Apache Software Foundation Committer](http://home.apache.org/committer-index.html) since 2017
 * CIS Apple iOS 7 Benchmark in 2013
 * [Forbes Road CTC](https://forbesroad.org/) Occupational Advisory Committee since 2012
 * [Pittsburgh Technology College](https://ptcollege.edu/) advisory board 2011-2024
@@ -111,4 +112,4 @@ Check out Jon's [presentations and trainings](project:./ref/jz-content.md).
 * Mountain Biking
 * Chess
 * [Certifications](https://drive.google.com/drive/u/0/folders/0B2NDLONqoOuTcXU1Uk5yVnBFMW8?resourcekey=0-iM4bgThWU8AStx5cR7RIow) and
-[badges](https://www.credly.com/users/jon-zeolla/badges).
+  [badges](https://www.credly.com/users/jon-zeolla/badges).

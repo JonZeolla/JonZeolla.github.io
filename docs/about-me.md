@@ -72,10 +72,11 @@ Check out Jon's [presentations and trainings](project:./ref/jz-content.md).
 * KubeCon/CloudNativeCon North America 2023 - [Cybersecurity Program Committee
   Member](https://www.credly.com/earner/earned/badge/b5fe6313-37ad-41f9-a3b0-a07e6003c6ac)
 * [CNCF TAG-Security](https://github.com/cncf/tag-security) Member since 2020
-  * 2024-25 [Automated Governance Maturity Model](https://github.com/cncf/tag-security/issues/1426)
+  * 2024-25 [Automated Governance Maturity Model](https://tag-security.cncf.io/community/resources/automated-governance-maturity-model/) ([announcement
+    blog](https://www.cncf.io/blog/2025/05/05/announcing-the-automated-governance-maturity-model/))
   * 2023 [Pixie security review](https://github.com/cncf/tag-security/issues/1068) ([Pixie](https://github.com/pixie-io/pixie))
-  * 2022 [Cloud Native Security Controls Catalog](https://docs.google.com/spreadsheets/d/1H9J0phBbg47fsyiLNG1-5NXms46KKxTH9ZjcU07no6A/edit#gid=1938257679) ([issue
-    635](https://github.com/cncf/tag-security/issues/635),
+  * 2022 [Cloud Native Security Controls Catalog](https://docs.google.com/spreadsheets/d/1H9J0phBbg47fsyiLNG1-5NXms46KKxTH9ZjcU07no6A/edit#gid=1938257679)
+    ([issue 635](https://github.com/cncf/tag-security/issues/635),
     [blog](https://www.cncf.io/blog/2022/06/07/introduction-to-the-cloud-native-security-controls-catalog/))
   * 2021 Serverless Security White Paper ([issue 546](https://github.com/cncf/tag-security/issues/546))
 * [Kubernetes SIG-Security](https://github.com/kubernetes/sig-security/tree/main) Policy Working Group Member since 2022 (sporadic)

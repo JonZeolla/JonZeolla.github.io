@@ -112,6 +112,10 @@ You can also watch my recorded presentations by going to [this YouTube playlist]
 
 | Date       | Event                             | Training                                                                            |
 | ---------- | --------------------------------- | ----------------------------------------------------------------------------------- |
+| 2025-10-02 | SANS CloudSecNext, Denver         | [SEC540][SEC540]                                                                    |
+| 2025-09-22 | SANS Network Security, Vegas      | [SEC540][SEC540]                                                                    |
+| 2025-08-25 | SANS Emerging Threats, VA Beach   | [SEC540][SEC540]                                                                    |
+| 2025-07-28 | SANS Live Online                  | [SEC545][SEC545]                                                                    |
 | 2025-06-02 | SANS Baltimore Spring 2025        | [SEC540][SEC540]                                                                    |
 | 2025-04-13 | SANS 2025 (Orlando)               | [SEC540][SEC540]                                                                    |
 | 2025-03-17 | SANS OnDemand Recording           | [SEC540][SEC540]                                                                    |
@@ -157,6 +161,7 @@ You can also watch my recorded presentations by going to [this YouTube playlist]
 | 2015-01-22 | Steel City InfoSec                | [Eavesdropping at a distance][2015-LaserMicrophones] (Collab with Brian Gray)       |
 | 2013-03-07 | Steel City InfoSec                | Wifi Security                                                                       |
 
+[SEC545]: http://sans.org/sec545 "GenAI and LLM Application Security"
 [ContainerSec101201]: https://jonzeolla.com/labs/container-security-101.html "Container Security 101 and 201"
 [2023-PCS]: https://www.meetup.com/pittsburgh-code-supply/events/297107969/ "Pittsburgh Code & Supply Container Security 101 Workshop"
 [2023-PolicyasCode]: https://jonzeolla.com/labs/policy-as-code.html "Mastering Policy as Code"

@@ -10,7 +10,7 @@ hidden: true
 | Date       | Event                                        | Title                                                                 |
 | ---------- | -------------------------------------------- | --------------------------------------------------------------------- |
 | 2025-07-11 | [BSides Pittsburgh][2025-BSidesPGH]          | How I learned to stop worrying and love vibe coding: security edition |
-| 2025-05-28 | [CSA Pittsburgh][2025-CSAPgh]                | How to make AI coding assistants suck less                            |
+| 2025-05-28 | [CSA Pittsburgh][2025-CSAPgh]                | [How to make AI coding assistants suck less][2025-CSA-coding-assist]  |
 | 2025-02-18 | [ISSA Pittsburgh][2025-ISSA]                 | [Container Security][2025-container-security]                         |
 | 2024-10-28 | [Pittsburgh InfoSec Day 2024][PGHINFOSECDAY] | [Your Governance Is (Still) Broken][2024-gov-still-broken]            |
 | 2024-09-10 | [Alabama CSA][Alabama-CSA]                   | [Automating Cloud Security][2024-CSABirm]                             |
@@ -79,6 +79,7 @@ You can also watch my recorded presentations by going to [this YouTube playlist]
 
 [2025-BSidesPGH]: https://bsidespgh.com/2025 "How I learned to stop worrying and love vibe coding: security edition"
 [2025-CSAPgh]: https://events.humanitix.com/csa-pittsburgh-chapter-in-person-meetup "How to make AI coding assistants suck less"
+[2025-CSA-coding-assist]: https://youtu.be/efkT8b0QX1c "How to make AI coding assistants suck less"
 [2025-container-security]: https://github.com/JonZeolla/monopreso/tree/main/presentations/2025-02-ISSA-Pittsburgh "Container Security"
 [2025-issa]: https://www.meetup.com/steel-city-infosec/events/305154174/ "ISSA Pittsburgh"
 [PGHINFOSECDAY]: https://www.pghinfosecday.com/ "Pittsburgh InfoSec Day"

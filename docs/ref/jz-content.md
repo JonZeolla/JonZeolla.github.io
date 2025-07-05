@@ -202,7 +202,7 @@ You can also watch my recorded presentations by going to [this YouTube playlist]
 | 2018-02-28 | Packet Pushers             | [Datanauts 123: Security without Firewalls][2018-PacketPushers]                   |
 | 2016-06-01 | Packet Pushers             | [Datanauts 036: Busting The Security Silo In The Data Center][2016-PacketPushers] |
 
-[2025-DistilledAI]: https://distilledsecuritypodcast.com/ "Episode 14 - AI in the business"
+[2025-DistilledAI]: https://youtu.be/L12uZJBGE7A "Episode 14 - AI Risks, Threat Modeling, and The Future of Vibe Coding"
 [2025-GRCEngAngPac]: https://www.sans.org/webcasts/scaling-compliance-grc-engineering-policy-code/ "Scaling Compliance: GRC Engineering and Policy as Code"
 [2025-SEC540PaC]: https://www.sans.org/webcasts/cloud-native-security-part-4-policy-code-automated-governance/ "Cloud Native Security Part 4: Policy as Code and Automated Governance"
 [2025-SeisoAI]: https://open.spotify.com/episode/31wZsaJSfDTCJuwB8ZGdKG?si=ofbapiEYSPGzMVUfCuDXXQ "Seiso Side Up - AI"

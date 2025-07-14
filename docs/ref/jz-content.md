@@ -189,10 +189,11 @@ You can also watch my recorded presentations by going to [this YouTube playlist]
 
 | Date       | Name                       | Details                                                                           |
 | ---------- | -------------------------- | --------------------------------------------------------------------------------- |
-| 2025-03-24 | SANS Cloud SEcurity        | [Scaling Compliance: GRC Engineering and Policy as Code][2025-GRCEngAndPaC]       |
-| 2025-03-24 | SANS Cloud Security        | [Policy as Code and Automated Governance][2025-SEC540PaC]                         |
-| 2025-03-24 | Distilled Security Podcast | [AI in the business][2025-DistilledAI]                                            |
-| 2025-03-24 | Seiso Side-up Podcast      | [AI][2025-SeisoAI]                                                                |
+| 2025-07-11 | Distilled Security Podcast | [BSides PGH 2025 Post-Talk Interview][2025-BSidesInterview]                       |
+| 2025-07-08 | Distilled Security Podcast | [AI Risks, Threat Modeling, and The Future of Vibe Coding][2025-DistilledAI]      |
+| 2025-06-10 | SANS Cloud Security        | [Scaling Compliance: GRC Engineering and Policy as Code][2025-GRCEngAndPaC]       |
+| 2025-05-20 | SANS Cloud Security        | [Policy as Code and Automated Governance][2025-SEC540PaC]                         |
+| 2025-03-24 | Seiso Side-up Podcast      | [AI Advancement and Security Concerns][2025-SeisoAI]                              |
 | 2024-08-30 | Seiso Side-up Podcast      | [Easy_Infra][2024-SeisoEasyInfra]                                                 |
 | 2024-05-23 | Seiso Side-up Podcast      | [Seiso's Origins][2024-SeisoOrigins]                                              |
 | 2023-09-13 | Wednesday Offensive        | [Cloud-native security][2023-WedOffensive]                                        |
@@ -202,6 +203,7 @@ You can also watch my recorded presentations by going to [this YouTube playlist]
 | 2018-02-28 | Packet Pushers             | [Datanauts 123: Security without Firewalls][2018-PacketPushers]                   |
 | 2016-06-01 | Packet Pushers             | [Datanauts 036: Busting The Security Silo In The Data Center][2016-PacketPushers] |
 
+[2025-BSidesInterview]: https://www.youtube.com/watch?v=zclMbR0JBSg "BSides Jon Zeolla - 2025 Interview"
 [2025-DistilledAI]: https://youtu.be/L12uZJBGE7A "Episode 14 - AI Risks, Threat Modeling, and The Future of Vibe Coding"
 [2025-GRCEngAngPac]: https://www.sans.org/webcasts/scaling-compliance-grc-engineering-policy-code/ "Scaling Compliance: GRC Engineering and Policy as Code"
 [2025-SEC540PaC]: https://www.sans.org/webcasts/cloud-native-security-part-4-policy-code-automated-governance/ "Cloud Native Security Part 4: Policy as Code and Automated Governance"

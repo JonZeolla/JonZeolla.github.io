@@ -205,7 +205,7 @@ You can also watch my recorded presentations by going to [this YouTube playlist]
 
 [2025-BSidesInterview]: https://www.youtube.com/watch?v=zclMbR0JBSg "BSides Jon Zeolla - 2025 Interview"
 [2025-DistilledAI]: https://youtu.be/L12uZJBGE7A "Episode 14 - AI Risks, Threat Modeling, and The Future of Vibe Coding"
-[2025-GRCEngAngPac]: https://www.sans.org/webcasts/scaling-compliance-grc-engineering-policy-code/ "Scaling Compliance: GRC Engineering and Policy as Code"
+[2025-GRCEngAndPaC]: https://www.sans.org/webcasts/scaling-compliance-grc-engineering-policy-code/ "Scaling Compliance: GRC Engineering and Policy as Code"
 [2025-SEC540PaC]: https://www.sans.org/webcasts/cloud-native-security-part-4-policy-code-automated-governance/ "Cloud Native Security Part 4: Policy as Code and Automated Governance"
 [2025-SeisoAI]: https://open.spotify.com/episode/31wZsaJSfDTCJuwB8ZGdKG?si=ofbapiEYSPGzMVUfCuDXXQ "Seiso Side Up - AI"
 [2024-SeisoEasyInfra]: https://open.spotify.com/episode/4Ro93bIrRUU6LqK3dB4z8h "Seiso Side Up - Easy_Infra"

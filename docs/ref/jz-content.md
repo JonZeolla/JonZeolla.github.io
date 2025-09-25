@@ -11,6 +11,7 @@ hidden: true
 | ---------- | -------------------------------------------- | --------------------------------------------------------------------- |
 | 2025-10-04 | [SANS CloudSecNext][2025-CloudSecNext]       | Keynote: Best Friends Forever: Cloud and AI                           |
 | 2025-10-03 | [SANS CloudSecNext][2025-CloudSecNext]       | How I learned to stop worrying and love vibe coding: security edition |
+| 2025-09-25 | SANS Network Security 2025                   | AI Tools for Security Professionals                                   |
 | 2025-09-19 | [BSides Columbus][2025-BSidesCol]            | How I learned to stop worrying and love vibe coding: security edition |
 | 2025-09-18 | [DevOpsDays DC][2025-Devopsdays-dc]          | How I learned to stop worrying and love vibe coding: security edition |
 | 2025-07-11 | [BSides Pittsburgh][2025-BSidesPGH]          | How I learned to stop worrying and love vibe coding: security edition |
@@ -122,6 +123,7 @@ You can also watch my recorded presentations by going to [this YouTube playlist]
 | ---------- | ------------------------------------- | ----------------------------------------------------------------------------------- |
 | 2026-02-02 | SANS DC Metro Rockville               | [SEC540][SEC540]                                                                    |
 | 2025-12-12 | SANS Cyber Defense Initiative 2025 x2 | [SEC545][SEC545]                                                                    |
+| 2025-10-17 | Private                               | [SEC545][SEC545]                                                                    |
 | 2025-10-02 | SANS CloudSecNext, Denver             | [SEC540][SEC540]                                                                    |
 | 2025-09-22 | SANS Network Security, Vegas          | [SEC540][SEC540]                                                                    |
 | 2025-08-25 | SANS Emerging Threats, VA Beach       | [SEC540][SEC540]                                                                    |

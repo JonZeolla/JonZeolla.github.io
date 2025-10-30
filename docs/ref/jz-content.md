@@ -9,6 +9,8 @@ hidden: true
 
 | Date       | Event                                        | Title                                                                 |
 | ---------- | -------------------------------------------- | --------------------------------------------------------------------- |
+| 2025-10-29 | Three Rivers Information Security            | How I learned to stop worrying and love vibe coding                   |
+| 2025-10-29 | Three Rivers Information Security            | AI in Cybersecurity Panel                                             |
 | 2025-10-07 | SANS CloudSecNext @ Night                    | How I learned to stop worrying and love vibe coding: security edition |
 | 2025-10-04 | [SANS CloudSecNext][2025-CloudSecNext]       | Keynote: Best Friends Forever: Cloud and AI                           |
 | 2025-10-03 | [SANS CloudSecNext][2025-CloudSecNext]       | How I learned to stop worrying and love vibe coding: security edition |

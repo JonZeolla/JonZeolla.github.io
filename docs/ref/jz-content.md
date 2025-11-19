@@ -126,7 +126,7 @@ You can also watch my recorded presentations by going to [this YouTube playlist]
 | ---------- | ------------------------------------- | ----------------------------------------------------------------------------------- |
 | 2026-02-02 | SANS DC Metro Rockville               | [SEC540][SEC540]                                                                    |
 | 2025-12-12 | SANS Cyber Defense Initiative 2025 x2 | [SEC545][SEC545]                                                                    |
-| 2025-10-17 | Private                               | [SEC545][SEC545]                                                                    |
+| 2025-11-17 | Private                               | [SEC545][SEC545]                                                                    |
 | 2025-10-02 | SANS CloudSecNext, Denver             | [SEC540][SEC540]                                                                    |
 | 2025-09-22 | SANS Network Security, Vegas          | [SEC540][SEC540]                                                                    |
 | 2025-08-25 | SANS Emerging Threats, VA Beach       | [SEC540][SEC540]                                                                    |

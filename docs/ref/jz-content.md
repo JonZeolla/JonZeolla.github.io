@@ -9,6 +9,8 @@ hidden: true
 
 | Date       | Event                                        | Title                                                                          |
 | ---------- | -------------------------------------------- | ------------------------------------------------------------------------------ |
+| 2026-02-19 | ISACA DC                                     | Guardrails for AI coding                                                       |
+| 2026-02-17 | AI Coding 2026                               | Live coding prototype and demo session                                         |
 | 2025-10-29 | Three Rivers Information Security            | How I learned to stop worrying and love vibe coding                            |
 | 2025-10-29 | Three Rivers Information Security            | AI in Cybersecurity Panel                                                      |
 | 2025-10-07 | SANS CloudSecNext @ Night                    | How I learned to stop worrying and love vibe coding: security edition          |
@@ -125,6 +127,9 @@ You can also watch my recorded presentations by going to [this YouTube playlist]
 
 | Date       | Event                                 | Training                                                                            |
 | ---------- | ------------------------------------- | ----------------------------------------------------------------------------------- |
+| 2026-10-26 | SANS Miami 2026                       | [SEC545][SEC545]                                                                    |
+| 2026-06-08 | SANS Chicago 2026                     | [SEC545][SEC545]                                                                    |
+| 2026-04-20 | SANS Amsterdam April 2026             | [SEC545][SEC545]                                                                    |
 | 2026-02-02 | SANS DC Metro Rockville               | [SEC540][SEC540]                                                                    |
 | 2025-12-12 | SANS Cyber Defense Initiative 2025 x2 | [SEC545][SEC545]                                                                    |
 | 2025-11-17 | Private                               | [SEC545][SEC545]                                                                    |

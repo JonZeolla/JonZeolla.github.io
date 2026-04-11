@@ -130,6 +130,7 @@ You can also watch my recorded presentations by going to [this YouTube playlist]
 | 2026-10-26 | SANS Miami 2026                       | [SEC545][SEC545]                                                                    |
 | 2026-06-08 | SANS Chicago 2026                     | [SEC545][SEC545]                                                                    |
 | 2026-04-20 | SANS Amsterdam April 2026             | [SEC545][SEC545]                                                                    |
+| 2026-04-07 | Private                               | [AI-Native Software Development][AINSD]                                              |
 | 2026-02-02 | SANS DC Metro Rockville               | [SEC540][SEC540]                                                                    |
 | 2025-12-12 | SANS Cyber Defense Initiative 2025 x2 | [SEC545][SEC545]                                                                    |
 | 2025-11-17 | Private                               | [SEC545][SEC545]                                                                    |
@@ -182,6 +183,7 @@ You can also watch my recorded presentations by going to [this YouTube playlist]
 | 2015-01-22 | Steel City InfoSec                    | [Eavesdropping at a distance][2015-LaserMicrophones] (Collab with Brian Gray)       |
 | 2013-03-07 | Steel City InfoSec                    | Wifi Security                                                                       |
 
+[AINSD]: https://www.zenable.io/workshops "AI-Native Software Development"
 [SEC545]: http://sans.org/sec545 "GenAI and LLM Application Security"
 [ContainerSec101201]: https://jonzeolla.com/labs/container-security-101.html "Container Security 101 and 201"
 [2023-PCS]: https://www.meetup.com/pittsburgh-code-supply/events/297107969/ "Pittsburgh Code & Supply Container Security 101 Workshop"
@@ -203,6 +205,9 @@ You can also watch my recorded presentations by going to [this YouTube playlist]
 
 | Date       | Name                       | Details                                                                           |
 | ---------- | -------------------------- | --------------------------------------------------------------------------------- |
+| 2026-05-19 | SANS Cloud Security        | [AI-Driven DevSecOps: Agentic Code Review in GitLab & GitHub][2026-AIDevSecOps3]  |
+| 2026-04-07 | Tech Talks Daily           | [From Cybersecurity to AI-Driven Code Quality][2026-TechTalksDaily]               |
+| 2026-03-25 | SANS Cloud Security        | [AI-Driven DevSecOps: Securing Coding Agents with MCP][2026-AIDevSecOps1]         |
 | 2025-07-11 | Distilled Security Podcast | [BSides PGH 2025 Post-Talk Interview][2025-BSidesInterview]                       |
 | 2025-07-08 | Distilled Security Podcast | [AI Risks, Threat Modeling, and The Future of Vibe Coding][2025-DistilledAI]      |
 | 2025-06-10 | SANS Cloud Security        | [Scaling Compliance: GRC Engineering and Policy as Code][2025-GRCEngAndPaC]       |
@@ -217,6 +222,9 @@ You can also watch my recorded presentations by going to [this YouTube playlist]
 | 2018-02-28 | Packet Pushers             | [Datanauts 123: Security without Firewalls][2018-PacketPushers]                   |
 | 2016-06-01 | Packet Pushers             | [Datanauts 036: Busting The Security Silo In The Data Center][2016-PacketPushers] |
 
+[2026-AIDevSecOps3]: https://www.sans.org/webcasts/ai-driven-devsecops-part-3 "AI-Driven DevSecOps: Agentic Code Review in GitLab & GitHub"
+[2026-TechTalksDaily]: https://youtu.be/gzoXocbDOAQ?si=EenEIMQAT3ju8lIG "From Cybersecurity to AI-Driven Code Quality: Jon Zeolla Journey"
+[2026-AIDevSecOps1]: https://www.sans.org/webcasts/ai-driven-devsecops-part-1 "AI-Driven DevSecOps: Securing Coding Agents with Model Context Protocol (MCP)"
 [2025-BSidesInterview]: https://www.youtube.com/watch?v=zclMbR0JBSg "BSides Jon Zeolla - 2025 Interview"
 [2025-DistilledAI]: https://youtu.be/L12uZJBGE7A "Episode 14 - AI Risks, Threat Modeling, and The Future of Vibe Coding"
 [2025-GRCEngAndPaC]: https://www.sans.org/webcasts/scaling-compliance-grc-engineering-policy-code/ "Scaling Compliance: GRC Engineering and Policy as Code"

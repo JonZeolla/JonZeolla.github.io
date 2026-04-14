@@ -206,6 +206,7 @@ You can also watch my recorded presentations by going to [this YouTube playlist]
 | Date       | Name                       | Details                                                                           |
 | ---------- | -------------------------- | --------------------------------------------------------------------------------- |
 | 2026-05-19 | SANS Cloud Security        | [AI-Driven DevSecOps: Agentic Code Review in GitLab & GitHub][2026-AIDevSecOps3]  |
+| 2026-04-13 | The Automated Advantage    | [Jon Zeolla of Zenable][2026-ClarkeysAI]                                          |
 | 2026-04-07 | Future Proof IT Podcast    | [From Cybersecurity to AI-Driven Code Quality][2026-FutureProofIT]                |
 | 2026-03-25 | SANS Cloud Security        | [AI-Driven DevSecOps: Securing Coding Agents with MCP][2026-AIDevSecOps1]         |
 | 2025-07-11 | Distilled Security Podcast | [BSides PGH 2025 Post-Talk Interview][2025-BSidesInterview]                       |
@@ -222,6 +223,7 @@ You can also watch my recorded presentations by going to [this YouTube playlist]
 | 2018-02-28 | Packet Pushers             | [Datanauts 123: Security without Firewalls][2018-PacketPushers]                   |
 | 2016-06-01 | Packet Pushers             | [Datanauts 036: Busting The Security Silo In The Data Center][2016-PacketPushers] |
 
+[2026-ClarkeysAI]: https://youtu.be/l13Sc_7KTi0?si=cIdHCmk_kavClUCt "Jon Zeolla of Zenable"
 [2026-AIDevSecOps3]: https://www.sans.org/webcasts/ai-driven-devsecops-part-3 "AI-Driven DevSecOps: Agentic Code Review in GitLab & GitHub"
 [2026-FutureProofIT]: https://youtu.be/gzoXocbDOAQ?si=EenEIMQAT3ju8lIG "From Cybersecurity to AI-Driven Code Quality: Jon Zeolla Journey"
 [2026-AIDevSecOps1]: https://www.sans.org/webcasts/ai-driven-devsecops-part-1 "AI-Driven DevSecOps: Securing Coding Agents with Model Context Protocol (MCP)"

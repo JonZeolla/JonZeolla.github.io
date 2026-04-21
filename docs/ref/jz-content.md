@@ -55,7 +55,8 @@ hidden: true
 | 2018-12-05 | Pittsburgh CISSP Study Group                 | Software Development Security                                                  |
 | 2018-04-18 | Steel City InfoSec                           | The Use and Abuse of Blockchains                                               |
 | 2018-02-05 | InfraGard Pittsburgh                         | Steel City InfoSec                                                             |
-| 2017-10-20 | Three Rivers Information Security            | [Cutting through the buzz: ML & AI][2017-TRISS]                                |
+| 2017-12-00 | Unknown                                      | [Cutting through the buzz: ML & AI][2017-CTBSlides]                            |
+| 2017-10-20 | Three Rivers Information Security            | [Cutting through the buzz: ML & AI][2017-TRISS] ([Slides][2017-TRISSSlides])   |
 | 2017-09-13 | BroCon 2017                                  | Apache Metron                                                                  |
 | 2017-07-19 | NEOISF                                       | Security Data Analytics for the masses                                         |
 | 2017-03-15 | University of Pitt InfoSec Group             | Wireless Security                                                              |
@@ -118,6 +119,8 @@ You can also watch my recorded presentations by going to [this YouTube playlist]
 [2022-DevSecCon]: https://www.youtube.com/watch?v=Y1TGQWOmrTI "Simplifying IaC Security"
 [2022-CloudSecNext]: https://www.youtube.com/watch?v=jwqR_gtjSOc "IaC Security at Scale"
 [2017-TRISS]: https://www.youtube.com/watch?v=61qJnY9njgs "Cutting Through the Buzz: Machine Learning & Artificial Intelligence"
+[2017-TRISSSlides]: https://docs.google.com/presentation/d/1N1C7M4_c7ccsU4lfKAt0Mi3UxlnM5mwb/edit?usp=drive_link&ouid=117874060640705900507&rtpof=true&sd=true "Cutting Through the Buzz: Machine Learning & Artificial Intelligence Slides"
+[2017-CTBSlides]: https://docs.google.com/presentation/d/12Etkk6Q-sspTrSSEAOUWyEmuSP5BfJ35/edit?usp=drive_link&ouid=117874060640705900507&rtpof=true&sd=true "Cutting Through the Buzz: Machine Learning & Artificial Intelligence Slides"
 [2017-SCIS]: https://www.youtube.com/watch?v=-\_ROZuYUNXY "Security Data Analysis for the masses"
 [2016-SCIS]: https://www.youtube.com/watch?v=4prUJI2Dm5Y "Proximity Attacks Intro"
 [2015-SCIS-PasswordCracking]: https://www.youtube.com/watch?v=QP7AEeeT-xQ "Password Cracking"

@@ -206,7 +206,11 @@ You can also watch my recorded presentations by going to [this YouTube playlist]
 
 | Date       | Name                       | Details                                                                           |
 | ---------- | -------------------------- | --------------------------------------------------------------------------------- |
+| unreleased | The Sunny Side             | recorded 2026-05-13 with Fin Barker                                               |
+| 2026-06-01 | Seiso Side-up Podcast      | [AI Chats w/ Zenable and OpenArc][2026-SeisoMay]                                  |
 | 2026-05-19 | SANS Cloud Security        | [AI-Driven DevSecOps: Agentic Code Review in GitLab & GitHub][2026-AIDevSecOps3]  |
+| 2026-05-18 | Ascend Integration Partners| [Build in Public Episode 18 Zeolla][2026-AscendAIP] (with Troy Mann)              |
+| 2026-05-18 | Modernizing Managed Security| [Modernizing Managed Security Podcast - Episode 7][2026-ModernizingMS] (with Ryan Smith)         |
 | 2026-04-13 | The Automated Advantage    | [Jon Zeolla of Zenable][2026-ClarkeysAI]                                          |
 | 2026-04-07 | Future Proof IT Podcast    | [From Cybersecurity to AI-Driven Code Quality][2026-FutureProofIT]                |
 | 2026-03-25 | SANS Cloud Security        | [AI-Driven DevSecOps: Securing Coding Agents with MCP][2026-AIDevSecOps1]         |
@@ -224,6 +228,9 @@ You can also watch my recorded presentations by going to [this YouTube playlist]
 | 2018-02-28 | Packet Pushers             | [Datanauts 123: Security without Firewalls][2018-PacketPushers]                   |
 | 2016-06-01 | Packet Pushers             | [Datanauts 036: Busting The Security Silo In The Data Center][2016-PacketPushers] |
 
+[2026-AscendAIP]: https://www.youtube.com/watch?v=OZwEi0so8DA "Build in Public Episode 18 Zeolla"
+[2026-ModernizingMS]: https://youtu.be/XpFbCYavyt0?si=VZySUjYpds29Lcxi "Modernizing Managed Security Podcast - Episode 7"
+[2026-SeisoMay]: https://open.spotify.com/episode/7oaNvV77V4ELQQdbYiBZ7A?si=33c8721698524d81 "Seiso Side Up - AI Chats w/ Zenable and OpenArc"
 [2026-ClarkeysAI]: https://youtu.be/l13Sc_7KTi0?si=cIdHCmk_kavClUCt "Jon Zeolla of Zenable"
 [2026-AIDevSecOps3]: https://www.sans.org/webcasts/ai-driven-devsecops-part-3 "AI-Driven DevSecOps: Agentic Code Review in GitLab & GitHub"
 [2026-FutureProofIT]: https://youtu.be/gzoXocbDOAQ?si=EenEIMQAT3ju8lIG "From Cybersecurity to AI-Driven Code Quality: Jon Zeolla Journey"

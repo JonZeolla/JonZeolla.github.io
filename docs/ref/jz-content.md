@@ -207,10 +207,10 @@ You can also watch my recorded presentations by going to [this YouTube playlist]
 | Date       | Name                       | Details                                                                           |
 | ---------- | -------------------------- | --------------------------------------------------------------------------------- |
 | unreleased | The Sunny Side             | recorded 2026-05-13 with Fin Barker                                               |
+| 2026-06-01 | Seiso Side-up Podcast      | [AI Chats w/ Zenable and OpenArc][2026-SeisoMay]                                  |
 | 2026-05-19 | SANS Cloud Security        | [AI-Driven DevSecOps: Agentic Code Review in GitLab & GitHub][2026-AIDevSecOps3]  |
 | 2026-05-18 | Ascend Integration Partners| [Build in Public Episode 18 Zeolla][2026-AscendAIP] (with Troy Mann)              |
 | 2026-05-18 | Modernizing Managed Security| [Modernizing Managed Security Podcast - Episode 7][2026-ModernizingMS] (with Ryan Smith)         |
-| 2026-05-08 | Seiso Side-up Podcast      | [AI Chats w/ Zenable and OpenArc][2026-SeisoMay]                                  |
 | 2026-04-13 | The Automated Advantage    | [Jon Zeolla of Zenable][2026-ClarkeysAI]                                          |
 | 2026-04-07 | Future Proof IT Podcast    | [From Cybersecurity to AI-Driven Code Quality][2026-FutureProofIT]                |
 | 2026-03-25 | SANS Cloud Security        | [AI-Driven DevSecOps: Securing Coding Agents with MCP][2026-AIDevSecOps1]         |

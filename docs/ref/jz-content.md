@@ -128,11 +128,14 @@ You can also watch my recorded presentations by going to [this YouTube playlist]
 
 | Date       | Event                                 | Training                                                                            |
 | ---------- | ------------------------------------- | ----------------------------------------------------------------------------------- |
+| 2026-11-02 | SANS Raleigh 2026                     | [SEC545][SEC545]                                                                    |
 | 2026-10-26 | SANS Miami 2026                       | [SEC545][SEC545]                                                                    |
+| 2026-09-14 | Private                               | [SEC545][SEC545]                                                                    |
+| 2026-08-19 | SANS Cloud Security Exchange Summit 2026 | [SEC545][SEC545]                                                                 |
 | 2026-06-08 | SANS Chicago 2026                     | [SEC545][SEC545]                                                                    |
 | 2026-04-20 | SANS Amsterdam April 2026             | [SEC545][SEC545]                                                                    |
 | 2026-04-07 | Private                               | [AI-Native Software Development][AINSD]                                              |
-| 2026-02-02 | SANS DC Metro Rockville               | [SEC540][SEC540]                                                                    |
+| 2026-02-02 | SANS DC Metro Rockville               | [SEC545][SEC545]                                                                    |
 | 2025-12-12 | SANS Cyber Defense Initiative 2025 x2 | [SEC545][SEC545]                                                                    |
 | 2025-11-17 | Private                               | [SEC545][SEC545]                                                                    |
 | 2025-10-02 | SANS CloudSecNext, Denver             | [SEC540][SEC540]                                                                    |
@@ -208,12 +211,12 @@ You can also watch my recorded presentations by going to [this YouTube playlist]
 | ---------- | -------------------------- | --------------------------------------------------------------------------------- |
 | unreleased | The Sunny Side             | recorded 2026-05-13 with Fin Barker                                               |
 | 2026-06-01 | Seiso Side-up Podcast      | [AI Chats w/ Zenable and OpenArc][2026-SeisoMay]                                  |
-| 2026-05-19 | SANS Cloud Security        | [AI-Driven DevSecOps: Agentic Code Review in GitLab & GitHub][2026-AIDevSecOps3]  |
+| 2026-05-19 | SANS Cloud Security        | [AI-Driven DevSecOps: Agentic Code Review in GitLab & GitHub][2026-AIDevSecOps3] ([Slides][2026-AIDevSecOps3-Slides]) |
 | 2026-05-18 | Ascend Integration Partners| [Build in Public Episode 18 Zeolla][2026-AscendAIP] (with Troy Mann)              |
 | 2026-05-18 | Modernizing Managed Security| [Modernizing Managed Security Podcast - Episode 7][2026-ModernizingMS] (with Ryan Smith)         |
 | 2026-04-13 | The Automated Advantage    | [Jon Zeolla of Zenable][2026-ClarkeysAI]                                          |
 | 2026-04-07 | Future Proof IT Podcast    | [From Cybersecurity to AI-Driven Code Quality][2026-FutureProofIT]                |
-| 2026-03-25 | SANS Cloud Security        | [AI-Driven DevSecOps: Securing Coding Agents with MCP][2026-AIDevSecOps1]         |
+| 2026-03-25 | SANS Cloud Security        | [AI-Driven DevSecOps: Securing Coding Agents with MCP][2026-AIDevSecOps1] ([Slides][2026-AIDevSecOps1-Slides]) |
 | 2025-07-11 | Distilled Security Podcast | [BSides PGH 2025 Post-Talk Interview][2025-BSidesInterview]                       |
 | 2025-07-08 | Distilled Security Podcast | [AI Risks, Threat Modeling, and The Future of Vibe Coding][2025-DistilledAI]      |
 | 2025-06-10 | SANS Cloud Security        | [Scaling Compliance: GRC Engineering and Policy as Code][2025-GRCEngAndPaC]       |
@@ -233,8 +236,10 @@ You can also watch my recorded presentations by going to [this YouTube playlist]
 [2026-SeisoMay]: https://open.spotify.com/episode/7oaNvV77V4ELQQdbYiBZ7A?si=33c8721698524d81 "Seiso Side Up - AI Chats w/ Zenable and OpenArc"
 [2026-ClarkeysAI]: https://youtu.be/l13Sc_7KTi0?si=cIdHCmk_kavClUCt "Jon Zeolla of Zenable"
 [2026-AIDevSecOps3]: https://youtu.be/MzsmDlQe9S8 "AI-Driven DevSecOps: Agentic Code Review in GitLab & GitHub"
+[2026-AIDevSecOps3-Slides]: https://github.com/JonZeolla/monopreso/tree/main/presentations/2026-05-sans-sec540-agentic-code-review "AI-Driven DevSecOps: Agentic Code Review in GitLab & GitHub Slides"
 [2026-FutureProofIT]: https://youtu.be/gzoXocbDOAQ?si=EenEIMQAT3ju8lIG "From Cybersecurity to AI-Driven Code Quality: Jon Zeolla Journey"
 [2026-AIDevSecOps1]: https://youtu.be/5QgLbuSNN58 "AI-Driven DevSecOps: Securing Coding Agents with Model Context Protocol (MCP)"
+[2026-AIDevSecOps1-Slides]: https://github.com/JonZeolla/monopreso/tree/main/presentations/2026-03-sans-sec540-ai-driven-devsecops "AI-Driven DevSecOps: Securing Coding Agents with Model Context Protocol (MCP) Slides"
 [2025-BSidesInterview]: https://www.youtube.com/watch?v=zclMbR0JBSg "BSides Jon Zeolla - 2025 Interview"
 [2025-DistilledAI]: https://youtu.be/L12uZJBGE7A "Episode 14 - AI Risks, Threat Modeling, and The Future of Vibe Coding"
 [2025-GRCEngAndPaC]: https://www.sans.org/webcasts/scaling-compliance-grc-engineering-policy-code/ "Scaling Compliance: GRC Engineering and Policy as Code"

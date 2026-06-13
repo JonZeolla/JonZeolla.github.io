@@ -31,15 +31,18 @@ hidden: true
 :width: 20px
 ```
 
-Jon Zeolla is the founder and CEO of Zenable, a tech company that’s streamlining cloud-native security. Jon aims to eliminate corporate toil and inefficiency by
-automating governance and simplifying data gathering and analysis.
+Jon Zeolla is a technical founder with a long-running obsession: helping serious organizations use new technologies without turning into chaos.
 
-He’s also a founder of Seiso where they partner with tech companies to implement low-friction security and compliance. His work at Seiso earned him the 2021
-Start-Up Innovator of the Year Award.
+He has been dealing with the same pattern his entire career, whether it was software, cloud, machine learning, or AI. Companies need to adopt new technology to
+make progress, and that technology needs to meet real requirements for quality, security, and governance.
 
-Finally, he stays active in the community by sharing his expertise as a [SANS Certified Instructor](https://www.sans.org/profiles/jon-zeolla), [CNCF
-Ambassador](https://www.cncf.io/people/ambassadors/?p=jon-zeolla), and [IANS Faculty
-member](https://www.iansresearch.com/our-faculty/faculty/detail/jon-zeolla).
+During his time at [CMU](https://www.cmu.edu/), Jon jumped headfirst into machine learning and large-scale data analysis. That path led him into open source and
+the [cloud-native community](https://www.cncf.io/), where he now serves as a [CNCF Ambassador](https://www.cncf.io/people/ambassadors/?p=jon-zeolla). He also
+travels internationally, teaching software developers, security engineers, and engineering leaders from over 100 companies across the Fortune 500 and Fortune
+Global 500 how to secure generative AI applications and cloud-native platforms.
+
+Today, Jon is the founder of [Zenable](https://www.zenable.io/), where he is building self-improving coding harnesses for enterprises. Zenable gives teams the
+insights and feedback loops they need to maintain coding standards, pass audits, and let developers keep using the IDEs they love.
 
 Feel free to connect on [LinkedIn](https://linkedin.com/in/jonzeolla).
 

@@ -210,6 +210,7 @@ You can also watch my recorded presentations by going to [this YouTube playlist]
 | Date       | Name                       | Details                                                                           |
 | ---------- | -------------------------- | --------------------------------------------------------------------------------- |
 | unreleased | The Sunny Side             | recorded 2026-05-13 with Fin Barker                                               |
+| 2026-06-13 | Anti-Checkbox Podcast      | [The Forward Deployed Engineer, Agentic Voting, & Treating GRC Like a Product][2026-AntiCheckbox] |
 | 2026-06-01 | Seiso Side-up Podcast      | [AI Chats w/ Zenable and OpenArc][2026-SeisoMay]                                  |
 | 2026-05-19 | SANS Cloud Security        | [AI-Driven DevSecOps: Agentic Code Review in GitLab & GitHub][2026-AIDevSecOps3] ([Slides][2026-AIDevSecOps3-Slides]) |
 | 2026-05-18 | Ascend Integration Partners| [Build in Public Episode 18 Zeolla][2026-AscendAIP] (with Troy Mann)              |
@@ -231,6 +232,7 @@ You can also watch my recorded presentations by going to [this YouTube playlist]
 | 2018-02-28 | Packet Pushers             | [Datanauts 123: Security without Firewalls][2018-PacketPushers]                   |
 | 2016-06-01 | Packet Pushers             | [Datanauts 036: Busting The Security Silo In The Data Center][2016-PacketPushers] |
 
+[2026-AntiCheckbox]: https://www.youtube.com/watch?v=gfC80KYCle0 "The Forward Deployed Engineer, Agentic Voting, & Treating GRC Like a Product"
 [2026-AscendAIP]: https://www.youtube.com/watch?v=OZwEi0so8DA "Build in Public Episode 18 Zeolla"
 [2026-ModernizingMS]: https://youtu.be/XpFbCYavyt0?si=VZySUjYpds29Lcxi "Modernizing Managed Security Podcast - Episode 7"
 [2026-SeisoMay]: https://open.spotify.com/episode/7oaNvV77V4ELQQdbYiBZ7A?si=33c8721698524d81 "Seiso Side Up - AI Chats w/ Zenable and OpenArc"

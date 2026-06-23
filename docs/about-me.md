@@ -37,7 +37,8 @@ He has been dealing with the same pattern his entire career, whether it was soft
 make progress, and that technology needs to meet real requirements for quality, security, and governance.
 
 During his time at [CMU](https://www.cmu.edu/), Jon jumped headfirst into machine learning and large-scale data analysis. That path led him into open source and
-the [cloud-native community](https://www.cncf.io/), where he now serves as a [CNCF Ambassador](https://www.cncf.io/people/ambassadors/?p=jon-zeolla). He also
+the [cloud-native community](https://www.cncf.io/), where he now serves as a [CNCF Ambassador](https://www.cncf.io/people/ambassadors/?p=jon-zeolla). As his focus
+has expanded into agentic AI, he is also an inaugural [Agentic AI Foundation Ambassador](https://aaif.io/ambassadors/#list). He also
 travels internationally, teaching software developers, security engineers, and engineering leaders from over 100 companies across the Fortune 500 and Fortune
 Global 500 how to secure generative AI applications and cloud-native platforms.
 

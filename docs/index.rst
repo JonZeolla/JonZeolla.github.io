@@ -18,7 +18,7 @@ Jon Zeolla
 
 Welcome to my page!
 
-I ❤️ cloud native security & compliance
+I 🤟 agentic engineering & automation
 
 Right now I'm spending *most* of my time building |zenable| and contributing in the |aaif| and |cncf|.
 

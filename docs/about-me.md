@@ -36,9 +36,10 @@ Jon Zeolla is a technical founder with a long-running obsession: helping serious
 He has been dealing with the same pattern his entire career, whether it was software, cloud, machine learning, or AI. Companies need to adopt new technology to
 make progress, and that technology needs to meet real requirements for quality, security, and governance.
 
-During his time at [CMU](https://www.cmu.edu/), Jon jumped headfirst into machine learning and large-scale data analysis. That path led him into open source and
-the [cloud-native community](https://www.cncf.io/), where he now serves in the inaugural cohort of [Agentic AI Foundation
-Ambassadors](https://aaif.io/ambassadors/#list). He also
+During his time at [CMU](https://www.cmu.edu/), Jon jumped headfirst into machine learning and large-scale data analysis. That path led him into open source via the
+[Apache Software Foundation](https://people.apache.org/committer-index.html#jonzeolla), then the
+[CNCF](https://www.cncf.io/people/ambassadors/?p=jon-zeolla), and most recently the [Agentic AI
+Foundation](https://aaif.io/ambassadors/#list). He also
 travels internationally, teaching software developers, security engineers, and engineering leaders from over 100 companies across the Fortune 500 and Fortune
 Global 500 how to secure generative AI applications and cloud-native platforms.
 

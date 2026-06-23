@@ -209,6 +209,8 @@ You can also watch my recorded presentations by going to [this YouTube playlist]
 
 | Date       | Name                       | Details                                                                           |
 | ---------- | -------------------------- | --------------------------------------------------------------------------------- |
+| TBD        | The Kickstand Effect       | TODO with Travis Garland — add link + date                                        |
+| TBD        | Coombs studio (TBD)        | TODO with Matthew Coombs (Inglefield/Coombs studio) — add link + date             |
 | unreleased | The Sunny Side             | recorded 2026-05-13 with Fin Barker                                               |
 | 2026-06-13 | Anti-Checkbox Podcast      | [The Forward Deployed Engineer, Agentic Voting, & Treating GRC Like a Product][2026-AntiCheckbox] |
 | 2026-06-01 | Seiso Side-up Podcast      | [AI Chats w/ Zenable and OpenArc][2026-SeisoMay]                                  |

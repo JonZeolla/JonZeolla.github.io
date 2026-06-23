@@ -58,6 +58,7 @@ Check out Jon's [presentations and trainings](project:./ref/jz-content.md).
 
 ## Community Building
 
+* [AAIF (Agentic AI Foundation) Ambassador](https://aaif.io/ambassadors/#list), inaugural cohort since 2026
 * [CNCF - Cloud Native Security Pittsburgh](https://community.cncf.io/cloud-native-security-pittsburgh/) ([YouTube
   channel](https://www.youtube.com/@cloud-native-security)) founder since 2023
 * [Steel City InfoSec](https://steelcityinfosec.com/) (aka DC412) founder since 2012; see prior events

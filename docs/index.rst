@@ -20,7 +20,7 @@ Welcome to my page!
 
 I ❤️ cloud native security & compliance
 
-Right now I'm spending *most* of my time building |zenable| and contributing in the |cncf| and |ossf|.
+Right now I'm spending *most* of my time building |zenable| and contributing in the |aaif| and |cncf|.
 
 If you're here for a lab, `click here <labs/index.html>`_.
 
@@ -34,13 +34,13 @@ You can also find a bit about my background `here <about-me.html>`_.
   :height: 3ex
   :target: https://sei.so
 
+.. |aaif| image:: img/aaif.svg
+  :height: 3ex
+  :target: https://aaif.io/
+
 .. |cncf| image:: img/cncf.png
   :height: 3ex
   :target: https://www.cncf.io/
-
-.. |ossf| image:: img/ossf.png
-  :height: 3ex
-  :target: https://openssf.org/
 
 .. toctree::
    :maxdepth: 2

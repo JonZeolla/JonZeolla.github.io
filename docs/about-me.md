@@ -31,7 +31,7 @@ hidden: true
 :width: 20px
 ```
 
-Jon Zeolla is a technical founder with a long-running obsession: helping serious organizations use new technologies without turning into chaos.
+Jon Zeolla is a technical founder with a long-running obsession: helping companies use new technologies without it turning into chaos.
 
 He has been dealing with the same pattern his entire career, whether it was software, cloud, machine learning, or AI. Companies need to adopt new technology to
 make progress, and that technology needs to meet real requirements for quality, security, and governance.
@@ -68,8 +68,8 @@ Check out Jon's [presentations and trainings](project:./ref/jz-content.md).
 * [BSides Pittsburgh](https://bsidespgh.com/) organizer since 2014
 * [PittSec](https://pittsec.com/) founder since 2018
 * CNCF [TAG-Security](https://github.com/cncf/tag-security) and [Ambassador](https://www.cncf.io/people/ambassadors/?p=jon-zeolla)
-* CNCF TAG Contributor Strategy's [Deaf & Hard of Hearing Working Group](https://contribute.cncf.io/about/deaf-and-hard-of-hearing/) (resources
-  [here](https://contribute.cncf.io/accessibility/deaf-and-hard-of-hearing/))
+* CNCF TAG Contributor Strategy's [Deaf & Hard of Hearing Working Group](https://ocgroups.dev/cncf/group/deaf-and-hard-of-hearing) and [best
+  practices](https://contribute.cncf.io/projects/best-practices/accessibility/deaf-and-hard-of-hearing/)
 * [AWS Community Builder](https://aws.amazon.com/developer/community/community-builders/community-builders-directory/)
 
 ## Volunteer Work

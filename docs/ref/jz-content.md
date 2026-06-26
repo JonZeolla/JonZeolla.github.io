@@ -212,6 +212,7 @@ You can also watch my recorded presentations by going to [this YouTube playlist]
 | 2026-07-28 | Coombs studio (TBD)        | Placeholder — with Matthew Coombs (Inglefield/Coombs studio); slated ~2026-07-28, link pending ([tracking][placeholder-tracking]) |
 | TBD        | The Kickstand Effect       | Placeholder — with Travis Garland; link + date pending ([tracking][placeholder-tracking])                   |
 | unreleased | The Sunny Side             | recorded 2026-05-13 with Fin Barker                                               |
+| 2026-06-27 | GRC Engineering Club       | How to Build Self-Improving Coding Agents (private)                               |
 | 2026-06-13 | Anti-Checkbox Podcast      | [The Forward Deployed Engineer, Agentic Voting, & Treating GRC Like a Product][2026-AntiCheckbox] |
 | 2026-06-01 | Seiso Side-up Podcast      | [AI Chats w/ Zenable and OpenArc][2026-SeisoMay]                                  |
 | 2026-05-19 | SANS Cloud Security        | [AI-Driven DevSecOps: Agentic Code Review in GitLab & GitHub][2026-AIDevSecOps3] ([Slides][2026-AIDevSecOps3-Slides]) |

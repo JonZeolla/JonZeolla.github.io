@@ -9,6 +9,7 @@ hidden: true
 
 | Date       | Event                                        | Title                                                                          |
 | ---------- | -------------------------------------------- | ------------------------------------------------------------------------------ |
+| 2026-06-09 | SANS@Night                                   | Guardrails for AI Generated Code                                               |
 | 2026-02-19 | ISACA DC                                     | Guardrails for AI coding                                                       |
 | 2026-02-17 | AI Coding 2026                               | Live coding prototype and demo session                                         |
 | 2025-10-29 | Three Rivers Information Security            | How I learned to stop worrying and love vibe coding                            |

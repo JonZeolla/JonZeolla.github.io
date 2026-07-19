@@ -212,7 +212,7 @@ You can also watch my recorded presentations by going to [this YouTube playlist]
 | ---------- | -------------------------- | --------------------------------------------------------------------------------- |
 | 2026-07-28 | Coombs studio (TBD)        | Placeholder — with Matthew Coombs (Inglefield/Coombs studio); slated ~2026-07-28, link pending ([tracking][placeholder-tracking]) |
 | TBD        | The Kickstand Effect       | Placeholder — with Travis Garland; link + date pending ([tracking][placeholder-tracking])                   |
-| unreleased | The Sunny Side             | recorded 2026-05-13 with Fin Barker                                               |
+| 2026-07-19 | The Sunny Side             | [Your Developers' AI Code Looks Perfect — Until It Hits Production][2026-SunnySide] (with Fin Barker) |
 | 2026-06-27 | GRC Engineering Club       | How to Build Self-Improving Coding Agents (private)                               |
 | 2026-06-13 | Anti-Checkbox Podcast      | [The Forward Deployed Engineer, Agentic Voting, & Treating GRC Like a Product][2026-AntiCheckbox] |
 | 2026-06-01 | Seiso Side-up Podcast      | [AI Chats w/ Zenable and OpenArc][2026-SeisoMay]                                  |
@@ -237,6 +237,7 @@ You can also watch my recorded presentations by going to [this YouTube playlist]
 | 2016-06-01 | Packet Pushers             | [Datanauts 036: Busting The Security Silo In The Data Center][2016-PacketPushers] |
 
 [placeholder-tracking]: https://github.com/JonZeolla/JonZeolla.github.io/pull/104 "Tracking: add placeholder podcast entries (link + date pending)"
+[2026-SunnySide]: https://youtu.be/pT8Jgl5RZ18 "Your Developers' AI Code Looks Perfect — Until It Hits Production | Jon Zeolla, Zenable"
 [2026-AntiCheckbox]: https://www.youtube.com/watch?v=gfC80KYCle0 "The Forward Deployed Engineer, Agentic Voting, & Treating GRC Like a Product"
 [2026-AscendAIP]: https://www.youtube.com/watch?v=OZwEi0so8DA "Build in Public Episode 18 Zeolla"
 [2026-ModernizingMS]: https://youtu.be/XpFbCYavyt0?si=VZySUjYpds29Lcxi "Modernizing Managed Security Podcast - Episode 7"

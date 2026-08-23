@@ -9,6 +9,11 @@ hidden: true
 
 | Date       | Event                                        | Title                                                                          |
 | ---------- | -------------------------------------------- | ------------------------------------------------------------------------------ |
+| 2026-09-08 | [Alabama CSA][Alabama-CSA]                   | [AI Governance and Guardrails][2026-CSABirm]                                   |
+| 2026-09-03 | AAIF Workshop                                | Building Modern AI Agents (TODO: luma link not yet created)                    |
+| 2026-08-27 | AI@Work 10                                   | TODO: talk title pending                                                       |
+| 2026-08-27 | AAIF Workshop                                | [Building Modern AI Agents][2026-AAIF-Agents]                                  |
+| 2026-08-20 | SANS@Night                                   | Guardrails for AI Coding                                                       |
 | 2026-06-09 | SANS@Night                                   | Guardrails for AI Generated Code                                               |
 | 2026-02-19 | ISACA DC                                     | Guardrails for AI coding                                                       |
 | 2026-02-17 | AI Coding 2026                               | Live coding prototype and demo session                                         |
@@ -89,6 +94,7 @@ hidden: true
 
 You can also watch my recorded presentations by going to [this YouTube playlist](https://jonzeolla.com/youtube.html).
 
+[2026-AAIF-Agents]: https://luma.com/cpeus3f9 "Building Modern AI Agents"
 [CSN25]: https://www.youtube.com/watch?v=XaosRsgGSX8 "How I learned to stop worrying and love vibe coding: security edition"
 [2025-Devopsdays-dc]: https://devopsdays.org/events/2025-washington-dc/welcome/ "How I learned to stop worrying and love vibe coding: security edition"
 [2025-CloudSecNext]: https://www.sans.org/cyber-security-training-events/cloudsecnext-summit-2025/ "How I learned to stop worrying and love vibe coding: security edition"
@@ -101,6 +107,7 @@ You can also watch my recorded presentations by going to [this YouTube playlist]
 [PGHINFOSECDAY]: https://www.pghinfosecday.com/ "Pittsburgh InfoSec Day"
 [2024-gov-still-broken]: https://github.com/JonZeolla/monopreso/tree/main/presentations/2024-10-PGH-InfoSec-Day "Your Governance is (still) Broken"
 [Alabama-CSA]: https://circle.cloudsecurityalliance.org/alabama/home "Cloud Security Alliance Alabama Chapter"
+[2026-CSABirm]: https://www.meetup.com/cloud-security-alliance-alabama-chapter/events/316172772/ "AI Governance and Guardrails"
 [2024-CSABirm]: https://www.meetup.com/cloud-security-alliance-alabama-chapter/events/302397794/ "Automating Cloud Security with Jon Zeolla"
 [2024-CNSC]: https://youtu.be/HvLkkrNFiK8?si=pKXy-VvlDktl9ezU "Cloud Native GRC"
 [2024-CNSCSlides]: https://docs.google.com/presentation/d/167QYSLeDlz2pipln_V5kCVI2UWAIMRNpOQHBtIKikqg/edit?usp=drive_link "Cloud Native GRC Slides"

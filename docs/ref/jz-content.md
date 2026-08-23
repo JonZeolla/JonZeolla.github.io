@@ -11,7 +11,7 @@ hidden: true
 | ---------- | -------------------------------------------- | ------------------------------------------------------------------------------ |
 | 2026-09-08 | [Alabama CSA][Alabama-CSA]                   | [AI Governance and Guardrails][2026-CSABirm]                                   |
 | 2026-09-03 | AAIF Workshop                                | Building Modern AI Agents (TODO: luma link not yet created)                    |
-| 2026-08-27 | AI@Work 10                                   | TODO: talk title pending                                                       |
+| 2026-08-27 | AI@Work 10                                   | Coding Agent Loops                                                             |
 | 2026-08-27 | AAIF Workshop                                | [Building Modern AI Agents][2026-AAIF-Agents]                                  |
 | 2026-08-20 | SANS@Night                                   | Guardrails for AI Coding                                                       |
 | 2026-06-09 | SANS@Night                                   | Guardrails for AI Generated Code                                               |

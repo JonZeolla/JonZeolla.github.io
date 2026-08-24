@@ -219,7 +219,7 @@ You can also watch my recorded presentations by going to [this YouTube playlist]
 
 | Date       | Name                       | Details                                                                           |
 | ---------- | -------------------------- | --------------------------------------------------------------------------------- |
-| 2026-07-28 | Coombs studio (TBD)        | Placeholder — with Matthew Coombs (Inglefield/Coombs studio); slated ~2026-07-28, link pending ([tracking][placeholder-tracking]) |
+| 2026-08-03 | Behind the Numbers         | [Behind the Numbers][2026-BehindTheNumbers] (with Matthew Coombs)                 |
 | TBD        | The Kickstand Effect       | Placeholder — with Travis Garland; link + date pending ([tracking][placeholder-tracking])                   |
 | 2026-07-19 | The Sunny Side             | [Your Developers' AI Code Looks Perfect — Until It Hits Production][2026-SunnySide] (with Fin Barker) |
 | 2026-06-27 | GRC Engineering Club       | How to Build Self-Improving Coding Agents (private)                               |
@@ -246,6 +246,7 @@ You can also watch my recorded presentations by going to [this YouTube playlist]
 | 2016-06-01 | Packet Pushers             | [Datanauts 036: Busting The Security Silo In The Data Center][2016-PacketPushers] |
 
 [placeholder-tracking]: https://github.com/JonZeolla/JonZeolla.github.io/pull/104 "Tracking: add placeholder podcast entries (link + date pending)"
+[2026-BehindTheNumbers]: https://www.youtube.com/watch?v=B-y2GNcSsDw "Behind the Numbers"
 [2026-SunnySide]: https://youtu.be/pT8Jgl5RZ18 "Your Developers' AI Code Looks Perfect — Until It Hits Production | Jon Zeolla, Zenable"
 [2026-AntiCheckbox]: https://www.youtube.com/watch?v=gfC80KYCle0 "The Forward Deployed Engineer, Agentic Voting, & Treating GRC Like a Product"
 [2026-AscendAIP]: https://www.youtube.com/watch?v=OZwEi0so8DA "Build in Public Episode 18 Zeolla"

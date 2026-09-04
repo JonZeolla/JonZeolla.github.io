@@ -9,34 +9,34 @@ hidden: true
 
 | Date       | Event                                        | Title                                                                          |
 | ---------- | -------------------------------------------- | ------------------------------------------------------------------------------ |
-| 2026-09-08 | [Alabama CSA][Alabama-CSA]                   | [AI Governance and Guardrails][2026-CSABirm]                                   |
-| 2026-09-03 | AAIF Workshop                                | [Building Modern AI Agents][2026-AAIF-Agents-0903]                             |
-| 2026-08-27 | AI@Work 10                                   | Coding Agent Loops                                                             |
-| 2026-08-27 | AAIF Workshop                                | [Building Modern AI Agents][2026-AAIF-Agents]                                  |
-| 2026-08-20 | SANS@Night                                   | Guardrails for AI Coding                                                       |
-| 2026-06-09 | SANS@Night                                   | Guardrails for AI Generated Code                                               |
-| 2026-02-19 | ISACA DC                                     | Guardrails for AI coding                                                       |
+| 2026-09-08 | [Alabama CSA][Alabama-CSA]                   | [AI Governance and Guardrails][2026-CSABirm] ([Slides][2026-CSABirm-Slides]) |
+| 2026-09-03 | AAIF Workshop                                | [Building Modern AI Agents][2026-AAIF-Agents-0903] ([Slides][2026-AAIF-Agents-0903-Slides]) |
+| 2026-08-27 | AI@Work 10                                   | Coding Agent Loops ([Slides][2026-AIWork-Slides]) |
+| 2026-08-27 | AAIF Workshop                                | [Building Modern AI Agents][2026-AAIF-Agents] ([Slides][2026-AAIF-Agents-Slides]) |
+| 2026-08-20 | SANS@Night                                   | Guardrails for AI Coding ([Slides][2026-08-SANSNight-Slides]) |
+| 2026-06-09 | SANS@Night                                   | Guardrails for AI Generated Code ([Slides][2026-06-SANSNight-Slides]) |
+| 2026-02-19 | ISACA DC                                     | Guardrails for AI coding ([Slides][2026-ISACA-Slides]) |
 | 2026-02-17 | AI Coding 2026                               | Live coding prototype and demo session                                         |
-| 2025-10-29 | Three Rivers Information Security            | How I learned to stop worrying and love vibe coding                            |
+| 2025-10-29 | Three Rivers Information Security            | How I learned to stop worrying and love vibe coding ([Slides][2025-TRISS-Slides]) |
 | 2025-10-29 | Three Rivers Information Security            | AI in Cybersecurity Panel                                                      |
-| 2025-10-07 | SANS CloudSecNext @ Night                    | How I learned to stop worrying and love vibe coding: security edition          |
+| 2025-10-07 | SANS CloudSecNext @ Night                    | How I learned to stop worrying and love vibe coding: security edition ([Slides][2025-CSN-Night-Slides]) |
 | 2025-10-04 | [SANS CloudSecNext][2025-CloudSecNext]       | Keynote: Best Friends Forever: Cloud and AI                                    |
-| 2025-10-03 | [SANS CloudSecNext][2025-CloudSecNext]       | [How I learned to stop worrying and love vibe coding: security edition][CSN25] |
-| 2025-09-25 | SANS Network Security 2025                   | AI Tools for Security Professionals                                            |
-| 2025-09-19 | [BSides Columbus][2025-BSidesCol]            | How I learned to stop worrying and love vibe coding: security edition          |
-| 2025-09-18 | [DevOpsDays DC][2025-Devopsdays-dc]          | How I learned to stop worrying and love vibe coding: security edition          |
-| 2025-07-11 | [BSides Pittsburgh][2025-BSidesPGH]          | [How I learned to stop worrying and love vibe coding: security edition][BSPGH25] |
-| 2025-05-28 | [CSA Pittsburgh][2025-CSAPgh]                | [Vibe coding safety course][2025-CSA-coding-assist]                            |
-| 2025-02-18 | [ISSA Pittsburgh][2025-ISSA]                 | [Container Security][2025-container-security]                                  |
-| 2024-10-28 | [Pittsburgh InfoSec Day 2024][PGHINFOSECDAY] | [Your Governance Is (Still) Broken][2024-gov-still-broken]                     |
-| 2024-09-10 | [Alabama CSA][Alabama-CSA]                   | [Automating Cloud Security][2024-CSABirm]                                      |
+| 2025-10-03 | [SANS CloudSecNext][2025-CloudSecNext]       | [How I learned to stop worrying and love vibe coding: security edition][CSN25] ([Slides][2025-CSN-Slides]) |
+| 2025-09-25 | SANS Network Security 2025                   | AI Tools for Security Professionals ([Slides][2025-SANS-Vegas-Slides]) |
+| 2025-09-19 | [BSides Columbus][2025-BSidesCol]            | How I learned to stop worrying and love vibe coding: security edition ([Slides][2025-BSidesCol-Slides]) |
+| 2025-09-18 | [DevOpsDays DC][2025-Devopsdays-dc]          | How I learned to stop worrying and love vibe coding: security edition ([Slides][2025-Devopsdays-dc-Slides]) |
+| 2025-07-11 | [BSides Pittsburgh][2025-BSidesPGH]          | [How I learned to stop worrying and love vibe coding: security edition][BSPGH25] ([Slides][2025-BSidesPGH-Slides]) |
+| 2025-05-28 | [CSA Pittsburgh][2025-CSAPgh]                | [Vibe coding safety course][2025-CSA-coding-assist] ([Slides][2025-CSAPgh-Slides]) |
+| 2025-02-18 | [ISSA Pittsburgh][2025-ISSA]                 | Container Security ([Slides][2025-container-security]) |
+| 2024-10-28 | [Pittsburgh InfoSec Day 2024][PGHINFOSECDAY] | Your Governance Is (Still) Broken ([Slides][2024-gov-still-broken]) |
+| 2024-09-10 | [Alabama CSA][Alabama-CSA]                   | [Automating Cloud Security][2024-CSABirm] ([Slides][2024-CSABirm-Slides]) |
 | 2024-06-27 | Cloud Native Security Con                    | [Cloud Native GRC][2024-CNSC] ([Slides][2024-CNSCSlides])                      |
 | 2024-05-07 | [AI Hackathon][2024-05-AIHack]               | AI Hackathon                                                                   |
-| 2023-12-04 | [2023 PGH InfoSec Day][2023-PInfoSec]        | [Your Governance is Broken][2023-PInfoSec-Talk]                                |
+| 2023-12-04 | [2023 PGH InfoSec Day][2023-PInfoSec]        | [Your Governance is Broken][2023-PInfoSec-Talk] ([Slides][2023-PInfoSec-Slides]) |
 | 2023-11-06 | [2023 KubeCon][2023-KubeCon]                 | [Lightning Talk][2023-KubeCon-Talk]                                            |
 | 2023-10-16 | [2023 CloudSecNext][2023-CloudSecNext]       | Event co-host                                                                  |
 | 2023-10-13 | [2023 TRISS][2023-TRISS]                     | Cloud Security Panel                                                           |
-| 2023-09-22 | [2023 Pittsburgh TechFest][2023-TF]          | Platform Engineering and Security Guardrails                                   |
+| 2023-09-22 | [2023 Pittsburgh TechFest][2023-TF]          | Platform Engineering and Security Guardrails ([Slides][2023-TF-Slides]) |
 | 2023-09-07 | [Cloud Native Security Pgh][2023-CNSP]       | Getting Started with Security Policy as Code                                   |
 | 2023-09-05 | SANS Cloud Security London @ Night           | Just In Time Cloud Permissions (updated)                                       |
 | 2023-08-23 | Domestic Security Alliance Council           | Cloud Security (Private)                                                       |
@@ -95,6 +95,24 @@ hidden: true
 You can also watch my recorded presentations by going to [this YouTube playlist](https://jonzeolla.com/youtube.html).
 
 [2026-AAIF-Agents]: https://luma.com/cpeus3f9 "Building Modern AI Agents"
+[2026-CSABirm-Slides]: https://github.com/JonZeolla/monopreso/tree/main/presentations/2026-09-csa-birmingham-ai-governance "Slides"
+[2026-AAIF-Agents-0903-Slides]: https://github.com/JonZeolla/monopreso/tree/main/presentations/2026-09-03-aaif-mcp-workshop "Slides"
+[2026-AIWork-Slides]: https://github.com/JonZeolla/monopreso/tree/main/presentations/2026-08-ai-at-work "Slides"
+[2026-AAIF-Agents-Slides]: https://github.com/JonZeolla/monopreso/tree/main/presentations/2026-08-27-aaif-mcp-workshop "Slides"
+[2026-08-SANSNight-Slides]: https://github.com/JonZeolla/monopreso/tree/main/presentations/2026-08-sans-cse-guardrails-ai-coding "Slides"
+[2026-06-SANSNight-Slides]: https://github.com/JonZeolla/monopreso/tree/main/presentations/2026-06-coding-guardrails "Slides"
+[2026-ISACA-Slides]: https://github.com/JonZeolla/monopreso/tree/main/presentations/2026-02-ISACA-DC "Slides"
+[2025-TRISS-Slides]: https://github.com/JonZeolla/monopreso/tree/main/presentations/2025-triss "Slides"
+[2025-CSN-Night-Slides]: https://github.com/JonZeolla/monopreso/tree/main/presentations/2025-10-sans-at-night-vibe-coding "Slides"
+[2025-CSN-Slides]: https://github.com/JonZeolla/monopreso/tree/main/presentations/2025-10-cloudsecnext "Slides"
+[2025-SANS-Vegas-Slides]: https://github.com/JonZeolla/monopreso/tree/main/presentations/2025-09-sans-vegas-lunch-n-learn "Slides"
+[2025-BSidesCol-Slides]: https://github.com/JonZeolla/monopreso/tree/main/presentations/2025-09-bsides-col "Slides"
+[2025-Devopsdays-dc-Slides]: https://github.com/JonZeolla/monopreso/tree/main/presentations/2025-09-devopsdays-dc "Slides"
+[2025-BSidesPGH-Slides]: https://github.com/JonZeolla/monopreso/tree/main/presentations/2025-07-BSides-PGH "Slides"
+[2025-CSAPgh-Slides]: https://github.com/JonZeolla/monopreso/tree/main/presentations/2025-05-CSA "Slides"
+[2024-CSABirm-Slides]: https://github.com/JonZeolla/monopreso/tree/main/presentations/2024-09-CSA_Birmingham "Slides"
+[2023-PInfoSec-Slides]: https://github.com/JonZeolla/monopreso/tree/main/presentations/2023-11-PGHInfoSecDay "Slides"
+[2023-TF-Slides]: https://github.com/JonZeolla/monopreso/tree/main/presentations/2023-09-TechFest "Slides"
 [2026-AAIF-Agents-0903]: https://luma.com/eob7xzdb "Building Modern AI Agents"
 [CSN25]: https://www.youtube.com/watch?v=XaosRsgGSX8 "How I learned to stop worrying and love vibe coding: security edition"
 [2025-Devopsdays-dc]: https://devopsdays.org/events/2025-washington-dc/welcome/ "How I learned to stop worrying and love vibe coding: security edition"

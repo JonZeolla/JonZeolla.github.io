@@ -93,6 +93,8 @@ Check out Jon's [presentations and trainings](project:./ref/jz-content.md).
 
 ## Open Source Software
 
+* [ai-guardrails](https://github.com/Zenable-io/ai-guardrails)
+* [ai-native-python](https://github.com/Zenable-io/ai-native-python)
 * [cookiecutter-python](https://github.com/SeisoLLC/cookiecutter-python)
 * [easy_infra](https://github.com/SeisoLLC/easy_infra)
 * [goat](https://github.com/SeisoLLC/goat)

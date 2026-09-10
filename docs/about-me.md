@@ -93,11 +93,13 @@ Check out Jon's [presentations and trainings](project:./ref/jz-content.md).
 
 ## Open Source Software
 
+* [ai-guardrails](https://github.com/Zenable-io/ai-guardrails)
+* [ai-native-python](https://github.com/Zenable-io/ai-native-python)
 * [cookiecutter-python](https://github.com/SeisoLLC/cookiecutter-python)
 * [easy_infra](https://github.com/SeisoLLC/easy_infra)
 * [goat](https://github.com/SeisoLLC/goat)
 * [zeek-kafka](https://github.com/SeisoLLC/zeek-kafka)
-* [easy_sast](https://github.com/SeisoLLC/easy_sast)
+* [easy_sast](https://github.com/SeisoLLC/easy_sast) (Archived)
 * [Apache Metron](https://github.com/apache/metron) (Archived)
 
 ## Current Work

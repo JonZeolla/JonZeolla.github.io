@@ -31,20 +31,14 @@ hidden: true
 :width: 20px
 ```
 
-Jon Zeolla is a technical founder with a long-running obsession: helping companies use new technologies without it turning into chaos.
+Jon builds governance-first software factories. As the founder of [Zenable](https://www.zenable.io/), he leads the team in developing self-improving
+verifiers that maintain alignment between coding agents and evolving company requirements.
 
-He has been dealing with the same pattern his entire career, whether it was software, cloud, machine learning, or AI. Companies need to adopt new technology to
-make progress, and that technology needs to meet real requirements for quality, security, and governance.
-
-During his time at [CMU](https://www.cmu.edu/), Jon jumped headfirst into machine learning and large-scale data analysis. That path led him into open source via the
-[Apache Software Foundation](https://people.apache.org/committer-index.html#jonzeolla), then the
-[CNCF](https://www.cncf.io/people/ambassadors/?p=jon-zeolla), and most recently the [Agentic AI
-Foundation](https://aaif.io/ambassadors/#list). He also
-travels internationally, teaching software developers, security engineers, and engineering leaders from over 100 companies across the Fortune 500 and Fortune
-Global 500 how to secure generative AI applications and cloud-native platforms.
-
-Today, Jon is the founder of [Zenable](https://www.zenable.io/), where he is building self-improving coding harnesses for enterprises. Zenable gives teams the
-insights and feedback loops they need to maintain coding standards, pass audits, and let developers keep using the IDEs they love.
+Jon got his start with AI and machine learning at [Carnegie Mellon](https://www.cmu.edu/), applying large-scale data analysis to improve security automations.
+That work led him to contribute to dozens of open source projects and initiatives, and he now serves as an [Agentic AI Foundation
+(AAIF)](https://aaif.io/ambassadors/#list) Ambassador, helping engineers understand and adopt open protocols for agentic systems, including MCP and A2A, via
+anything from talks and hands-on workshops to running strategy sessions to help navigate tradeoffs. He's particularly interested in using data and feedback to
+improve systems and automate repetitive work.
 
 Feel free to connect on [LinkedIn](https://linkedin.com/in/jonzeolla).
 

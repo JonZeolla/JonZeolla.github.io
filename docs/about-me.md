@@ -36,9 +36,9 @@ verifiers that maintain alignment between coding agents and evolving company req
 
 Jon got his start with AI and machine learning at [Carnegie Mellon](https://www.cmu.edu/), applying large-scale data analysis to improve security automations.
 That work led him to contribute to dozens of open source projects and initiatives, and he now serves as an [Agentic AI Foundation
-(AAIF)](https://aaif.io/ambassadors/#list) Ambassador, helping engineers understand and adopt open protocols for agentic systems, including MCP and A2A, via
-anything from talks and hands-on workshops to running strategy sessions to help navigate tradeoffs. He's particularly interested in using data and feedback to
-improve systems and automate repetitive work.
+(AAIF)](https://aaif.io/ambassadors/#list) Ambassador. As a part of that, he helps engineers understand and adopt open protocols for agentic systems, including
+MCP and A2A, via anything from talks and hands-on workshops to running strategy sessions to navigate tradeoffs. He's particularly interested in using data and
+feedback to improve systems and automate repetitive work.
 
 Feel free to connect on [LinkedIn](https://linkedin.com/in/jonzeolla).
 

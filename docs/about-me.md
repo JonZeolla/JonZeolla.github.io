@@ -104,10 +104,16 @@ Check out Jon's [presentations and trainings](project:./ref/jz-content.md).
 
 ## Current Work
 
-* Founder and CEO at [Zenable](https://www.zenable.io/#The-Team-slider)
-* Co-founder and CTO at [Seiso](https://sei.so/jon)
+* Founder and CEO at [Zenable](https://www.zenable.io/)
+* [Agentic AI Foundation (AAIF) Ambassador](https://aaif.io/ambassadors/#list)
 * Instructor at [SANS](https://www.sans.org/profiles/jon-zeolla/)
-* Faculty member at [IANS](https://www.iansresearch.com/our-faculty/faculty/detail/jon-zeolla)
+* Faculty member at [IANS](https://www.ians.com/faculty/jon-zeolla)
+
+## Previously
+
+* Co-founder and CTO at Seiso, 2017 to 2026
+* Principal Information Security Engineer at [Carnegie Mellon University](https://www.cmu.edu/), 2014 to 2020
+* Senior Security Engineer at American Eagle Outfitters and PNC Bank, 2009 to 2014
 
 ## Hobbies
 

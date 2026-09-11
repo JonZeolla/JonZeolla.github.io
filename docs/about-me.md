@@ -105,9 +105,9 @@ Check out Jon's [presentations and trainings](project:./ref/jz-content.md).
 ## Current Work
 
 * Founder and CEO at [Zenable](https://www.zenable.io/)
+* [Agentic AI Foundation (AAIF) Ambassador](https://aaif.io/ambassadors/#list)
 * Instructor at [SANS](https://www.sans.org/profiles/jon-zeolla/)
 * Faculty member at [IANS](https://www.ians.com/faculty/jon-zeolla)
-* [Agentic AI Foundation (AAIF) Ambassador](https://aaif.io/ambassadors/#list)
 
 ## Previously
 

@@ -111,7 +111,9 @@ Check out Jon's [presentations and trainings](project:./ref/jz-content.md).
 
 ## Previously
 
-* Co-founder and CTO at Seiso
+* Co-founder and CTO at Seiso, 2017 to 2026
+* Principal Information Security Engineer at [Carnegie Mellon University](https://www.cmu.edu/), 2014 to 2020
+* Senior Security Engineer at American Eagle Outfitters and PNC Bank, 2009 to 2014
 
 ## Hobbies
 

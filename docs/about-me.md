@@ -104,10 +104,14 @@ Check out Jon's [presentations and trainings](project:./ref/jz-content.md).
 
 ## Current Work
 
-* Founder and CEO at [Zenable](https://www.zenable.io/#The-Team-slider)
-* Co-founder and CTO at [Seiso](https://sei.so/jon)
+* Founder and CEO at [Zenable](https://www.zenable.io/)
 * Instructor at [SANS](https://www.sans.org/profiles/jon-zeolla/)
-* Faculty member at [IANS](https://www.iansresearch.com/our-faculty/faculty/detail/jon-zeolla)
+* Faculty member at [IANS](https://www.ians.com/faculty/jon-zeolla)
+* [Agentic AI Foundation (AAIF) Ambassador](https://aaif.io/ambassadors/#list)
+
+## Previously
+
+* Co-founder and CTO at Seiso
 
 ## Hobbies
 

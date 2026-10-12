@@ -1,3 +1,6 @@
+---
+orphan: true
+---
 ```{admonition} Environment Setup
 ---
 class: important environment-setup

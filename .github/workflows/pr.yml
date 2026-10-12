@@ -23,16 +23,23 @@ jobs:
           cache-dependency-glob: "uv.lock"
       - name: Set up Python
         run: uv python install
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: package.json
+          cache: npm
       - name: Install Task
         uses: arduino/setup-task@v2
       - name: Initialize the repository
         run: task -v init
-      - name: Generate the HTML
+      - name: Build the site (Astro + Sphinx labs)
         run: task -v build
+      - name: Test the site (unit tests, type check, offline link check)
+        run: task -v test-site
       - name: Configure AWS Credentials using OIDC
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::728412089767:role/jonzeolla.com_lab_testing
           aws-region: us-east-1
-      - name: Test the project
+      - name: Test the labs
         run: task -v test

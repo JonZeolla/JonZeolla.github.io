@@ -1,33 +1,45 @@
-# Jon Zeolla
+# jonzeolla.com
 
-## Getting setup
+Two builds, one site:
 
-Developing against this project assumes that you have the docker daemon running, the docker cli properly configured, and a modern version of both
-[`task`](https://taskfile.dev/installation/) and [`uv`](https://docs.astral.sh/uv/getting-started/installation/) installed and configured.
+- **Astro** (`src/`, `public/`, `astro.config.mjs`) renders the home page, `/talks.html`, `/llms.txt`, and the redirect stubs for old URLs.
+- **Sphinx** (`docs/`) renders the hands-on labs at `/labs/*.html` (plus `/ref/*` and `_static/`), skinned with Furo to the same tokens.
 
-Run `task init` to setup your local environment, `task build` to build the project, and `task test` to test it. You can run `task open` to open the root
-`index.html` in your local browser.
+`task build` runs both and merges the Sphinx output into `dist/`, which is what GitHub Pages serves.
 
-You can also spin up an ad-hoc lab environment with `task deploy-lab`; destroy it with `task destroy`.
+## Getting set up
 
-If you only want to test a single lab, set the `LAB` environment variable; more on this in the [tests README](./tests/README.md#configuring-tests). The same
-pattern existts for `task destroy`.
+You need [`task`](https://taskfile.dev/installation/), [`uv`](https://docs.astral.sh/uv/getting-started/installation/), Node 22.6+ (npm), and Docker for the lab tests.
 
-IMPORTANT: a `task destroy` will always destroy any deployed ad-hoc labs, if one exists.
+```
+task init        # uv sync, npm ci, Playwright browsers
+task build       # dist/ = Astro site + Sphinx labs
+task open        # open dist/index.html
+task dev         # Astro dev server (home page and /talks only; labs need task build)
+task test-site   # unit tests, astro check, offline link check over dist/
+task test        # lab tests on a throwaway EC2 instance (macOS only; see tests/README.md)
+task update      # bump Python and Node dependencies (the weekly Update workflow opens a PR from this)
+```
 
-If you'd like to turn debug logging on, set your `LOG_LEVEL` environment variable to `DEBUG`.
+## Where content lives
 
-To autobuild as files change, run `nohup task -w build >/dev/null 2>&1 &` and clean up the job with `pkill -f 'task -w build'`
+| What | Where | Notes |
+|---|---|---|
+| Talks, classes, podcasts | `docs/ref/jz-content.md` | Three markdown tables. Parsed by `src/lib/content.ts`; feeds the home page's Upcoming list, `/talks.html`, `/llms.txt`, and the counts. Add new rows here, including private classes. |
+| Students taught | `data/students.json` | Per-class counts with their source; see `data/README.md` for the rules and `scripts/sans_rosters.py` for refreshing from SANS rosters. |
+| Hero copy, links, hand-maintained counts | `src/lib/site.ts` | Labs built and public repos carry their formula in a comment. |
+| Featured recordings | `src/data/featured.ts` | Thumbnails in `public/yt/`; `scripts/thumbnails.sh` fetches YouTube stills or renders a card for talks with stock art. |
+| Lab modules | `src/data/labs.ts` | Mirrors the lab guides in next-gen-governance. |
+| "Trusted by" logos | `src/data/logos.ts`, `public/wm/`, `public/wm-dark/` | `scripts/logos_dark.py` makes the dark-mode variants. |
+| GitHub calendar | fetched at build from the public contributions widget; snapshot in `src/data/github-contributions.json` | The daily Deploy workflow keeps it fresh. |
+| Labs | `docs/labs/*.md` | Sphinx + MyST; tested end to end by `tests/test_labs.py`. |
 
-## Warning
+## Lab tests
 
-When running the tests, the contents of your clipboard is saved to a variable in an attempt to reinstate it after the tests complete (which use the clipboard to
-most closely approximate a user following the lab). It is possible that this has unintended consequences, or is imperfect.
+`task test` builds the labs, scrapes each page with Playwright, deploys an EC2 instance with OpenTofu, and runs the lab's commands over SSH the way a learner would. Set `LAB` to run one lab; `task destroy` tears environments down. Details and lessons learned in [tests/README.md](./tests/README.md).
+
+The tests save and restore your clipboard; that is imperfect.
 
 ## Known issues
 
-1. Unable to have a heredoc in a {code-block} console, because the non-prompt lines for the heredoc won't be copied by the copy button.
-
-## TODO
-
-Cleanup the `arn:aws:s3:::jonzeolla-labs` s3 bucket if it's not needed for deployments or tests.
+1. A heredoc can't be used in a `{code-block} console`, because the non-prompt lines won't be copied by the copy button.

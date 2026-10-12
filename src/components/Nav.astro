@@ -1,0 +1,36 @@
+---
+import { site } from '../lib/site';
+interface Props { home?: boolean }
+const { home = true } = Astro.props;
+const href = (anchor: string) => (home ? anchor : `/${anchor}`);
+---
+<nav class="top" aria-label="Site">
+  <a class="brand" href={home ? '#top' : '/'}>{site.name}</a>
+  <a href={href('#talks')}>Speaking</a>
+  <a href={href('#labs')}>Labs</a>
+  <a href="/talks.html">Archive</a>
+  <button class="toggle" id="theme-toggle" type="button" aria-label="Toggle light or dark theme">☾ theme</button>
+</nav>
+<script>
+  // Cycles dark/light and remembers the choice; Base.astro applies it before first paint on later loads.
+  const root = document.documentElement;
+  const btn = document.getElementById('theme-toggle');
+  function isDark() {
+    const t = root.getAttribute('data-theme');
+    return t ? t === 'dark' : !window.matchMedia('(prefers-color-scheme: light)').matches;
+  }
+  btn?.addEventListener('click', () => {
+    const next = isDark() ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('theme', next); } catch {}
+    document.dispatchEvent(new CustomEvent('themechange'));
+  });
+</script>
+<style>
+  nav.top { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 22px; padding-block: 22px; font-size: 0.95rem; }
+  nav.top .brand { font-family: var(--font-display); font-weight: 700; font-size: 1.1rem; color: var(--fg); margin-right: auto; }
+  nav.top a { color: var(--muted); }
+  nav.top a:hover { color: var(--fg); text-decoration: none; }
+  nav.top .brand:hover { color: var(--fg); }
+  .toggle { font-family: var(--font-mono); font-size: 0.75rem; background: transparent; border: 1px solid var(--line); color: var(--muted); padding: 4px 10px; border-radius: 3px; cursor: pointer; }
+</style>

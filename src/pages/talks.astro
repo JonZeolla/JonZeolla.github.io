@@ -1,0 +1,96 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { content, type Entry } from '../lib/content';
+import { site, counts } from '../lib/site';
+
+const byYear = (rows: Entry[]) => {
+  const m = new Map<string, Entry[]>();
+  for (const r of rows) { const y = r.date.slice(0, 4); if (!m.has(y)) m.set(y, []); m.get(y)!.push(r); }
+  return [...m.entries()];
+};
+const dayOf = (d: string) => d.slice(5).replace(/-00$/, '');
+const sections = [
+  { id: 'talks', name: 'Talks', rows: content.talks },
+  { id: 'classes', name: 'Classes taught', rows: content.classes },
+  { id: 'podcasts', name: 'Podcasts and live streams', rows: content.podcasts },
+];
+const total = counts.talks + counts.classes + counts.podcasts;
+---
+<Base title="Talks, classes, and podcasts" description={`Every public talk, class, and podcast by Jon Zeolla since 2011: ${counts.talks} talks, ${counts.classes} classes, ${counts.podcasts} podcasts, with recordings and slides.`}>
+  <div class="wrap page">
+    <Nav home={false} />
+    <div class="head">
+      <h1>Talks, classes, and podcasts</h1>
+      <p>Everything public since 2011. Slides for most of the recent talks live in <a href={site.links.slides}>monopreso</a>; recordings in the <a href={site.links.youtube}>YouTube playlist</a>.</p>
+    </div>
+    <div class="bar">
+      <input id="q" type="search" placeholder="Search titles, events, years…" autocomplete="off" aria-label="Search talks, classes, and podcasts" />
+      <p class="toc">
+        {sections.map((s) => <a href={`#${s.id}`}>{s.name.split(' ')[0]}</a>)}
+        <span id="count" data-total={total}></span>
+      </p>
+    </div>
+    {sections.map((s) => (
+      <section id={s.id}>
+        <h2>{s.name} <span class="n">{s.rows.length}</span></h2>
+        {byYear(s.rows).map(([year, rows]) => (
+          <>
+            <h3>{year}</h3>
+            <ul>
+              {rows.map((r) => (
+                <li data-year={year}>
+                  <span class="d">{dayOf(r.date)}</span>
+                  <span class="b"><b>{r.title}</b> <span class="e">{r.event}</span></span>
+                  <span class="l">{r.links.filter((l, i, a) => l.label !== 'Link' && a.findIndex((x) => x.label === l.label) === i).map((l) => <a href={l.url}>{l.label}</a>)}</span>
+                </li>
+              ))}
+            </ul>
+          </>
+        ))}
+      </section>
+    ))}
+    <Footer home={false} />
+  </div>
+</Base>
+<script>
+  const q = document.getElementById('q') as HTMLInputElement;
+  const count = document.getElementById('count')!;
+  const items = [...document.querySelectorAll<HTMLLIElement>('li')];
+  for (const li of items) li.dataset.text = `${li.textContent} ${li.dataset.year}`.toLowerCase();
+  function run() {
+    const terms = q.value.toLowerCase().trim().split(/\s+/).filter(Boolean);
+    let shown = 0;
+    for (const li of items) {
+      const ok = terms.every((t) => li.dataset.text!.includes(t));
+      li.hidden = !ok; if (ok) shown++;
+    }
+    document.querySelectorAll<HTMLElement>('h3').forEach((h3) => { h3.hidden = !h3.nextElementSibling?.querySelector('li:not([hidden])'); });
+    document.querySelectorAll<HTMLElement>('section').forEach((sec) => { sec.hidden = !sec.querySelector('li:not([hidden])'); });
+    count.textContent = terms.length ? `${shown} of ${items.length}` : '';
+  }
+  q.addEventListener('input', run);
+</script>
+<style>
+  .page { display: grid; gap: 40px; padding-top: 0; }
+  .head { display: grid; gap: 6px; }
+  h1 { font-size: 2rem; font-weight: 600; }
+  .head p { color: var(--muted); max-width: 60ch; }
+  .bar { position: sticky; top: env(safe-area-inset-top, 0px); background: var(--bg); padding-block: 12px; border-bottom: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 10px 24px; align-items: center; z-index: 2; }
+  .bar input { font: inherit; font-size: 1rem; padding: 8px 12px; border: 1px solid var(--line); border-radius: 4px; background: transparent; color: var(--fg); min-width: min(100%, 320px); }
+  .bar input:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: var(--accent); }
+  .toc { display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: 0.95rem; margin: 0; align-items: baseline; }
+  #count { font-family: var(--font-mono); font-size: 0.78rem; color: var(--muted); }
+  h2 { font-size: 1.5rem; margin: 0 0 6px; }
+  h2 .n { font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted); font-weight: 400; margin-left: 8px; }
+  h3 { font-family: var(--font-mono); font-size: 0.78rem; letter-spacing: 0.1em; color: var(--muted); margin: 22px 0 6px; font-weight: 500; }
+  ul { list-style: none; margin: 0; padding: 0; }
+  li { display: grid; grid-template-columns: 52px 1fr auto; gap: 14px; padding: 8px 0; border-top: 1px dashed var(--line); align-items: baseline; }
+  li .d { font-family: var(--font-mono); font-size: 0.78rem; color: var(--faint); font-variant-numeric: tabular-nums; }
+  li .b { min-width: 0; }
+  li .e { color: var(--muted); }
+  li .l { display: flex; gap: 12px; font-size: 0.9rem; white-space: nowrap; }
+  li[hidden], h3[hidden], section[hidden] { display: none; }
+  @media (max-width: 560px) { li { grid-template-columns: 52px 1fr; } li .l { grid-column: 2; } }
+</style>

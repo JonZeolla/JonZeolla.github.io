@@ -17,7 +17,7 @@ dependencies = [
   "sphinx-design",
   "sphinx-last-updated-by-git",
   "sphinx-prompt",
-  "sphinx-rtd-theme>=2",
+  "furo",
   "sphinx-tippy",
   "sphinx-togglebutton",
   "sphinxcontrib-googleanalytics",

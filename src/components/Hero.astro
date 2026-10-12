@@ -1,0 +1,43 @@
+---
+import { site } from '../lib/site';
+---
+<header class="hero" id="top">
+  <div>
+    <h1 class="name">{site.name}
+      <small>{site.roles.join(' · ')} · <em>{site.nickname}</em></small>
+    </h1>
+    <p class="mission">I’m on a mission to make AI <b>Correct</b>, <b>Observable</b>, and <b>Conformant</b>.</p>
+    <p class="sub">I’ve built verifiers for software for over twenty years, first by hand, then with machine learning from 2015, and <b class="hl">exclusively for coding agents since 2023</b>. In my day job at <a href={site.links.zenable}>Zenable</a>, I build managed, self-improving verifiers that mold themselves to your company’s unique requirements. And in my classes, I teach you how to do the same.</p>
+    <div class="socials">
+      <a class="primary" href={site.links.resume}><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 1h7l3 3v11H3V1zm1 1v12h8V5H9V2H4zm2 6h5v1H6V8zm0 2h5v1H6v-1zm0 2h3v1H6v-1z"/></svg>Resume</a>
+      <a href={site.links.github}><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>GitHub</a>
+      <a href={site.links.linkedin}><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 2h12v12H2V2zm2 4.5h1.6v5H4v-5zm.8-2.4a.9.9 0 1 1 0 1.8.9.9 0 0 1 0-1.8zM7 6.5h1.5v.7c.3-.5.9-.9 1.7-.9 1.6 0 1.8 1 1.8 2.3v2.9h-1.6V9c0-.6 0-1.3-.8-1.3s-.9.6-.9 1.3v2.5H7v-5z"/></svg>LinkedIn</a>
+      <a href={site.links.x}><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 2h3.2l3.1 4.3L12 2h1.8L9.1 7.4 14 14h-3.2L7.5 9.4 3.5 14H1.7l5-5.7L2 2zm2.1 1.1 7.3 9.8h1L5.1 3.1h-1z"/></svg>X</a>
+      <a href={site.links.meet}><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 3h12v11H2V3zm1 3v7h10V6H3zm1-4h2v2H4V2zm6 0h2v2h-2V2z"/></svg>Meet with Jon</a>
+    </div>
+  </div>
+  <div class="portrait">
+    <img src="/img/jon_zeolla.png" alt="Jon Zeolla" width="200" height="200" />
+    <span class="where">{site.location}</span>
+  </div>
+</header>
+<style>
+  .hero { display: grid; grid-template-columns: 1fr 240px; gap: 32px 48px; align-items: start; padding-block: 36px 40px; border-bottom: 1px solid var(--line); }
+  .name { font-size: clamp(2.4rem, 6vw, 4rem); font-weight: 700; letter-spacing: -0.02em; }
+  .name small { display: block; font-family: var(--font-mono); font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); font-weight: 400; margin-top: 10px; }
+  .name small em { font-style: normal; color: var(--warm); }
+  .mission { font-family: var(--font-display); font-size: clamp(1.1rem, 2.2vw, 1.45rem); font-weight: 500; line-height: 1.25; margin-top: 22px; }
+  .mission b { color: var(--accent); font-weight: 600; }
+  .sub { color: var(--muted); max-width: 58ch; margin-top: 16px; font-size: 1.02rem; }
+  .sub a { color: var(--fg); border-bottom: 1px solid var(--line); }
+  .sub .hl { color: var(--accent); font-weight: 600; }
+  .socials { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
+  .socials a { display: inline-flex; align-items: center; gap: 7px; padding: 7px 12px; border: 1px solid var(--line); border-radius: 4px; color: var(--fg); font-size: 0.9rem; transition: border-color 140ms; }
+  .socials a:hover { border-color: var(--accent); text-decoration: none; }
+  .socials a.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  .socials svg { width: 16px; height: 16px; fill: currentColor; }
+  .portrait { display: grid; gap: 10px; justify-items: center; }
+  .portrait img { width: 200px; height: 200px; border-radius: 50%; object-fit: cover; border: 3px solid var(--line); }
+  .where { font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); text-align: center; }
+  @media (max-width: 760px) { .hero { grid-template-columns: 1fr; } .portrait { order: -1; justify-items: start; } }
+</style>

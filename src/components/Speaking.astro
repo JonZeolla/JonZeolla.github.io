@@ -1,0 +1,75 @@
+---
+import { featured, featuredDescription, grid, courseNames } from '../data/featured';
+import { upcomingAll } from '../lib/site';
+
+const fmt = (d: string) => {
+  const [y, m, day] = d.split('-').map(Number);
+  const date = new Date(Date.UTC(y, m - 1, day || 1));
+  return date.toLocaleDateString('en-US', { month: 'short', day: day ? 'numeric' : undefined, timeZone: 'UTC' });
+};
+const title = (t: string) => courseNames[t] ?? t;
+const venue = (e: string) => (e.toLowerCase().startsWith('private') ? 'Private' : e);
+---
+<section class="block" id="talks">
+  <div class="sechead"><h2>Speaking</h2></div>
+
+  <div class="feature">
+    <a class="img" href={featured.watch}><img src={featured.thumb} alt={featured.alt ?? ''} width="1280" height="720" /></a>
+    <div class="body">
+      <span class="ev">{featured.event}</span>
+      <p class="title">{featured.title}</p>
+      <p class="desc">{featuredDescription}</p>
+      <div class="links"><a href={featured.watch}>Watch</a>{featured.slides && <a href={featured.slides}>Slides</a>}</div>
+    </div>
+  </div>
+
+  <div class="vids">
+    {grid.map((v) => (
+      <a class="vid" href={v.watch}>
+        <img class="th" src={v.thumb} alt="" width="640" height="360" loading="lazy" />
+        <span class="t">{v.title}</span>
+        <span class="m">{v.event} · {v.year}</span>
+      </a>
+    ))}
+  </div>
+
+  {upcomingAll.length > 0 && (
+    <div class="upcoming">
+      <h3>Upcoming</h3>
+      {upcomingAll.map((u) => (
+        <div class="urow">
+          <span class="d">{fmt(u.date)}</span>
+          <span class="t">{title(u.title)}</span>
+          <span class="v">{venue(u.event)}{u.kind === 'class' && u.event.toLowerCase().startsWith('private') ? ' class' : ''}</span>
+        </div>
+      ))}
+    </div>
+  )}
+  <a class="more" href="/talks.html">All talks, classes, and podcasts →</a>
+</section>
+<style>
+  .feature { display: grid; grid-template-columns: 1.6fr 1fr; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+  .feature a.img { display: block; min-width: 0; }
+  .feature img { display: block; width: 100%; height: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+  .feature .body { padding: 28px; display: grid; gap: 10px; align-content: center; min-width: 0; }
+  .ev { font-family: var(--font-mono); font-size: 0.74rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  .title { font-family: var(--font-display); font-size: 1.45rem; font-weight: 600; line-height: 1.15; text-wrap: balance; }
+  .desc { color: var(--muted); font-size: 0.95rem; }
+  .links { display: flex; gap: 18px; font-size: 0.95rem; }
+  .vids { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px 18px; }
+  .vid { display: grid; gap: 8px; min-width: 0; color: var(--fg); }
+  .vid:hover { text-decoration: none; }
+  .vid img.th { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 6px; border: 1px solid var(--line); }
+  .vid .t { font-weight: 600; font-size: 0.98rem; line-height: 1.3; }
+  .vid .m { color: var(--muted); font-size: 0.85rem; }
+  .upcoming { display: grid; padding-top: 10px; }
+  .upcoming h3 { padding-bottom: 10px; }
+  .urow { display: grid; grid-template-columns: 90px 1fr 1fr; gap: 16px; padding: 10px 0; border-top: 1px dashed var(--line); font-size: 0.95rem; align-items: baseline; }
+  .urow:last-child { border-bottom: 1px dashed var(--line); }
+  .urow .d { font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .urow .t { font-weight: 600; }
+  .urow .v { color: var(--muted); }
+  @media (max-width: 900px) { .vids { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 760px) { .feature { grid-template-columns: 1fr; } }
+  @media (max-width: 560px) { .vids { grid-template-columns: 1fr; } .urow { grid-template-columns: 70px 1fr; } .urow .v { grid-column: 2; } }
+</style>

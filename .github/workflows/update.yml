@@ -27,11 +27,16 @@ jobs:
           cache-dependency-glob: "uv.lock"
       - name: Set up Python
         run: uv python install
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: package.json
+          cache: npm
       - name: Install Task
         uses: arduino/setup-task@v2
       - name: Initialize the repository
         run: task -v init
-      - name: Update the repository
+      - name: Update the repository (Python and Node dependencies)
         run: task -v update
       - name: Create or update a pull request
         uses: peter-evans/create-pull-request@v6

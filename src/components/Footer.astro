@@ -1,0 +1,27 @@
+---
+import { site } from '../lib/site';
+interface Props { home?: boolean }
+const { home = true } = Astro.props;
+const href = (anchor: string) => (home ? anchor : `/${anchor}`);
+const year = new Date().getUTCFullYear();
+---
+<footer>
+  <div class="cols">
+    <div><span class="brand">{site.name}</span><span class="tag">Correct, Observable, Conformant. Self-Improving Verifiers for coding agents.</span></div>
+    <div><b>Site</b><a href={href('#talks')}>Speaking</a><a href={href('#labs')}>Labs</a><a href="/talks.html">All talks</a></div>
+    <div><b>Elsewhere</b><a href={site.links.github}>GitHub</a><a href={site.links.linkedin}>LinkedIn</a><a href={site.links.x}>X</a><a href={site.links.youtube}>YouTube</a></div>
+    <div><b>Also</b><a href={site.links.resume}>Resume</a><a href={site.links.meet}>Meet with Jon</a><a href="/llms.txt">llms.txt</a></div>
+  </div>
+  <p class="fine">© {year} {site.name} · Made with 🤟 in Pittsburgh</p>
+</footer>
+<style>
+  footer { padding-block: 28px 0; display: grid; gap: 28px; }
+  .cols { display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: 24px; }
+  .cols > div { display: grid; gap: 8px; align-content: start; font-size: 0.92rem; }
+  .cols b { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+  .cols a { color: var(--fg); }
+  .brand { font-family: var(--font-display); font-weight: 700; font-size: 1.1rem; }
+  .tag { color: var(--muted); max-width: 30ch; font-size: 0.9rem; }
+  .fine { font-family: var(--font-mono); font-size: 0.72rem; color: var(--faint); }
+  @media (max-width: 760px) { .cols { grid-template-columns: 1fr 1fr; } }
+</style>

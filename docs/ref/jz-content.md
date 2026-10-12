@@ -9,6 +9,7 @@ hidden: true
 
 | Date       | Event                                        | Title                                                                          |
 | ---------- | -------------------------------------------- | ------------------------------------------------------------------------------ |
+| 2026-10-23 | Private                                      | Agent Security                                                                 |
 | 2026-09-08 | [Alabama CSA][Alabama-CSA]                   | [AI Governance and Guardrails][2026-CSABirm] ([Slides][2026-CSABirm-Slides]) |
 | 2026-09-03 | AAIF Workshop                                | [Building Modern AI Agents][2026-AAIF-Agents-0903] ([Slides][2026-AAIF-Agents-0903-Slides]) |
 | 2026-08-27 | AI@Work 10                                   | Coding Agent Loops ([Slides][2026-AIWork-Slides]) |
@@ -61,7 +62,7 @@ hidden: true
 | 2018-12-05 | Pittsburgh CISSP Study Group                 | Software Development Security                                                  |
 | 2018-04-18 | Steel City InfoSec                           | The Use and Abuse of Blockchains                                               |
 | 2018-02-05 | InfraGard Pittsburgh                         | Steel City InfoSec                                                             |
-| 2017-12-00 | Unknown                                      | <a href="https://drive.google.com/uc?export=download&id=12Etkk6Q-sspTrSSEAOUWyEmuSP5BfJ35">Cutting through the buzz: ML & AI</a>                            |
+| 2017-12-00 | Steel City InfoSec                           | <a href="https://drive.google.com/uc?export=download&id=12Etkk6Q-sspTrSSEAOUWyEmuSP5BfJ35">Cutting through the buzz: ML & AI</a>                            |
 | 2017-10-20 | Three Rivers Information Security            | [Cutting through the buzz: ML & AI][2017-TRISS] (<a href="https://drive.google.com/uc?export=download&id=1N1C7M4_c7ccsU4lfKAt0Mi3UxlnM5mwb">Slides</a>)   |
 | 2017-09-13 | BroCon 2017                                  | Apache Metron                                                                  |
 | 2017-07-19 | NEOISF                                       | Security Data Analytics for the masses                                         |
@@ -156,8 +157,11 @@ You can also watch my recorded presentations by going to [this YouTube playlist]
 
 | Date       | Event                                 | Training                                                                            |
 | ---------- | ------------------------------------- | ----------------------------------------------------------------------------------- |
+| 2026-12-08 | Private Class                         | [AI-Native Software Development][AINSD]                                              |
 | 2026-11-02 | SANS Raleigh 2026                     | [SEC545][SEC545]                                                                    |
 | 2026-10-26 | SANS Miami 2026                       | [SEC545][SEC545]                                                                    |
+| 2026-10-19 | Private Class                         | [AI-Native Software Development][AINSD]                                              |
+| 2026-10-07 | Private Class                         | [AI-Native Software Development][AINSD]                                              |
 | 2026-09-14 | Private                               | [SEC545][SEC545]                                                                    |
 | 2026-08-19 | SANS Cloud Security Exchange Summit 2026 | [SEC545][SEC545]                                                                 |
 | 2026-06-08 | SANS Chicago 2026                     | [SEC545][SEC545]                                                                    |

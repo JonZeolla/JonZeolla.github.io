@@ -235,7 +235,7 @@ resource "null_resource" "wait_for_user_data" {
             break
           fi
         fi
-        
+
         echo "User data script still running... Retrying in 5 seconds."
         sleep 5
       done

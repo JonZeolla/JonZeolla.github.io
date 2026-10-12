@@ -4,6 +4,9 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: ["main"]
+  schedule:
+    # Daily rebuild so the GitHub contribution calendar and "Upcoming" roll forward without a commit.
+    - cron: '17 9 * * *'
   workflow_dispatch:
 
 defaults:
@@ -24,7 +27,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          # Needed to generate last modified dates
+          # Needed to generate last modified dates on the lab pages
           fetch-depth: 0
       - name: Install uv
         uses: astral-sh/setup-uv@v2
@@ -33,23 +36,30 @@ jobs:
           cache-dependency-glob: "uv.lock"
       - name: Set up Python
         run: uv python install
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: package.json
+          cache: npm
       - name: Install Task
         uses: arduino/setup-task@v2
       - name: Initialize the repository
         run: task -v init
-      - name: Generate the HTML
+      - name: Build the site (Astro + Sphinx labs)
         run: task -v build
+      - name: Test the site
+        run: task -v test-site
       - name: Configure AWS Credentials using OIDC
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::728412089767:role/jonzeolla.com_lab_testing
           aws-region: us-east-1
-      - name: Run the tests
+      - name: Test the labs
         run: task -v test
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './build'
+          path: './dist'
   deploy:
     needs: build
     environment:

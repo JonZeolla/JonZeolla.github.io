@@ -271,3 +271,9 @@ tags
 [._]*.un~
 
 # End of https://www.toptal.com/developers/gitignore/api/vim,python,macos,terraform
+
+# Astro
+node_modules/
+.astro/
+# The Python template above ignores lib/; the site source lives in src/lib
+!src/lib/

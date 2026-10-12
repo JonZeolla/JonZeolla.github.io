@@ -129,7 +129,8 @@ tasks:
       - task: build-site
       - task: build-labs
       # Sphinx owns the labs and their references/assets; Astro owns every top-level page, so those are excluded.
-      - rsync -a --exclude index.html --exclude about-me.html --exclude resume.html --exclude meet-with-jon.html --exclude playlist.html --exclude workshop.html --exclude youtube.html build/ dist/
+      # Excludes are anchored to the top level so build/labs/index.html still ships.
+      - rsync -a --exclude /index.html --exclude /about-me.html --exclude /resume.html --exclude /meet-with-jon.html --exclude /playlist.html --exclude /workshop.html --exclude /youtube.html build/ dist/
 
   open:
     desc: Open the built home page
@@ -143,6 +144,7 @@ tasks:
       - npm test
       - npx astro check
       - python3 -I scripts/check_links.py dist
+      - uv run pytest -n0 tests/test_site.py
 
   test:
     desc: Run the lab tests (deploys EC2 via OpenTofu; local macOS only for now)

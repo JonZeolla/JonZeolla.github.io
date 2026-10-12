@@ -41,6 +41,7 @@ const total = modules.reduce((n, m) => n + m.labs.length, 0);
   .mt { font-family: var(--font-display); font-size: 1.5rem; font-weight: 600; line-height: 1.1; }
   .mx { color: var(--muted); font-size: 1.02rem; }
   ul { margin: 8px 0 0; padding: 0; list-style: none; display: grid; gap: 4px; font-size: 0.95rem; }
+  ul[hidden] { display: none; }
   li::before { content: "— "; color: var(--faint); }
   .agenda { font-family: var(--font-mono); font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; background: transparent; color: var(--fg); border: 1px solid var(--line); padding: 10px 16px; cursor: pointer; margin-top: 4px; transition: border-color 140ms; }
   .agenda span { color: var(--accent); margin-left: 4px; }

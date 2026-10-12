@@ -1,0 +1,162 @@
+{
+ "_readme": "Students per class, keyed by the date in the 'My Training Classes' table of docs/ref/jz-content.md. source=roster: SANS roster xlsx (in person + live online) from the SEC540/SEC545 Google Drive class folders. source=given: Jon's number. Any past class not listed here counts as `default` (20). Future classes and OnDemand recordings are not counted. Rebuild: scripts/talks_build.py.",
+ "default": 20,
+ "classes": {
+  "2022-04-10": {
+   "students": 15,
+   "source": "roster"
+  },
+  "2022-06-13": {
+   "students": 12,
+   "source": "roster"
+  },
+  "2022-07-10": {
+   "students": 18,
+   "source": "roster"
+  },
+  "2022-09-26": {
+   "students": 18,
+   "source": "roster"
+  },
+  "2022-11-07": {
+   "students": 9,
+   "source": "roster"
+  },
+  "2023-02-20": {
+   "students": 19,
+   "source": "roster"
+  },
+  "2023-03-06": {
+   "students": 7,
+   "source": "roster"
+  },
+  "2023-05-21": {
+   "students": 14,
+   "source": "roster"
+  },
+  "2023-07-10": {
+   "students": 38,
+   "source": "roster"
+  },
+  "2023-08-00": {
+   "students": 22,
+   "source": "roster"
+  },
+  "2023-09-04": {
+   "students": 29,
+   "source": "roster"
+  },
+  "2023-09-25": {
+   "students": 13,
+   "source": "roster"
+  },
+  "2023-10-18": {
+   "students": 14,
+   "source": "roster"
+  },
+  "2024-02-19": {
+   "students": 20,
+   "source": "roster"
+  },
+  "2024-03-24": {
+   "students": 22,
+   "source": "roster"
+  },
+  "2024-04-00": {
+   "students": 21,
+   "source": "roster"
+  },
+  "2024-05-09": {
+   "students": 6,
+   "source": "roster"
+  },
+  "2024-09-04": {
+   "students": 7,
+   "source": "roster"
+  },
+  "2024-10-07": {
+   "students": 25,
+   "source": "roster"
+  },
+  "2024-12-04": {
+   "students": 14,
+   "source": "roster"
+  },
+  "2025-03-03": {
+   "students": 10,
+   "source": "roster"
+  },
+  "2025-04-13": {
+   "students": 20,
+   "source": "roster"
+  },
+  "2025-06-02": {
+   "students": 15,
+   "source": "roster"
+  },
+  "2025-09-22": {
+   "students": 14,
+   "source": "roster"
+  },
+  "2025-10-02": {
+   "students": 7,
+   "source": "roster"
+  },
+  "2026-02-02": {
+   "students": 18,
+   "source": "roster"
+  },
+  "2025-07-28": {
+   "students": 27,
+   "source": "roster"
+  },
+  "2025-11-17": {
+   "students": 22,
+   "source": "roster"
+  },
+  "2025-12-12": {
+   "students": 71,
+   "source": "roster"
+  },
+  "2026-04-20": {
+   "students": 33,
+   "source": "roster"
+  },
+  "2026-06-08": {
+   "students": 46,
+   "source": "roster"
+  },
+  "2026-08-19": {
+   "students": 37,
+   "source": "roster"
+  },
+  "2026-09-14": {
+   "students": 21,
+   "source": "roster"
+  },
+  "2026-10-07": {
+   "students": 30,
+   "source": "given"
+  },
+  "2026-04-07": {
+   "students": 15,
+   "source": "given"
+  },
+  "2023-04-27": {
+   "students": 50,
+   "source": "given"
+  },
+  "2023-10-16": {
+   "students": 50,
+   "source": "given"
+  },
+  "2023-11-01": {
+   "students": 35,
+   "source": "given"
+  },
+  "2025-03-17": {
+   "students": 0,
+   "source": "given"
+  }
+ }
+}

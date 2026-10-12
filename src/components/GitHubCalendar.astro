@@ -1,0 +1,45 @@
+---
+import { loadCalendar } from '../lib/github';
+import { site } from '../lib/site';
+
+const cal = await loadCalendar();
+const cell = 15, gap = 4, left = 36, top = 22;
+const W = left + cal.weeks.length * (cell + gap), H = top + 7 * (cell + gap);
+const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const dow = (d: string) => new Date(`20${d}T12:00:00Z`).getUTCDay();
+let lastMonth = -1;
+const months: { x: number; label: string }[] = [];
+cal.weeks.forEach((w, x) => {
+  const m = Number(w[0][0].slice(3, 5)) - 1;
+  if (m !== lastMonth && x < cal.weeks.length - 2) { months.push({ x: left + x * (cell + gap), label: MON[m] }); lastMonth = m; }
+});
+const opacity = [0, 0.3, 0.55, 0.8, 1];
+---
+<div class="gh">
+  <div class="head">
+    <a class="mono" href={site.links.github}>github.com/jonzeolla</a>
+    <span class="mono">{cal.total.toLocaleString('en-US')} contributions in the last year</span>
+  </div>
+  <div class="cal">
+    <svg viewBox={`0 0 ${W} ${H}`} width={W} height={H} role="img" aria-label={`GitHub contribution calendar: ${cal.total} contributions in the last year`}>
+      {['Mon', 'Wed', 'Fri'].map((d, i) => <text x="4" y={top + (i * 2 + 1) * (cell + gap) + 12}>{d}</text>)}
+      {months.map((m) => <text x={m.x} y="12">{m.label}</text>)}
+      {cal.weeks.map((w, x) => w.map((d) => (
+        <rect x={left + x * (cell + gap)} y={top + dow(d[0]) * (cell + gap)} width={cell} height={cell} rx="3"
+          class={d[2] === 0 ? 'empty' : 'day'} style={d[2] ? `opacity:${opacity[d[2]]}` : undefined}>
+          <title>{`${d[1]} contributions on 20${d[0]}`}</title>
+        </rect>
+      )))}
+    </svg>
+  </div>
+</div>
+<style>
+  .gh { padding-block: 8px 28px; border-bottom: 1px solid var(--line); display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; }
+  .head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 16px; align-items: baseline; font-size: 0.78rem; color: var(--muted); }
+  .head a { color: var(--muted); }
+  .cal { overflow-x: auto; min-width: 0; }
+  svg { display: block; width: 100%; height: auto; min-width: 640px; }
+  text { font-family: var(--font-mono); font-size: 10px; fill: var(--muted); }
+  rect.day { fill: var(--accent); }
+  rect.empty { fill: var(--line); }
+</style>

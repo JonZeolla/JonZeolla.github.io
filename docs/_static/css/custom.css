@@ -1,3 +1,7 @@
-.circle {
-  border-radius: 50%;
-}
+/* Lab pages: small overrides on top of Furo's variables (set in conf.py) to match the main site. */
+.circle { border-radius: 50%; }
+h1, h2, h3, h4 { font-family: var(--font-stack--headings); letter-spacing: -0.01em; }
+.sidebar-home { padding: 1rem 1.5rem 0.25rem; font-size: 0.85rem; font-family: var(--font-stack--monospace); }
+.sidebar-home a { color: var(--color-foreground-secondary); text-decoration: none; }
+.sidebar-home a:hover { color: var(--color-foreground-primary); }
+.sidebar-brand-text { font-family: var(--font-stack--headings); font-weight: 700; }

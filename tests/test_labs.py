@@ -194,9 +194,7 @@ def run_commands(
         sanitized_code_block = sanitize_code_block(code_block=code_block)
         # TODO: Add `set -u` back in once "/home/ec2-user/.rvm/scripts/functions/rvmrc_env: line 66: rvm_saved_env: unbound variable" is fixed in Amazon Linux
         # ~related to https://github.com/rvm/rvm/issues/4694
-        command: str = (
-            f"export user=$({get_user_command}) && su - ${{user}} --shell /bin/bash -c 'set -eo pipefail && cd && {sanitized_code_block}'"
-        )
+        command: str = f"export user=$({get_user_command}) && su - ${{user}} --shell /bin/bash -c 'set -eo pipefail && cd && {sanitized_code_block}'"
         LOG.debug(f"{lab.file.stem}: Running {command}")
         response = ssm_client.send_command(
             DocumentName="AWS-RunShellScript",

@@ -1,0 +1,46 @@
+---
+import { logoRows } from '../data/logos';
+import { counts } from '../lib/site';
+---
+{/* Sources for the number: counts.students = sum of past rows in the classes table × data/students.json (see data/README.md). */}
+<div class="logos">
+  <span class="logos-note">Trusted by <b>{counts.studentsRounded}</b> engineers at</span>
+  <div class="marquee" aria-label="Employers of engineers Jon has taught">
+    {logoRows.map((row, i) => (
+      <div class:list={['track', { rev: i % 2 === 1 }]}>
+        {[0, 1].map((copy) => row.map((l) => (
+          <span aria-hidden={copy ? 'true' : undefined}>
+            <img data-slug={l.slug} src={`/wm-dark/${l.slug}.svg`} alt={copy ? '' : l.name} class:list={{ tall: l.tall }} loading="lazy" />
+          </span>
+        )))}
+      </div>
+    ))}
+  </div>
+</div>
+<script>
+  // Dark mode shows the recolored variants, light mode the originals; swap when the theme changes.
+  const root = document.documentElement;
+  function isDark() {
+    const t = root.getAttribute('data-theme');
+    return t ? t === 'dark' : !window.matchMedia('(prefers-color-scheme: light)').matches;
+  }
+  function relogo() {
+    const dir = isDark() ? '/wm-dark/' : '/wm/';
+    document.querySelectorAll<HTMLImageElement>('.marquee img').forEach((im) => { im.src = `${dir}${im.dataset.slug}.svg`; });
+  }
+  relogo();
+  document.addEventListener('themechange', relogo);
+  window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', relogo);
+</script>
+<style>
+  .logos { padding-block: 28px 18px; display: grid; gap: 10px; }
+  .logos-note { font-family: var(--font-display); font-size: 1.1rem; font-weight: 600; }
+  .marquee { display: grid; gap: 22px; overflow: hidden; padding-block: 6px; mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+  .track { display: flex; width: max-content; animation: slide 48s linear infinite; }
+  .track.rev { animation-direction: reverse; }
+  .track span { display: inline-flex; align-items: center; padding-right: 56px; }
+  .track img { height: 24px; width: auto; max-width: 130px; }
+  .track img.tall { height: 30px; }
+  @keyframes slide { to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) { .track { animation: none; width: auto; flex-wrap: wrap; gap: 16px 0; } .marquee { mask-image: none; -webkit-mask-image: none; } }
+</style>

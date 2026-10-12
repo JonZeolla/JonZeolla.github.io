@@ -73,32 +73,79 @@ tasks:
         vars:
           TOOLS: opentofu
 
+  init-npm:
+    desc: Install node dependencies if package-lock.json changes
+    internal: true
+    sources:
+      - package-lock.json
+    cmds:
+      - npm ci
+
   init:
     desc: Initialize the repo for local use; intended to be run after git clone
     deps: [lock]
     cmds:
       - task: init-uv
+      - task: init-npm
       - task: init-install-tools
       - uv run playwright install --with-deps chromium
 
-  build:
-    desc: Build the project
-    # Sources are needed for auto-rebuilding via the taskfile watch feature
+  dev:
+    desc: Run the Astro dev server for the site (labs are not served here; use task build + task open)
+    cmds:
+      - npm run dev
+
+  build-labs:
+    desc: Build the Sphinx labs into build/ (tests read build/labs/)
+    internal: true
     sources:
       - docs/**/*.md
       - docs/**/*.py
       - docs/**/*.rst
+      - docs/_static/**/*
+      - docs/_templates/**/*
     cmds:
+      # Same font files the Astro site self-hosts, so the labs match without a third-party request
+      - mkdir -p docs/_static/fonts
+      - cp node_modules/@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wght-normal.woff2 node_modules/@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2 node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-{400,500,600}-normal.woff2 docs/_static/fonts/
       - uv run sphinx-build -b html docs build
 
+  build-site:
+    desc: Build the Astro site into dist/
+    internal: true
+    sources:
+      - src/**/*
+      - public/**/*
+      - data/**/*
+      - docs/ref/jz-content.md
+      - astro.config.mjs
+      - package-lock.json
+    cmds:
+      - npm run build
+
+  build:
+    desc: Build the whole site into dist/ (Astro pages + Sphinx labs merged in)
+    cmds:
+      - task: build-site
+      - task: build-labs
+      # Sphinx owns the labs and their references/assets; Astro owns every top-level page, so those are excluded.
+      - rsync -a --exclude index.html --exclude about-me.html --exclude resume.html --exclude meet-with-jon.html --exclude playlist.html --exclude workshop.html --exclude youtube.html build/ dist/
+
   open:
-    desc: Open the home page
+    desc: Open the built home page
     deps: [build]
     cmds:
-      - open {{.ROOT_DIR}}/build/index.html
+      - open {{.ROOT_DIR}}/dist/index.html
+
+  test-site:
+    desc: Test the Astro site; run after `task build`
+    cmds:
+      - npm test
+      - npx astro check
+      - python3 -I scripts/check_links.py dist
 
   test:
-    desc: Run the project tests
+    desc: Run the lab tests (deploys EC2 via OpenTofu; local macOS only for now)
     deps: [clean, build]
     # Tests only work locally for now
     platforms: [darwin]
@@ -149,15 +196,20 @@ tasks:
         fi
 
   update:
-    desc: Update the project dependencies, and other misc components
+    desc: Update the project dependencies (Python via uv, Node via npm-check-updates), and other misc components
     cmds:
       - '{{if ne .GITHUB_ACTIONS "true"}}brew upgrade uv{{end}}'
       - uv lock --upgrade
+      # Bumps package.json ranges to the latest versions (majors included); the PR workflow builds and tests the result
+      - npx --yes npm-check-updates --upgrade
+      - npm install
 
   clean:
     desc: Clean up build artifacts, cache files/directories, temp files, etc.
     cmds:
       - rm -rf {{.ROOT_DIR}}/build/
+      - rm -rf {{.ROOT_DIR}}/dist/
+      - rm -rf {{.ROOT_DIR}}/.astro/
       - find {{.ROOT_DIR}} -type d -name '.mypy_cache' -exec rm -rf {} +
       - find {{.ROOT_DIR}} -type d -name '.pytest_cache' -exec rm -rf {} +
       - find {{.ROOT_DIR}} -type d -name '.ruff_cache' -exec rm -rf {} +

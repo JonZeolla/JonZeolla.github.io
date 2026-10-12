@@ -1,0 +1,46 @@
+/* Design tokens. Dark-first (slate ground, sky accent); light mode via prefers-color-scheme or data-theme.
+   Fonts are self-hosted through @fontsource (imported in Base.astro). */
+:root {
+  --bg: #0c1118; --bg-2: #121a24; --surface: #16202c; --line: #253142;
+  --fg: #e7e3da; --muted: #93a0b1; --faint: #5f6c7d;
+  --accent: #5ab4ff; --accent-ink: #0c1118; --accent-soft: #163044; --warm: #f0b35b;
+  --font-display: "Bricolage Grotesque Variable", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono Variable", "SFMono-Regular", Menlo, monospace;
+  --font-serif: "Instrument Serif", Georgia, serif;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #f6f4ee; --bg-2: #ece9e1; --surface: #ffffff; --line: #d8d3c6;
+    --fg: #171c24; --muted: #5a6677; --faint: #8b95a3;
+    --accent: #0a6fc2; --accent-ink: #ffffff; --accent-soft: #dcebf8; --warm: #b7741a;
+    color-scheme: light;
+  }
+}
+:root[data-theme="light"] {
+  --bg: #f6f4ee; --bg-2: #ece9e1; --surface: #ffffff; --line: #d8d3c6;
+  --fg: #171c24; --muted: #5a6677; --faint: #8b95a3;
+  --accent: #0a6fc2; --accent-ink: #ffffff; --accent-soft: #dcebf8; --warm: #b7741a;
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+html { height: 100%; }
+body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 17px; line-height: 1.55; padding-inline: 16px; padding-block: 0 72px; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+h1, h2, h3 { font-family: var(--font-display); line-height: 1.1; text-wrap: balance; margin: 0; letter-spacing: -0.01em; }
+h2 { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 600; }
+h3 { font-size: 1.1rem; font-weight: 600; }
+p { margin: 0; }
+img { max-width: 100%; }
+.wrap { max-width: 1080px; margin: 0 auto; }
+.wrap > * { min-width: 0; }
+.mono { font-family: var(--font-mono); }
+.block { padding-block: 48px; border-bottom: 1px solid var(--line); display: grid; gap: 22px; }
+.sechead { display: grid; gap: 6px; }
+.sechead p { color: var(--muted); }
+.more { font-size: 0.95rem; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; } }

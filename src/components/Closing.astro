@@ -1,0 +1,16 @@
+---
+import { site } from '../lib/site';
+---
+<div class="closing" id="contact">
+  <h2>In a world of coding agents, <em>verifiers are king.</em></h2>
+  <p>Learn how to build yours with hands-on workshops customized for your team.</p>
+  <a class="btn" href={site.links.meet}>Talk to Jon</a>
+</div>
+<style>
+  .closing { padding-block: 80px 72px; display: grid; gap: 22px; justify-items: center; text-align: center; border-bottom: 1px solid var(--line); }
+  h2 { font-size: clamp(2.2rem, 5.6vw, 4rem); font-weight: 700; letter-spacing: -0.02em; line-height: 1.05; max-width: 24ch; }
+  h2 em { font-family: var(--font-serif); font-style: italic; font-weight: 400; color: var(--accent); letter-spacing: 0; font-size: 1.08em; }
+  p { color: var(--muted); max-width: 52ch; font-size: 1.05rem; }
+  .btn { background: var(--accent); color: var(--accent-ink); padding: 12px 20px; border-radius: 4px; font-weight: 600; font-size: 1rem; }
+  .btn:hover { text-decoration: none; filter: brightness(1.08); }
+</style>

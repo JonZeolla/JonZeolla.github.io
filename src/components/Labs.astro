@@ -1,0 +1,51 @@
+---
+import { modules } from '../data/labs';
+import { site } from '../lib/site';
+const total = modules.reduce((n, m) => n + m.labs.length, 0);
+---
+<section class="block" id="labs">
+  <div class="sechead">
+    <h2>Hands-on labs</h2>
+    <p>I learn by building things, then I teach what I learned. These are the current ones: {total} labs and more than 40 hours of hands-on content, run as private workshops for engineering teams.</p>
+  </div>
+  <div class="modules">
+    {modules.map((m, i) => (
+      <div class="mod">
+        <div class="mb">
+          <span class="mt">{m.title}</span>
+          <span class="mx">{m.topics.join(' · ')}</span>
+          <ul id={`labs-${i}`} hidden>{m.labs.map((l) => <li>{l}</li>)}</ul>
+        </div>
+        <button type="button" class="agenda" aria-expanded="false" aria-controls={`labs-${i}`}>{m.labs.length} labs <span>+</span></button>
+      </div>
+    ))}
+  </div>
+  <div class="foot"><span class="up"><b>Every workshop is built from these modules.</b></span><a class="more" href={site.links.meet}>Talk to Jon about the right class for your team →</a></div>
+</section>
+<script>
+  document.querySelectorAll<HTMLButtonElement>('.agenda').forEach((b) => {
+    b.addEventListener('click', () => {
+      const open = b.getAttribute('aria-expanded') === 'true';
+      const ul = document.getElementById(b.getAttribute('aria-controls')!);
+      b.setAttribute('aria-expanded', String(!open));
+      if (ul) ul.hidden = open;
+      const sign = b.querySelector('span'); if (sign) sign.textContent = open ? '+' : '−';
+    });
+  });
+</script>
+<style>
+  .modules { display: grid; }
+  .mod { display: grid; grid-template-columns: 1fr auto; gap: 20px; padding: 22px 0; border-top: 1px dashed var(--line); align-items: start; }
+  .mod:last-child { border-bottom: 1px dashed var(--line); }
+  .mb { display: grid; gap: 6px; min-width: 0; }
+  .mt { font-family: var(--font-display); font-size: 1.5rem; font-weight: 600; line-height: 1.1; }
+  .mx { color: var(--muted); font-size: 1.02rem; }
+  ul { margin: 8px 0 0; padding: 0; list-style: none; display: grid; gap: 4px; font-size: 0.95rem; }
+  li::before { content: "— "; color: var(--faint); }
+  .agenda { font-family: var(--font-mono); font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; background: transparent; color: var(--fg); border: 1px solid var(--line); padding: 10px 16px; cursor: pointer; margin-top: 4px; transition: border-color 140ms; }
+  .agenda span { color: var(--accent); margin-left: 4px; }
+  .agenda[aria-expanded="true"], .agenda:hover { border-color: var(--accent); }
+  .foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; align-items: baseline; }
+  .foot .up { color: var(--muted); font-size: 0.92rem; }
+  .foot .up b { color: var(--fg); font-weight: 500; }
+</style>

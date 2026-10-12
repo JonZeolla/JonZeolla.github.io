@@ -1,5 +1,5 @@
 ---
-class: important environment-setup
+orphan: true
 ---
 # Configuring AWS Cloud9
 

@@ -14,5 +14,13 @@
     "types": [
       "node"
     ]
-  }
+  },
+  "contentMappers": [
+    {
+      "package": "@astrojs/ts-content-mapper",
+      "extensions": [
+        ".astro"
+      ]
+    }
+  ]
 }

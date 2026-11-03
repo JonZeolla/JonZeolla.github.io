@@ -9,6 +9,8 @@ hidden: true
 
 | Date       | Event                                        | Title                                                                          |
 | ---------- | -------------------------------------------- | ------------------------------------------------------------------------------ |
+| 2026-11-03 | SANS@Night                                   | Self Improving Guardrails for Coding Agents ([Slides][2026-11-SANSNight-Slides]) |
+| 2026-10-28 | SANS@Night                                   | Self Improving Guardrails for Coding Agents ([Slides][2026-10-SANSNight-Slides]) |
 | 2026-10-23 | Private                                      | Agent Security                                                                 |
 | 2026-09-08 | [Alabama CSA][Alabama-CSA]                   | [AI Governance and Guardrails][2026-CSABirm] ([Slides][2026-CSABirm-Slides]) |
 | 2026-09-03 | AAIF Workshop                                | [Building Modern AI Agents][2026-AAIF-Agents-0903] ([Slides][2026-AAIF-Agents-0903-Slides]) |
@@ -100,6 +102,8 @@ You can also watch my recorded presentations by going to [this YouTube playlist]
 [2026-AAIF-Agents-0903-Slides]: https://github.com/JonZeolla/monopreso/tree/main/presentations/2026-09-03-aaif-mcp-workshop "Slides"
 [2026-AIWork-Slides]: https://github.com/JonZeolla/monopreso/tree/main/presentations/2026-08-ai-at-work "Slides"
 [2026-AAIF-Agents-Slides]: https://github.com/JonZeolla/monopreso/tree/main/presentations/2026-08-27-aaif-mcp-workshop "Slides"
+[2026-11-SANSNight-Slides]: https://github.com/JonZeolla/monopreso/tree/main/presentations/2026-11-sans-raleigh-self-improving-guardrails "Slides"
+[2026-10-SANSNight-Slides]: https://github.com/JonZeolla/monopreso/tree/main/presentations/2026-10-sans-miami-self-improving-guardrails "Slides"
 [2026-08-SANSNight-Slides]: https://github.com/JonZeolla/monopreso/tree/main/presentations/2026-08-sans-cse-guardrails-ai-coding "Slides"
 [2026-06-SANSNight-Slides]: https://github.com/JonZeolla/monopreso/tree/main/presentations/2026-06-coding-guardrails "Slides"
 [2026-ISACA-Slides]: https://github.com/JonZeolla/monopreso/tree/main/presentations/2026-02-ISACA-DC "Slides"

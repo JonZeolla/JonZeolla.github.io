@@ -203,7 +203,7 @@ tasks:
       - '{{if ne .GITHUB_ACTIONS "true"}}brew upgrade uv{{end}}'
       - uv lock --upgrade
       # Bumps package.json ranges to the latest versions (majors included); the PR workflow builds and tests the result
-      - npx --yes npm-check-updates --upgrade --peer
+      - npx --yes npm-check-updates --upgrade
       - npm install
 
   clean:

@@ -11,7 +11,8 @@ import { site } from '../lib/site';
 interface Props { title?: string; description: string; wide?: boolean }
 const { title, description } = Astro.props;
 const fullTitle = title ? `${title} · ${site.name}` : site.name;
-const canonical = new URL(Astro.url.pathname, site.url).href;
+// build.format 'file' makes the home pathname /index.html, but Google keeps / as the canonical.
+const canonical = new URL(Astro.url.pathname.replace(/index\.html$/, ''), site.url).href;
 ---
 <!doctype html>
 <html lang="en">

@@ -57,6 +57,32 @@ def test_sphinx_labs_ship_alongside_the_astro_pages() -> None:
         )
 
 
+def test_home_canonical_is_the_root_url() -> None:
+    assert '<link rel="canonical" href="https://jonzeolla.com/">' in (
+        DIST / "index.html"
+    ).read_text(), "Google picks / for the home page, so the canonical must match"
+
+
+def test_sphinx_sources_are_not_published() -> None:
+    # Sphinx still creates an empty _sources/, so check for files rather than the directory.
+    assert not list((DIST / "_sources").rglob("*.txt")), (
+        "raw sources get crawled as thin pages"
+    )
+
+
+def test_sitemap_lists_llms_txt_and_every_lab() -> None:
+    sitemap = (DIST / "sitemap.xml").read_text()
+    assert "<loc>https://jonzeolla.com/llms.txt</loc>" in sitemap
+    labs = list((DIST.parent / "docs" / "labs").glob("*.md"))
+    assert labs, "the sitemap reads docs/labs/*.md, so this path must keep matching"
+    for lab in labs:
+        url = f"https://jonzeolla.com/labs/{lab.stem}.html"
+        assert f"<loc>{url}</loc>" in sitemap, f"{url} should be in the sitemap"
+    assert "Sitemap: https://jonzeolla.com/sitemap.xml" in (
+        DIST / "robots.txt"
+    ).read_text(), "robots.txt is how Google finds the sitemap"
+
+
 def test_labs_index_lists_every_lab(base_url: str, page: Page) -> None:
     page.goto(f"{base_url}/labs/")
     for lab in SPHINX_LABS:

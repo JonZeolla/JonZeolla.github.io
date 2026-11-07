@@ -8,6 +8,7 @@ const fmt = (d: string) => {
   return date.toLocaleDateString('en-US', { month: 'short', day: day ? 'numeric' : undefined, timeZone: 'UTC' });
 };
 const title = (t: string) => courseNames[t] ?? t;
+const eventUrl = (u: (typeof upcomingAll)[number]) => u.links.find((l) => l.label === 'Event')?.url;
 const venue = (e: string) => (e.toLowerCase().startsWith('private') ? 'Private' : e);
 ---
 <section class="block" id="talks">
@@ -39,7 +40,7 @@ const venue = (e: string) => (e.toLowerCase().startsWith('private') ? 'Private' 
       {upcomingAll.map((u) => (
         <div class="urow">
           <span class="d">{fmt(u.date)}</span>
-          <span class="t">{title(u.title)}</span>
+          {eventUrl(u) ? <a class="t" href={eventUrl(u)}>{title(u.title)}</a> : <span class="t">{title(u.title)}</span>}
           <span class="v">{venue(u.event)}{u.kind === 'class' && u.event.toLowerCase().startsWith('private') ? ' class' : ''}</span>
         </div>
       ))}

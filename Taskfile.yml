@@ -118,6 +118,7 @@ tasks:
       - public/**/*
       - data/**/*
       - docs/ref/jz-content.md
+      - docs/labs/*.md
       - astro.config.mjs
       - package-lock.json
     cmds:

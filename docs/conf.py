@@ -34,6 +34,8 @@ exclude_patterns: list[str] = []
 # node_modules into _static/fonts by the Taskfile (build-labs) so nothing loads from a third party.
 html_theme: str = "furo"
 html_title: str = "Jon Zeolla · Labs"
+# Don't publish _sources/*.txt: nothing links to them, but Google crawls them as thin pages.
+html_copy_source: bool = False
 html_static_path: list[str] = ["_static"]
 html_css_files: list[str] = ["css/fonts.css", "css/custom.css"]
 html_sidebars: dict[str, list[str]] = {

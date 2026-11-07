@@ -162,6 +162,7 @@ You can also watch my recorded presentations by going to [this YouTube playlist]
 
 | Date       | Event                                 | Training                                                                            |
 | ---------- | ------------------------------------- | ----------------------------------------------------------------------------------- |
+| 2027-04-12 | SANS 2027                             | [SEC546][SEC546]                                                                    |
 | 2026-12-08 | Private Class                         | [AI-Native Software Development][AINSD]                                              |
 | 2026-11-02 | SANS Raleigh 2026                     | [SEC545][SEC545]                                                                    |
 | 2026-10-26 | SANS Miami 2026                       | [SEC545][SEC545]                                                                    |
@@ -225,6 +226,7 @@ You can also watch my recorded presentations by going to [this YouTube playlist]
 | 2013-03-07 | Steel City InfoSec                    | Wifi Security                                                                       |
 
 [AINSD]: https://www.zenable.io/workshops "AI-Native Software Development"
+[SEC546]: https://www.sans.org/cyber-security-courses/securing-agentic-ai "Securing Agentic AI"
 [SEC545]: http://sans.org/sec545 "GenAI and LLM Application Security"
 [ContainerSec101201]: https://jonzeolla.com/labs/container-security-101.html "Container Security 101 and 201"
 [2023-PCS]: https://www.meetup.com/pittsburgh-code-supply/events/297107969/ "Pittsburgh Code & Supply Container Security 101 Workshop"

@@ -1,6 +1,10 @@
 ---
 import { logoRows } from '../data/logos';
 import { counts } from '../lib/site';
+import { viewBoxSize } from '../lib/svg';
+import { readFileSync } from 'node:fs';
+// Reserve each logo's width before it loads; otherwise the track grows mid-animation and the -50% loop point jumps.
+const size = (slug: string) => viewBoxSize(readFileSync(`public/wm/${slug}.svg`, 'utf8'));
 ---
 {/* Sources for the number: counts.students = sum of past rows in the classes table × data/students.json (see data/README.md). */}
 <div class="logos">
@@ -10,7 +14,10 @@ import { counts } from '../lib/site';
       <div class:list={['track', { rev: i % 2 === 1 }]}>
         {[0, 1].map((copy) => row.map((l) => (
           <span aria-hidden={copy ? 'true' : undefined}>
-            <img data-slug={l.slug} src={`/wm-dark/${l.slug}.svg`} alt={copy ? '' : l.name} class:list={{ tall: l.tall }} loading="lazy" />
+            <picture>
+              <source srcset={`/wm/${l.slug}.svg`} media="(prefers-color-scheme: light)" />
+              <img src={`/wm-dark/${l.slug}.svg`} alt={copy ? '' : l.name} class:list={{ tall: l.tall }} {...size(l.slug)} />
+            </picture>
           </span>
         )))}
       </div>
@@ -18,19 +25,14 @@ import { counts } from '../lib/site';
   </div>
 </div>
 <script>
-  // Dark mode shows the recolored variants, light mode the originals; swap when the theme changes.
-  const root = document.documentElement;
-  function isDark() {
-    const t = root.getAttribute('data-theme');
-    return t ? t === 'dark' : !window.matchMedia('(prefers-color-scheme: light)').matches;
-  }
+  // <picture> picks the light originals by OS preference, so only one variant downloads; a manual theme toggle overrides it.
   function relogo() {
-    const dir = isDark() ? '/wm-dark/' : '/wm/';
-    document.querySelectorAll<HTMLImageElement>('.marquee img').forEach((im) => { im.src = `${dir}${im.dataset.slug}.svg`; });
+    const t = document.documentElement.getAttribute('data-theme');
+    const media = t ? (t === 'light' ? 'all' : 'not all') : '(prefers-color-scheme: light)';
+    document.querySelectorAll<HTMLSourceElement>('.marquee source').forEach((s) => { if (s.media !== media) s.media = media; });
   }
   relogo();
   document.addEventListener('themechange', relogo);
-  window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', relogo);
 </script>
 <style>
   .logos { padding-block: 28px 18px; display: grid; gap: 10px; }

@@ -9,7 +9,10 @@ const href = (anchor: string) => (home ? anchor : `/${anchor}`);
   <a href={href('#talks')}>Speaking</a>
   <a href={href('#labs')}>Labs</a>
   <a href="/talks.html">Archive</a>
-  <button class="toggle" id="theme-toggle" type="button" aria-label="Toggle light or dark theme">☾ theme</button>
+  <button class="toggle" id="theme-toggle" type="button" aria-label="Toggle light or dark theme">
+    <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" /></svg>
+    <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" /></svg>
+  </button>
 </nav>
 <script>
   // Cycles dark/light and remembers the choice; Base.astro applies it before first paint on later loads.
@@ -32,5 +35,15 @@ const href = (anchor: string) => (home ? anchor : `/${anchor}`);
   nav.top a { color: var(--muted); }
   nav.top a:hover { color: var(--fg); text-decoration: none; }
   nav.top .brand:hover { color: var(--fg); }
-  .toggle { font-family: var(--font-mono); font-size: 0.75rem; background: transparent; border: 1px solid var(--line); color: var(--muted); padding: 4px 10px; border-radius: 3px; cursor: pointer; }
+  .toggle { display: inline-flex; background: transparent; border: 1px solid var(--line); color: var(--muted); padding: 5px; border-radius: 3px; cursor: pointer; }
+  .toggle:hover { color: var(--fg); }
+  .toggle svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  /* Show the theme a click switches to: sun in dark mode, moon in light. Mirrors the light-mode selectors in global.css. */
+  .moon { display: none; }
+  :global(:root[data-theme="light"]) .sun { display: none; }
+  :global(:root[data-theme="light"]) .moon { display: block; }
+  @media (prefers-color-scheme: light) {
+    :global(:root:not([data-theme="dark"])) .sun { display: none; }
+    :global(:root:not([data-theme="dark"])) .moon { display: block; }
+  }
 </style>

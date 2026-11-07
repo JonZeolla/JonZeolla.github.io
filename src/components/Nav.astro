@@ -4,7 +4,7 @@ interface Props { home?: boolean }
 const { home = true } = Astro.props;
 const href = (anchor: string) => (home ? anchor : `/${anchor}`);
 ---
-<nav class="top" aria-label="Site">
+<nav class:list={['top', { home }]} aria-label="Site">
   <a class="brand" href={home ? '#top' : '/'}>{site.name}</a>
   <a href={href('#talks')}>Speaking</a>
   <a href={href('#labs')}>Labs</a>
@@ -28,6 +28,13 @@ const href = (anchor: string) => (home ? anchor : `/${anchor}`);
     try { localStorage.setItem('theme', next); } catch {}
     document.dispatchEvent(new CustomEvent('themechange'));
   });
+  // Home only: the hero already shows the name, so the nav brand appears once the hero title scrolls away.
+  const nav = document.querySelector<HTMLElement>('nav.top.home');
+  const title = document.querySelector('.hero .name');
+  if (nav && title) {
+    new IntersectionObserver(([e]) => nav.classList.toggle('scrolled', !e.isIntersecting && e.boundingClientRect.top < 0),
+      { rootMargin: `-${nav.offsetHeight}px 0px 0px 0px` }).observe(title);
+  }
 </script>
 <style>
   nav.top { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 22px; padding-block: 22px; font-size: 0.95rem; }
@@ -35,6 +42,12 @@ const href = (anchor: string) => (home ? anchor : `/${anchor}`);
   nav.top a { color: var(--muted); }
   nav.top a:hover { color: var(--fg); text-decoration: none; }
   nav.top .brand:hover { color: var(--fg); }
+  nav.home { position: sticky; top: 0; z-index: 10; background: var(--bg); padding-block: 14px; border-bottom: 1px solid transparent; transition: border-color .2s; }
+  nav.home .brand { opacity: 0; visibility: hidden; transition: opacity .2s, visibility .2s; }
+  nav.home.scrolled { border-bottom-color: var(--line); }
+  nav.home.scrolled .brand { opacity: 1; visibility: visible; }
+  /* Keep in-page anchors (#talks, #labs) from landing under the sticky bar. */
+  :global(html) { scroll-padding-top: 72px; }
   .toggle { display: inline-flex; background: transparent; border: 1px solid var(--line); color: var(--muted); padding: 5px; border-radius: 3px; cursor: pointer; }
   .toggle:hover { color: var(--fg); }
   .toggle svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }

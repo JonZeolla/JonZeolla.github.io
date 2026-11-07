@@ -9,14 +9,14 @@ hidden: true
 
 | Date       | Event                                        | Title                                                                          |
 | ---------- | -------------------------------------------- | ------------------------------------------------------------------------------ |
-| 2026-11-03 | SANS@Night                                   | [Self Improving Guardrails for Coding Agents][2026-11-SANSNight] ([Slides][2026-11-SANSNight-Slides]) |
-| 2026-10-28 | SANS@Night                                   | Self Improving Guardrails for Coding Agents ([Slides][2026-10-SANSNight-Slides]) |
+| 2026-11-03 | SANS Raleigh @ Night                         | [Self Improving Guardrails for Coding Agents][2026-11-SANSNight] ([Slides][2026-11-SANSNight-Slides]) |
+| 2026-10-28 | SANS Miami @ Night                           | Self Improving Guardrails for Coding Agents ([Slides][2026-10-SANSNight-Slides]) |
 | 2026-10-23 | Private                                      | Agent Security                                                                 |
 | 2026-09-08 | [Alabama CSA][Alabama-CSA]                   | [AI Governance and Guardrails][2026-CSABirm] ([Slides][2026-CSABirm-Slides]) |
 | 2026-09-03 | AAIF Workshop                                | [Building Modern AI Agents][2026-AAIF-Agents-0903] ([Slides][2026-AAIF-Agents-0903-Slides]) |
 | 2026-08-27 | AI@Work 10                                   | Coding Agent Loops ([Slides][2026-AIWork-Slides]) |
 | 2026-08-27 | AAIF Workshop                                | [Building Modern AI Agents][2026-AAIF-Agents] ([Slides][2026-AAIF-Agents-Slides]) |
-| 2026-08-20 | SANS@Night                                   | Guardrails for AI Coding ([Slides][2026-08-SANSNight-Slides]) |
+| 2026-08-20 | SANS Cloud Security Exchange @ Night         | Guardrails for AI Coding ([Slides][2026-08-SANSNight-Slides]) |
 | 2026-06-09 | SANS@Night                                   | Guardrails for AI Generated Code ([Slides][2026-06-SANSNight-Slides]) |
 | 2026-02-19 | ISACA DC                                     | Guardrails for AI coding ([Slides][2026-ISACA-Slides]) |
 | 2026-02-17 | AI Coding 2026                               | Live coding prototype and demo session                                         |

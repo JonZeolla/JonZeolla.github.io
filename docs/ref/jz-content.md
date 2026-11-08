@@ -9,6 +9,7 @@ hidden: true
 
 | Date       | Event                                        | Title                                                                          |
 | ---------- | -------------------------------------------- | ------------------------------------------------------------------------------ |
+| 2026-11-19 | [CSA Pittsburgh][2026-11-CSAPgh]              | Self-Improving Guardrails for AI Agents ([Slides][2026-11-CSAPgh-Slides])         |
 | 2026-11-03 | SANS@Night                                   | [Self Improving Guardrails for Coding Agents][2026-11-SANSNight] ([Slides][2026-11-SANSNight-Slides]) |
 | 2026-10-28 | SANS@Night                                   | Self Improving Guardrails for Coding Agents ([Slides][2026-10-SANSNight-Slides]) |
 | 2026-10-23 | Private                                      | Agent Security                                                                 |
@@ -102,6 +103,8 @@ You can also watch my recorded presentations by going to [this YouTube playlist]
 [2026-AAIF-Agents-0903-Slides]: https://github.com/JonZeolla/monopreso/tree/main/presentations/2026-09-03-aaif-mcp-workshop "Slides"
 [2026-AIWork-Slides]: https://github.com/JonZeolla/monopreso/tree/main/presentations/2026-08-ai-at-work "Slides"
 [2026-AAIF-Agents-Slides]: https://github.com/JonZeolla/monopreso/tree/main/presentations/2026-08-27-aaif-mcp-workshop "Slides"
+[2026-11-CSAPgh]: https://events.humanitix.com/csapittnovevent "Self-Improving Guardrails for AI Agents"
+[2026-11-CSAPgh-Slides]: https://github.com/JonZeolla/monopreso/tree/main/presentations/2026-11-csa-pittsburgh-self-improving-guardrails "Slides"
 [2026-11-SANSNight]: https://www.sans.org/webcasts/sans-raleigh-2026-self-improving-guardrails-coding-agents "Self Improving Guardrails for Coding Agents"
 [2026-11-SANSNight-Slides]: https://github.com/JonZeolla/monopreso/tree/main/presentations/2026-11-sans-raleigh-self-improving-guardrails "Slides"
 [2026-10-SANSNight-Slides]: https://github.com/JonZeolla/monopreso/tree/main/presentations/2026-10-sans-miami-self-improving-guardrails "Slides"

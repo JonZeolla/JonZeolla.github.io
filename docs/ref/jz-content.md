@@ -9,14 +9,15 @@ hidden: true
 
 | Date       | Event                                        | Title                                                                          |
 | ---------- | -------------------------------------------- | ------------------------------------------------------------------------------ |
-| 2026-11-03 | SANS@Night                                   | [Self Improving Guardrails for Coding Agents][2026-11-SANSNight] ([Slides][2026-11-SANSNight-Slides]) |
-| 2026-10-28 | SANS@Night                                   | Self Improving Guardrails for Coding Agents ([Slides][2026-10-SANSNight-Slides]) |
+| 2026-11-19 | [CSA Pittsburgh][2026-11-CSAPgh]              | Self-Improving Guardrails for AI Agents ([Slides][2026-11-CSAPgh-Slides])         |
+| 2026-11-03 | SANS Raleigh @ Night                         | [Self Improving Guardrails for Coding Agents][2026-11-SANSNight] ([Slides][2026-11-SANSNight-Slides]) |
+| 2026-10-28 | SANS Miami @ Night                           | Self Improving Guardrails for Coding Agents ([Slides][2026-10-SANSNight-Slides]) |
 | 2026-10-23 | Private                                      | Agent Security                                                                 |
 | 2026-09-08 | [Alabama CSA][Alabama-CSA]                   | [AI Governance and Guardrails][2026-CSABirm] ([Slides][2026-CSABirm-Slides]) |
 | 2026-09-03 | AAIF Workshop                                | [Building Modern AI Agents][2026-AAIF-Agents-0903] ([Slides][2026-AAIF-Agents-0903-Slides]) |
 | 2026-08-27 | AI@Work 10                                   | Coding Agent Loops ([Slides][2026-AIWork-Slides]) |
 | 2026-08-27 | AAIF Workshop                                | [Building Modern AI Agents][2026-AAIF-Agents] ([Slides][2026-AAIF-Agents-Slides]) |
-| 2026-08-20 | SANS@Night                                   | Guardrails for AI Coding ([Slides][2026-08-SANSNight-Slides]) |
+| 2026-08-20 | SANS Cloud Security Exchange @ Night         | Guardrails for AI Coding ([Slides][2026-08-SANSNight-Slides]) |
 | 2026-06-09 | SANS@Night                                   | Guardrails for AI Generated Code ([Slides][2026-06-SANSNight-Slides]) |
 | 2026-02-19 | ISACA DC                                     | Guardrails for AI coding ([Slides][2026-ISACA-Slides]) |
 | 2026-02-17 | AI Coding 2026                               | Live coding prototype and demo session                                         |
@@ -102,6 +103,8 @@ You can also watch my recorded presentations by going to [this YouTube playlist]
 [2026-AAIF-Agents-0903-Slides]: https://github.com/JonZeolla/monopreso/tree/main/presentations/2026-09-03-aaif-mcp-workshop "Slides"
 [2026-AIWork-Slides]: https://github.com/JonZeolla/monopreso/tree/main/presentations/2026-08-ai-at-work "Slides"
 [2026-AAIF-Agents-Slides]: https://github.com/JonZeolla/monopreso/tree/main/presentations/2026-08-27-aaif-mcp-workshop "Slides"
+[2026-11-CSAPgh]: https://events.humanitix.com/csapittnovevent "Self-Improving Guardrails for AI Agents"
+[2026-11-CSAPgh-Slides]: https://github.com/JonZeolla/monopreso/tree/main/presentations/2026-11-csa-pittsburgh-self-improving-guardrails "Slides"
 [2026-11-SANSNight]: https://www.sans.org/webcasts/sans-raleigh-2026-self-improving-guardrails-coding-agents "Self Improving Guardrails for Coding Agents"
 [2026-11-SANSNight-Slides]: https://github.com/JonZeolla/monopreso/tree/main/presentations/2026-11-sans-raleigh-self-improving-guardrails "Slides"
 [2026-10-SANSNight-Slides]: https://github.com/JonZeolla/monopreso/tree/main/presentations/2026-10-sans-miami-self-improving-guardrails "Slides"
@@ -162,6 +165,7 @@ You can also watch my recorded presentations by going to [this YouTube playlist]
 
 | Date       | Event                                 | Training                                                                            |
 | ---------- | ------------------------------------- | ----------------------------------------------------------------------------------- |
+| 2027-04-12 | SANS 2027                             | [SEC546][SEC546]                                                                    |
 | 2026-12-08 | Private Class                         | [AI-Native Software Development][AINSD]                                              |
 | 2026-11-02 | SANS Raleigh 2026                     | [SEC545][SEC545]                                                                    |
 | 2026-10-26 | SANS Miami 2026                       | [SEC545][SEC545]                                                                    |
@@ -225,6 +229,7 @@ You can also watch my recorded presentations by going to [this YouTube playlist]
 | 2013-03-07 | Steel City InfoSec                    | Wifi Security                                                                       |
 
 [AINSD]: https://www.zenable.io/workshops "AI-Native Software Development"
+[SEC546]: https://www.sans.org/cyber-security-courses/securing-agentic-ai "Securing Agentic AI"
 [SEC545]: http://sans.org/sec545 "GenAI and LLM Application Security"
 [ContainerSec101201]: https://jonzeolla.com/labs/container-security-101.html "Container Security 101 and 201"
 [2023-PCS]: https://www.meetup.com/pittsburgh-code-supply/events/297107969/ "Pittsburgh Code & Supply Container Security 101 Workshop"

@@ -55,3 +55,20 @@ test('parseWidget reads GitHub contribution cells and tooltips', () => {
   assert.equal(cal.total, [...Array(365).keys()].reduce((s, i) => s + (i % 7 === 0 ? 0 : i % 7), 0));
   assert.ok(cal.weeks.every((w) => w.length <= 7));
 });
+
+test('every marquee logo has a viewBox so its width is reserved before it loads and Safari scales it', async () => {
+  const { readFileSync } = await import('node:fs');
+  const { viewBoxSize } = await import('./svg.ts');
+  const { logoRows } = await import('../data/logos.ts');
+  for (const { slug } of logoRows.flat()) {
+    const [light, dark] = ['wm', 'wm-dark'].map((d) => viewBoxSize(readFileSync(`public/${d}/${slug}.svg`, 'utf8')));
+    assert.ok(light && dark, `${slug}: missing viewBox`);
+    assert.deepEqual(light, dark, `${slug}: light and dark variants differ in size`);
+    // Browsers size a loaded SVG by its width/height attributes when present, so they must agree with the viewBox.
+    const root = readFileSync(`public/wm/${slug}.svg`, 'utf8').match(/<svg\b[^>]*>/)![0];
+    const [w, h] = ['width', 'height'].map((a) => parseFloat(root.match(new RegExp(`\\s${a}="([^"]+)"`))?.[1] ?? ''));
+    if (w && h) assert.ok(Math.abs(w / h / (light.width / light.height) - 1) < 0.01, `${slug}: width/height ratio ${w / h} != viewBox ratio`);
+  }
+  assert.deepEqual(viewBoxSize('<svg width="9" viewBox="0 302.1 612 192">'), { width: 612, height: 192 });
+  assert.equal(viewBoxSize('<svg width="603" height="182">'), undefined);
+});

@@ -32,4 +32,5 @@ export const grid: Featured[] = [
 export const courseNames: Record<string, string> = {
   SEC540: 'SEC540: Cloud Security and DevSecOps Automation',
   SEC545: 'SEC545: GenAI and LLM Application Security',
+  SEC546: 'SEC546: Securing Agentic AI',
 };

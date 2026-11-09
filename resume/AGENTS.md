@@ -19,10 +19,10 @@ real advantage over the plain CLI is that it **waits for the live contribution-g
 (`ghchart.rshah.org`) to finish loading before printing, so the graph is never blank:
 
 ```bash
-node resume/print-pdf.mjs   # from the repo root; writes public/resume.pdf
+task resume   # runs node resume/print-pdf.mjs from the repo root; writes public/resume.pdf
 ```
 
-It takes an optional `<file-url> <out.pdf>` pair to print something else.
+The script takes an optional `<file-url> <out.pdf>` pair to print something else.
 
 `@page { size: letter; margin: 0 }` in the HTML controls page size/margins.
 

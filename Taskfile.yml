@@ -139,6 +139,11 @@ tasks:
     cmds:
       - open {{.ROOT_DIR}}/dist/index.html
 
+  resume:
+    desc: Regenerate public/resume.pdf from resume/Jon Zeolla Resume.html (always runs; the GitHub chart in it is live)
+    cmds:
+      - node resume/print-pdf.mjs
+
   test-site:
     desc: Test the Astro site; run after `task build`
     cmds:

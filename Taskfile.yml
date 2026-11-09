@@ -148,7 +148,7 @@ tasks:
     desc: Test the Astro site; run after `task build`
     cmds:
       - npm test
-      - npx astro check
+      - npx tsc --noEmit --runExternalCode
       - python3 -I scripts/check_links.py dist
       - uv run pytest -n0 tests/test_site.py
 

@@ -33,6 +33,7 @@ task update      # bump Python and Node dependencies (the weekly Update workflow
 | "Trusted by" logos | `src/data/logos.ts`, `public/wm/`, `public/wm-dark/` | `scripts/logos_dark.py` makes the dark-mode variants. |
 | GitHub calendar | fetched at build from the public contributions widget; snapshot in `src/data/github-contributions.json` | The daily Deploy workflow keeps it fresh. |
 | Labs | `docs/labs/*.md` | Sphinx + MyST; tested end to end by `tests/test_labs.py`. |
+| Resume | `resume/Jon Zeolla Resume.html` | Only the PDF is published: `node resume/print-pdf.mjs` writes `public/resume.pdf`. Read `resume/AGENTS.md` first. |
 
 ## Lab tests
 

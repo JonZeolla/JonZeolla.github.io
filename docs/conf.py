@@ -21,7 +21,6 @@ extensions: list[str] = [
     "sphinx_design",
     "sphinx_last_updated_by_git",
     "sphinx_togglebutton",
-    "sphinxcontrib.googleanalytics",
     "sphinxcontrib.mermaid",
 ]
 
@@ -37,7 +36,12 @@ html_title: str = "Jon Zeolla · Labs"
 # Don't publish _sources/*.txt: nothing links to them, but Google crawls them as thin pages.
 html_copy_source: bool = False
 html_static_path: list[str] = ["_static"]
-html_css_files: list[str] = ["css/fonts.css", "css/custom.css"]
+html_css_files: list[str] = ["css/fonts.css", "css/custom.css", "consent/cookieconsent.css"]
+# Google Analytics behind the same cookie banner as the Astro site; the Taskfile copies these in from public/ and node_modules.
+html_js_files: list = [
+    ("consent/cookieconsent.umd.js", {"defer": "defer"}),
+    ("consent/analytics.js", {"defer": "defer"}),
+]
 html_sidebars: dict[str, list[str]] = {
     "**": [
         "sidebar/scroll-start.html",
@@ -115,8 +119,3 @@ copybutton_selector: str = "div:not(.no-copybutton) > div.highlight > pre"
 
 # This removes the hint text to avoid a CSS alignment bug where the hint was not properly aligned
 togglebutton_hint: str = ""
-
-# -- Options for sphinxcontrib-googleanalytics --
-# https://github.com/sphinx-contrib/googleanalytics#configuration
-
-googleanalytics_id: str = "G-EZSNDVQWPT"

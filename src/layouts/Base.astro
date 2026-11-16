@@ -5,6 +5,8 @@ import '@fontsource/ibm-plex-sans/500.css';
 import '@fontsource/ibm-plex-sans/600.css';
 import '@fontsource-variable/jetbrains-mono';
 import '@fontsource/instrument-serif/400-italic.css';
+import 'vanilla-cookieconsent/dist/cookieconsent.css';
+import cookieConsent from 'vanilla-cookieconsent/dist/cookieconsent.umd.js?url';
 import '../styles/global.css';
 import { site } from '../lib/site';
 
@@ -35,13 +37,8 @@ const canonical = new URL(Astro.url.pathname.replace(/index\.html$/, ''), site.u
     <script is:inline>
       try { var t = localStorage.getItem('theme'); if (t === 'dark' || t === 'light') document.documentElement.setAttribute('data-theme', t); } catch (e) {}
     </script>
-    <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${site.ga}`}></script>
-    <script is:inline define:vars={{ ga: site.ga }}>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', ga);
-    </script>
+    <script is:inline defer src={cookieConsent}></script>
+    <script is:inline defer src="/analytics.js"></script>
   </head>
   <body>
     <slot />

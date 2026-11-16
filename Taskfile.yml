@@ -104,10 +104,14 @@ tasks:
       - docs/**/*.rst
       - docs/_static/**/*
       - docs/_templates/**/*
+      - public/analytics.js
     cmds:
       # Same font files the Astro site self-hosts, so the labs match without a third-party request
       - mkdir -p docs/_static/fonts
       - cp node_modules/@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wght-normal.woff2 node_modules/@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2 node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-{400,500,600}-normal.woff2 docs/_static/fonts/
+      # Cookie banner + Google Analytics, shared with the Astro site (public/analytics.js)
+      - mkdir -p docs/_static/consent
+      - cp node_modules/vanilla-cookieconsent/dist/cookieconsent.umd.js node_modules/vanilla-cookieconsent/dist/cookieconsent.css public/analytics.js docs/_static/consent/
       - uv run sphinx-build -b html docs build
 
   build-site:

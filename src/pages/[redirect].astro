@@ -1,0 +1,41 @@
+---
+import { site } from '../lib/site';
+
+export function getStaticPaths() {
+  // Old Sphinx-era URLs that other sites link to. The labs keep their paths (Sphinx still builds them, see Taskfile).
+  const targets = {
+    'meet-with-jon': 'https://zenable.io/jon',
+    youtube: 'https://www.youtube.com/watch?v=oPhGKduOrKM&list=PLDvTIewuIyaKK2wk49iq5_rxUcNioSr0y&index=1',
+    playlist: 'https://www.youtube.com/watch?v=6s6K2zelYQo&list=PLDvTIewuIyaKK2wk49iq5_rxUcNioSr0y&index=1',
+    workshop: '/labs/container-security-101.html', // served by Sphinx, merged into dist/ by the Taskfile
+    resume: '/resume.pdf',
+    'about-me': '/',
+  };
+  return Object.entries(targets).map(([redirect, to]) => ({ params: { redirect }, props: { to } }));
+}
+
+const { to } = Astro.props;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Redirecting to {to}</title>
+    <meta name="robots" content="noindex" />
+    <link rel="canonical" href={new URL(to, site.url).href} />
+    <noscript><meta http-equiv="refresh" content={`0;url=${to}`} /></noscript>
+    <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${site.ga}`}></script>
+    <script is:inline define:vars={{ ga: site.ga, to }}>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      var gone = false;
+      function go() { if (!gone) { gone = true; location.replace(to); } }
+      gtag('js', new Date());
+      gtag('config', ga, { send_page_view: false });
+      gtag('event', 'page_view', { event_callback: go, event_timeout: 1500 });
+      // An ad blocker stops gtag.js from loading, so the callback above never fires.
+      setTimeout(go, 2000);
+    </script>
+  </head>
+  <body><a href={to}>Continue to {to}</a></body>
+</html>

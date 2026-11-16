@@ -13,6 +13,8 @@ export const site = {
   roles: ['Founder, Zenable', 'AAIF Ambassador'],
   nickname: 'AI Janitor',
   mission: 'I’m on a mission to make AI Correct, Observable, and Conformant.',
+  // GA4 property; the Sphinx labs set the same one in docs/conf.py.
+  ga: 'G-EZSNDVQWPT',
   links: {
     github: 'https://github.com/jonzeolla',
     linkedin: 'https://linkedin.com/in/jonzeolla',

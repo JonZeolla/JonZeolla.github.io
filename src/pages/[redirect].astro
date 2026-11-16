@@ -11,6 +11,7 @@ export function getStaticPaths() {
     workshop: '/labs/container-security-101.html', // served by Sphinx, merged into dist/ by the Taskfile
     resume: '/resume.pdf',
     'about-me': '/',
+    linkedin: site.links.linkedin,
   };
   return Object.entries(targets).map(([redirect, to]) => ({ params: { redirect }, props: { to } }));
 }

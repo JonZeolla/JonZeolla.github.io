@@ -35,6 +35,14 @@ const canonical = new URL(Astro.url.pathname.replace(/index\.html$/, ''), site.u
     <script is:inline>
       try { var t = localStorage.getItem('theme'); if (t === 'dark' || t === 'light') document.documentElement.setAttribute('data-theme', t); } catch (e) {}
     </script>
+    {/* Same GA4 property as the Sphinx docs (docs/conf.py). */}
+    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-EZSNDVQWPT"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-EZSNDVQWPT');
+    </script>
   </head>
   <body>
     <slot />

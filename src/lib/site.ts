@@ -12,8 +12,7 @@ export const site = {
   location: 'Pittsburgh, PA',
   roles: ['Founder, Zenable', 'AAIF Ambassador'],
   nickname: 'AI Janitor',
-  mission: 'I’m on a mission to make AI Correct, Observable, and Conformant.',
-  links: {
+  mission: 'I’m on a mission to make AI Correct, Observable, and Conformant.',  links: {
     github: 'https://github.com/jonzeolla',
     linkedin: 'https://linkedin.com/in/jonzeolla',
     x: 'https://twitter.com/jonzeolla',

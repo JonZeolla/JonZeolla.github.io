@@ -14,7 +14,7 @@ export const site = {
   nickname: 'AI Janitor',
   mission: 'I’m on a mission to make AI Correct, Observable, and Conformant.',  links: {
     github: 'https://github.com/jonzeolla',
-    linkedin: 'https://linkedin.com/in/jonzeolla',
+    linkedin: 'https://www.linkedin.com/in/jonzeolla/',
     x: 'https://twitter.com/jonzeolla',
     youtube: 'https://www.youtube.com/playlist?list=PLDvTIewuIyaKK2wk49iq5_rxUcNioSr0y',
     meet: 'https://zenable.io/jon',
